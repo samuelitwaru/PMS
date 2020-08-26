@@ -1,0 +1,73 @@
+{% extends 'user-base.html' %}
+{% load procurement_tags %}
+
+{% block content %}
+
+	<div class="container-fluid p-0">
+
+		<nav class="navbar navbar-expand-lg navbar-light bg-light p-2 border-bottom fixed d-flex">
+			
+			<a class="navbar-brand" href="#">{{ requisition.alt_id }}</a>
+			</button>
+		</nav>
+		
+		<div class="container-fluid">
+			<div class="row p-2">
+	            {% block requisition_content %}
+	            {% endblock %}
+			</div>
+
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+		</div>
+
+		{% block requisition_foot %}
+		<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+			{% if user == requisition.incharge %}
+				{% if plan.plancorrection_set.all|length != 0 and plan.initiator != user_department.hod %}
+				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
+					<input type="hidden" name="redirect_url" value="{% url 'initiation:send_back_to_initiator' requisition_id=requisition.id %}">
+					<button class="btn btn-sm btn-info">Send back to initiator</button>
+				</form>
+				{% elif requisition.pdu_approved_on and requisition.incharge == ao %}
+				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'initiation:ao_approve' requisition_id=requisition.id %}">
+					{% csrf_token %}
+					<button class="btn btn-sm btn-info">Approve as AO</button>
+				</form>
+				{% elif requisition.hod_approved_on and requisition.incharge == pdu_head and not requisition.ao_approved_on %}
+				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'initiation:pdu_approve' requisition_id=requisition.id %}">
+					{% csrf_token %}
+					<button class="btn btn-sm btn-info">Approve as PDU</button>
+				</form>
+
+				{% elif requisition.incharge == user_department.hod and not requisition.hod_approved_on and not requisition.pdu_approved_on %}
+				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
+					{% csrf_token %}
+					<input type="hidden" name="redirect_url" value="{% url 'initiation:hod_approve_and_send_to_pdu' requisition_id=requisition.id %}">
+					<button class="btn btn-sm btn-info">Approve as HOD</button>
+				</form>				
+				{% elif requisition.incharge != userdepartment.hod and not requisition.initiated_on %}
+					<form class='ajaxForm m-0 d-inline' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
+						<input type="hidden" name="redirect_url" value="{% url 'initiation:send_to_hod_for_approval' requisition_id=requisition.id %}">
+						<button class="btn btn-sm btn-info">Send to HOD</button>
+					</form>
+				{% else %}
+					<div align="center">
+						Waiting for <strong>{{requisition.stage}}</strong>
+					</div>
+				{% endif %}
+			{% endif %}
+		</div>
+		{% endblock %}
+	</div>
+
+{% endblock %}

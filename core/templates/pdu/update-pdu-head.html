@@ -1,0 +1,22 @@
+{% extends 'pdu/pdu.html' %}
+
+{% block pdu_content %}
+<div>
+	<div class="card">
+		<form method="POST" action="{% url 'core:update_pdu_head' %}">
+			<div class="card-header">
+				Change PDU Head
+			</div>
+			<div class="card-body">
+				{% csrf_token %}
+				{{ update_pdu_head_form.as_p }}
+				
+			</div>
+			<div class="modal-footer">
+				<a href="{% url 'core:get_pdu' %}" class="btn btn-secondary">Cancel</a>
+				<button class="btn btn-info">Okay</button>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}

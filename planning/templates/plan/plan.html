@@ -1,0 +1,16 @@
+{% extends 'plan/plan-base.html' %}
+{% load procurement_tags %}
+
+{% block plan_content %}
+
+<div class="col-md-8 p-0">
+	{% include 'plan/plan-detail.html' %}
+</div>
+
+<div class='col-md-4 bg-ligh p-2'>
+	{% include 'plan/plan-corrections-mini.html' %}
+	<hr>
+	{% include 'plan/plan-actions.html' %}
+</div>
+
+{% endblock %}

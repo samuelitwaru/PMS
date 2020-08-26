@@ -1,0 +1,61 @@
+<div class="modal shadow left slide" id="sideBar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content rounded-0 bg-light">
+			<div class="alert-info d-flex p-2">
+				<label class="fa fa-user fa-4x"></label>
+				<div class="flex-fill p-1 m-auto">
+					<h5 class="text-primar">{{ profile.display_name }}</h5>
+					<small class="text-muted">{{ user_department }}</small>
+				</div>
+			</div>
+
+			<div class="modal-body p-0">
+					<div class="list-group list-group-flush p-0">
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:index' %}"><span class="fa fa-home"></span> Home</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'planning:get_plans' %}"><span class="fa fa-list"></span> Plans</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'initiation:get_requisitions' %}"><span class="fa fa-list"></span> Requisitions</a>
+						
+						{% if user_department.hod == user %}
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_profiles' %}"><span class="fa fa-users"></span> Members</a>
+						{% endif %}
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:logout' %}"><span class="fa fa-power-off"></span> Logout</a>
+					</div>
+
+					<br>
+
+					<div class="list-group list-group-flush p-1">
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_timing' %}"><span class="fa fa-clock-o"></span> Procurement Process & Timing</a>
+					</div>
+
+					<br>
+
+					{% if profile.is_ao or profile.is_in_pdu %}
+					{% if profile.is_ao %}
+					<br>
+					<div class="list-group list-group-flush p-1">
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_pdu' %}"><span class="fa fa-user-secret"></span> PDU Head</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_user_departments' %}"><span class="fa fa-th"> </span> User Departments</a>
+					</div>
+					{% endif %}
+					
+					{% if profile.is_in_pdu %}
+					<br>
+					<div class="list-group list-group-flush p-1">
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'planning:get_entity_plans' %}"><span class="fa fa-indent"></span> Plan Submissions</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'initiation:get_entity_requisitions' %}"><span class="fa fa-list"></span> Requisition submissions</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'planning:get_consolidation_groups' %}"><span class="fa fa-list-alt"></span> Plan consolidation</a>
+						
+					</div>
+					{% endif %}
+					<br>
+					<div class="list-group list-group-flush p-1">
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_budgets' %}"><span class="fa fa-dollar"></span> Budget</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_programmes' %}"><span class="fa fa-object-ungroup"></span> Programs and Sub Programs</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_expenses' %}"><span class="fa fa-money"></span> Expenses</a>
+					</div>
+					{% endif %}
+			</div>
+
+		</div>
+	</div>
+</div>

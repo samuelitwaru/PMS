@@ -1,0 +1,161 @@
+{% load procurement_tags %}
+<div id="requisition">
+    <div id="title-div"></div>
+    <table class="table table-responsive-sm table-bordered">
+        <tr>
+            <th  class="text-center" colspan="4">Procurement Requisition</th>
+        </tr>
+        <tr class="text-center">
+            <th >Procuring and Disposing Entity</th>
+            <th >Financial year</th>
+        </tr>
+        <tr class="text-center">
+            <td  class="text-info">{{entity_name}}</td>
+            <td  class="text-info">{{financial_year}}</td>
+        </tr>
+    </table>
+
+    <table class="table table-bordered table-sm table-responsive-sm">
+
+        <tr>
+            <td  class="text-center" colspan="2">Plan Reference</td>
+            <td  class="text-center" colspan="2">{{ requisition.plan.alt_id }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">User Department</td>
+            <td  class="text-center" colspan="2">{{ requisition.user_department }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Chart of Account</td>
+            <td  class="text-center" colspan="2">{{ requisition.expense }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Subject of Procurement</td>
+            <td  class="text-center" colspan="2">{{ requisition.subject_of_procurement }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Type of Procurement</td>
+            <td  class="text-center" colspan="2">{{ requisition.type_of_procurement }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Quantity</td>
+            <td  class="text-center" colspan="2">{{ requisition.quantity }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Unit of Measure</td>
+            <td  class="text-center" colspan="2">{{ requisition.unit_of_measure }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Estimated Cost</td>
+            <td  class="text-center" colspan="2">{{ requisition.estimated_cost|comma_separator }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Source of Funding</td>
+            <td  class="text-center" colspan="2">{{ requisition.source_of_funding }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Dates required</td>
+            <td  class="text-center" colspan="2">
+                <table class="table">
+                    <tr>
+                        <td>Q1</td>
+                        <td>{% if requisition.date_required_q1 %}<span class="fa fa-check"></span>{% endif %}</td>
+                        <td>Q2</td>
+                        <td>{% if requisition.date_required_q2 %}<span class="fa fa-check"></span>{% endif %}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Q3</td>
+                        <td>{% if requisition.date_required_q3 %}<span class="fa fa-check"></span>{% endif %}</td>
+                        <td>Q4</td>
+                        <td>{% if requisition.date_required_q4 %}<span class="fa fa-check"></span>{% endif %}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Location of delivery</td>
+            <td  class="text-center" colspan="2">{{ requisition.location_of_delivery }}</td>
+        </tr>
+    </table>
+
+    {% include 'requisition/requisition-specification-info.html' %}
+
+    <table class="table table-bordered">
+        <thead>
+            <th colspan="2">Process Flow</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td  class="text-center">INITIATED</td>
+                <td  class="text-center">{% if requisition.initiated_on %}YES ({{requisition.initiated_on}}){% else %}NO{% endif %}</td>
+            </tr>
+
+            <tr>
+                <td  class="text-center">APPROVED (HOD)</td>
+                <td  class="text-center">{% if requisition.hod_approved_on %}YES ({{requisition.hod_approved_on}}){% else %}NO{% endif %}</td>
+            </tr>
+
+            <tr>
+                <td  class="text-center">APPROVED (PDU)</td>
+                <td  class="text-center">{% if requisition.pdu_approved_on %}YES ({{requisition.pdu_approved_on}}){% else %}NO{% endif %}</td>
+            </tr>
+
+
+            <tr>
+                <td  class="text-center">APPROVED (AO)</td>
+                <td  class="text-center">{% if requisition.ao_approved_on %}YES ({{requisition.ao_approved_on}}){% else %}NO{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% with consolidation_group=requisition.consolidation_group %}
+    {% if consolidation_group %}
+    <table class="table table-bordered table-sm table-responsive-sm">       
+        <tr>
+            <td  class="text-center" colspan="2">Bid Invitation</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_invitation_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Bid Opening and Closing</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_opening_and_closing_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Approval of Evaluation</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_evaluation_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Award Notification</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.award_notification_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Contract Signing</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.contract_signing_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Contract Completion</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.contract_signing_date}}</td>
+        </tr>
+    </table>
+    {% endif %}
+    {% endwith %}
+</div>
+
+
+
+<hr>

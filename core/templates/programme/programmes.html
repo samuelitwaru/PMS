@@ -1,0 +1,22 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+
+<div>
+	<div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Programmes</h4>
+        </div>
+    </div>
+	<ul>
+		{% for programme in programmes %}
+		<li>{{programme.code}} {{programme.name}}</li>
+		<ul>
+			{% for subprogramme in programme.subprogramme_set.values %}
+			<li>{{subprogramme.code}} {{subprogramme.name}}</li>
+			{% endfor %}
+		</ul>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock %}

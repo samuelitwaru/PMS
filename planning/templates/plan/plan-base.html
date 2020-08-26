@@ -1,0 +1,102 @@
+{% extends 'user-base.html' %}
+{% load procurement_tags %}
+
+{% block content %}
+	{% with is_user_incharge=user|equal_to:plan.incharge is_user_initiator=user|equal_to:plan.initiator is_user_in_pdu=profile.is_in_pdu has_corrections=plan.plancorrection_set.all|length|not_equal_to:0 hod_approved=plan.hod_approved_on pdu_approved=plan.pdu_approved_on prepared=plan.prepared_on consolidated=plan.consolidated_on is_user_hod=user|equal_to:user_department.hod is_user_department_pdu=user_department.is_pdu%}
+
+
+	<div class="container-fluid p-0">
+
+		<nav class="navbar navbar-expand-lg navbar-light bg-light p-2 border-bottom fixed d-flex">
+			
+			<a class="navbar-brand" href="#">{{plan.alt_id}}</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'planning:get_plan' plan_id=plan.id %}">Details</a>
+					</li>
+					{% if is_user_incharge and is_user_initiator and not plan.pdu_approved_on %}
+					<li class="nav-item active">
+						<a class="nav-link" href="{% url 'planning:update_plan' plan_id=plan.id %}">Edit</a>
+					</li>
+					<li class="nav-item active">
+						<a class="nav-link" href="{% url 'planning:delete_plan' plan_id=plan.id %}">Cancel</a>
+					</li>
+					{% endif %}
+					<li class="nav-item active" align="right">
+						<a title="print" href="{% url 'planning:print_plan' plan_id=plan.id %}" class="btn btn-o fa fa-print nav-link"></a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<div class="container-fluid">
+			<div class="row p-2">
+	            {% block plan_content %}
+	            {% endblock %}
+			</div>
+
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+		</div>
+
+		{% block plan_foot %}
+		<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+			{% if user == plan.incharge %}
+				{% if plan.plancorrection_set.all|length != 0 and plan.initiator != user_department.hod %}
+					<form class='ajaxForm m-0' method="GET" data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" action="{% url 'core:authentication' %}">
+						<input type="hidden" name="redirect_url" value="{% url 'planning:send_back_to_initiator' plan_id=plan.id %}">
+						<button class="btn btn-sm btn-info">Send back to initiator</button>
+					</form>
+				{% elif plan.consolidated_on %}
+					Waiting for <strong>{{plan.stage}}</strong>
+				{% elif plan.pdu_approved_on %}
+					{% if user == pdu_head %}
+					<form class='ajaxForm m-0 d-inline' method="GET" data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" action="{% url 'planning:pdu_send_to_other_member' plan_id=plan.id %}">
+						<button class="btn btn-sm btn-info">Send to PDU Member</button>
+					</form>
+					{% endif %}
+					
+					<form class='ajaxForm m-0 d-inline' method="GET" data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" action="{% url 'planning:consolidate' plan_id=plan.id %}">
+						<button class="btn btn-sm btn-info">Consolidate</button>
+					</form>
+				{% elif plan.hod_approved_on %}
+					<form class='ajaxForm m-0' method="GET" data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" action="{% url 'core:authentication' %}">
+						<input type="hidden" name="redirect_url" value="{% url 'planning:pdu_approve' plan_id=plan.id %}">
+						<button class="btn btn-sm btn-info">Approve as PDU</button>
+					</form>
+				{% elif plan.prepared_on or plan.initiator == user_department.hod %}
+					<form class='ajaxForm m-0' method="GET" data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" action="{% url 'core:authentication' %}">
+						<input type="hidden" name="redirect_url" value="{% url 'planning:hod_approve_and_send_to_pdu' plan_id=plan.id %}">
+						<button class="btn btn-sm btn-info">Approve as HOD</button>
+					</form>
+				{% elif not plan.prepared_on and plan.initiator != user_department.hod %}
+					<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
+						<input type="hidden" name="redirect_url" value="{% url 'planning:send_to_hod_for_approval' plan_id=plan.id %}">
+						<button class="btn btn-sm btn-info">Send to HOD</button>
+					</form>
+				{% endif %}
+			{% else %}
+				<div align="center">
+					Waiting for <strong>{{plan.stage}}</strong>
+				</div>
+			{% endif %}
+		</div>
+		{% endblock %}
+	</div>
+
+{% endwith %}
+
+{% endblock %}

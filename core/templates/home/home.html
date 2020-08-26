@@ -1,0 +1,76 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Procurement</h4>
+        </div>
+    </div>
+
+     <div class="container p-2">
+			
+			<div>
+				<h5 class="card-title text-info font-weight-bold">Planning</h5>
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<td>Start</td>
+							<td>{{planning_process.start|date:time_format}}</td>
+							<td><label id="planningStartTimer" data-stop-time="{{planning_process.start|date:'yy-m-d H:i'}}">Calculating</label></td>
+						</tr>
+						<tr class="text-danger">
+							<td>Submission Dealine</td>
+							<td>{{planning_process.submission_deadline|date:time_format}}</td>
+							<td><label id="planningSubmissionDeadlineTimer" data-stop-time="{{planning_process.submission_deadline|date:'yy-m-d H:i'}}">Calculating</label></td>
+						</tr>
+						<tr>
+							<td>Stop</td>
+							<td>{{planning_process.stop|date:time_format}}</td>
+							<td><label id="planningStopTimer" data-stop-time="{{planning_process.stop|date:'yy-m-d H:i'}}">Calculating</label></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="text-center text-muted"><span class="fa fa-arrow-down fa-5x"></span></div>
+
+			<div>
+				<h5 class="card-title text-info font-weight-bold">Initiaiton</h5>
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<td>Start</td>
+							<td>{{initiation_process.start|date:time_format}}</td>
+							<td><label id="initiationStartTimer" data-stop-time="{{initiation_process.start|date:'yy-m-d H:i'}}">Calculating</label></td>
+						</tr>
+						<tr class="text-danger">
+							<td>Submission Dealine</td>
+							<td>{{initiation_process.submission_deadline|date:time_format}}</td>
+							<td><label id="initiationSubmissionDeadlineTimer" data-stop-time="{{initiation_process.submission_deadline|date:'yy-m-d H:i'}}">Calculating</label></td>
+						</tr>
+						<tr>
+							<td>Stop</td>
+							<td>{{initiation_process.stop|date:time_format}}</td>
+							<td><label id="initiationStopTimer" data-stop-time="{{initiation_process.stop|date:'yy-m-d H:i'}}">Calculating</label></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$().ready((event)=>{
+		setTimeLeft("#planningStartTimer")
+		setTimeLeft("#planningStopTimer")
+		setTimeLeft("#planningSubmissionDeadlineTimer")
+
+		setTimeLeft("#initiationStartTimer")
+		setTimeLeft("#initiationStopTimer")
+		setTimeLeft("#initiationSubmissionDeadlineTimer")
+
+	})
+</script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+
+<div>
+	<div class="login-content">
+    	<div class="card">
+    		<div class="card-header">
+    			<i class="fa fa-user-secret"></i> H.O.D - {{ department }}
+    		</div>
+
+    		<div class="card-body">
+    			<form method="POST" action="{% url 'core:create_user_department_head' user_department_id=department.id %}">
+    				{% csrf_token %}
+					{{ create_user_department_head_form.as_p }}
+					<div align="center">
+		    			<button class="btn btn-info">Save</button>
+					</div>
+		    	</form>
+    		</div>
+	    	
+    	</div>
+    </div>
+</div>
+{% endblock %}

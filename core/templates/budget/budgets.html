@@ -1,0 +1,35 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Budget</h4>
+        </div>
+    </div>
+
+	<div>
+		<table class="table table-responsive-sm border">
+	        <tbody>
+	            {% for department in departments %} 
+	                <tr>
+	                    <td>{{ plan.id }}</td>
+	                    
+	                    <td class="border m-auto">
+	                        <p>{{ department.name }}</p>
+	                        <small>Sealing: {{department.budget_sealing}}</small>
+	                    </td>
+	                    <td><a href="{% url 'core:update_user_department_budget' user_department_id=department.id %}" class='btn btn-info'>Allocate</a></td>
+	                </tr>
+	            {% empty %}
+	                <div class="container" align="center">
+	                    <label class="display-4 text-muted">No departments!</label>
+	                    <hr>
+	                    <a class="btn btn-primary" href=""><span class="fa fa-plus"></span> Add Department</a>
+	                </div>
+	            {% endfor %}
+	        </tbody>
+	    </table>
+	</div>
+</div>
+{% endblock %}

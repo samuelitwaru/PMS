@@ -1,0 +1,10 @@
+<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+	<form align="left" method="POST" action="{% url 'core:authentication' %}">
+		<strong><p>Please enter your password to proceed.</p></strong>
+		{% csrf_token %}
+		{{ authentication_form.redirect_url }}
+		{{ authentication_form.password }}
+		<button class="btn btn-info btn-sm">Proceed</button>
+		<a href=''>Cancel</a>
+	</form>
+</div>

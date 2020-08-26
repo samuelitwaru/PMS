@@ -1,0 +1,9 @@
+<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+	<form method="POST" action="{% url 'planning:consolidate' plan_id=plan.id %}">
+		<strong><p>Select a consolidation group</p></strong>
+		{% csrf_token %}
+		{{ consolidate_plan_form.as_p }}
+		<a href=''>Cancel</a>
+		<button class="btn btn-info btn-sm">Consolidate</button>
+	</form>
+</div>

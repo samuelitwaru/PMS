@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block body %}
+	<body>
+
+		<div class="bg-dark d-flex p-2">
+			<div class="flex-fill">
+				<label class="border text-light shadow p-1">Ink<span class="text-info">oop</span></label>
+				<button id="leftButton" type="button" class="btn btn-light btn-sm fa fa-navicon" data-toggle="modal" data-target="#sideBar"></button>
+            </div>
+            <button type="button" class="btn btn-dark" data-toggle="dropdown">
+				<small>Actions</small> <span class="badge badge-light">{{action_count}}</span>
+				<span class="sr-only">unread messages</span>
+			</button>
+
+			<div class="dropdown-menu dropdown-menu-right">
+				<p class="m-0 text-center"><strong>Plans</strong></p>
+				<div class="dropdown-divider"></div>
+				{% for action in plan_actions %}
+					<a href="{% url 'planning:get_plan' plan_id=action.id %}" class="dropdown-item">{{action.alt_id}} <small>({{action.stage}})</small></a>
+				{% empty %}
+				<p class="p-1 text-center m-auto">Nothing</p>
+				{% endfor %}
+				
+				<div class="dropdown-divider"></div>
+				<p class="m-0 text-center"><strong>Requisitions</strong></p>
+				<div class="dropdown-divider"></div>
+				{% for action in requisition_actions %}
+					<a href="{% url 'initiation:get_requisition' requisition_id=action.id %}" class="dropdown-item">{{action.alt_id}} <small>({{action.stage}})</small></a>
+				{% empty %}
+				<p class="p-1 text-center m-auto">Nothing</p>
+				{% endfor %}
+			</div>
+		</div>
+
+		<div>
+			{% if messages %}
+				{% for message in messages %}
+					<div class="w-100 p-0 m-0 alert alert-{{ message.tags }} text-center font-weight-bold alert-dismissible">
+						<button type="button" class="close p-0" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times</span>
+						</button>
+						{{ message }} 
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+		
+		{% include 'main-menu.html' %}
+
+		{% block content %}
+		{% endblock %}
+	</body>
+{% endblock %}

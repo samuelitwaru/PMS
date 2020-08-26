@@ -1,0 +1,34 @@
+{% extends 'user-base.html' %}
+{% load procurement_tags %}
+
+{% block content %}
+<div class="container-fluid  p-0">
+	<div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Create User Department</h4>
+        </div>
+    </div>
+
+	<div class="login-content">
+		<form method="POST" action="{% url 'core:create_user_department' %}">
+			{{ create_user_department_form.errors }}
+
+			{% csrf_token %}
+
+			<div class="form-group">
+				<small>Name</small>
+				{{ create_user_department_form.name|add_css:"form-control" }}
+			</div>
+
+			<div class="form-group">
+				<small>Sub program</small>
+				{{ create_user_department_form.sub_programme|add_css:"form-control" }}
+			</div>
+			<hr>
+			<div class="form-group">
+				<button type="submit" class="btn btn-block btn-info" name="submit">Create</button>
+			</div>
+		</form>
+	</div>
+</div> 
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'user_department/user-department.html' %}
+
+{% block user_department_head %}
+<div>
+	<div class="card-body">
+		<p>Are you sure you want to remove this H.O.D?</p>
+	</div>
+	<form method="POST" action="{% url 'core:delete_user_department_head' user_department_id=department.id %}">
+		{% csrf_token %}
+		{{delete_user_department_head_form.errors}}
+		{{delete_user_department_head_form.as_p}}
+		<div class="modal-footer">
+			<a href="{% url 'core:get_user_department_head' user_department_id=department.id %}" class="btn btn-secondary">Cancel</a>
+			<button class="btn btn-danger">Yes, remove</button>
+		</div>
+	</form>
+</div>
+{% endblock %}

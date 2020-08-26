@@ -1,0 +1,109 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Process Track</h4>
+        </div>
+    </div>
+
+    <div>
+    	<form method="POST" action="">
+    		{% csrf_token %}
+			<table class="table">
+				<thead>
+					<th>No</th>
+					<th>Action</th>
+					<th>Status</th>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>{{update_process_track_form.preparation_of_bid_document.label}}</td>
+						<td>{{update_process_track_form.preparation_of_bid_document}}</td>
+					</tr>
+
+					<tr>
+						<td>2</td>
+						<td>{{update_process_track_form.approval_of_bid_document.label}}</td>
+						<td>{{update_process_track_form.approval_of_bid_document}}</td>
+					</tr>
+
+					<tr>
+						<td>3</td>
+						<td>{{update_process_track_form.invitation_bid.label}}</td>
+						<td>{{update_process_track_form.invitation_bid}}</td>
+					</tr>
+
+					<tr>
+						<td>4</td>
+						<td>{{update_process_track_form.issue_and_sale_of_bid_document.label}}</td>
+						<td>{{update_process_track_form.issue_and_sale_of_bid_document}}</td>
+					</tr>
+
+					<tr>
+						<td>5</td>
+						<td>{{update_process_track_form.receipt_of_bids.label}}</td>
+						<td>{{update_process_track_form.receipt_of_bids}}</td>
+					</tr>
+
+					<tr>
+						<td>6</td>
+						<td>{{update_process_track_form.opening_of_bids.label}}</td>
+						<td>{{update_process_track_form.opening_of_bids}}</td>
+					</tr>
+
+					<tr>
+						<td>7</td>
+						<td>{{update_process_track_form.nomination_of_evaluation_committee_members.label}}</td>
+						<td>{{update_process_track_form.nomination_of_evaluation_committee_members}}</td>
+					</tr>
+
+					<tr>
+						<td>8</td>
+						<td>{{update_process_track_form.approval_or_rejection_of_evaluation_committee_members.label}}</td>
+						<td>{{update_process_track_form.approval_or_rejection_of_evaluation_committee_members}}</td>
+					</tr>
+
+					<tr>
+						<td>9</td>
+						<td>{{update_process_track_form.evaluation_of_bids.label}}</td>
+						<td>{{update_process_track_form.evaluation_of_bids}}</td>
+					</tr>
+
+					<tr>
+						<td>10</td>
+						<td>{{update_process_track_form.approval_or_rejection_of_evaluation_report.label}}</td>
+						<td>{{update_process_track_form.approval_or_rejection_of_evaluation_report}}</td>
+					</tr>
+
+					<tr>
+						<td>11</td>
+						<td>{{update_process_track_form.display_of_best_evaluated_bidders.label}}</td>
+						<td>{{update_process_track_form.display_of_best_evaluated_bidders}}</td>
+					</tr>
+
+					<tr>
+						<td>12</td>
+						<td>{{update_process_track_form.contract_signing.label}}</td>
+						<td>{{update_process_track_form.contract_signing}}</td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+				<button>save</button>
+			</div>
+		</form>
+    </div>
+    
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+</div>
+
+{% endblock %}

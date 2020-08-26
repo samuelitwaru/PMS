@@ -1,0 +1,19 @@
+{% extends 'requisition/requisition-base.html' %}
+{% load procurement_tags %}
+
+{% block requisition_title %}{{ requisition.alt_id }}{% endblock %}
+
+{% block requisition_content %}
+
+<div class="col-md-8 p-0">
+    {% include 'requisition/requisition-detail.html' %}
+</div>
+
+<div class='col-md-4 bg-ligh p-2'>
+    {% include 'requisition/requisition-corrections-mini.html' %}
+    <hr>
+    {% include 'requisition/requisition-actions.html' %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,29 @@
+<label class="text-light">{{current_process.process}} :</label> <label id="submissionDeadline" class="text-danger submission-deadline">Submission Deadline</label>
+<script type="text/javascript">
+	function updateTimeLeft () {
+		let stopTime = new Date(
+			{{current_process.submission_deadline.year}},
+			{{current_process.submission_deadline.month}}-1, 
+			{{current_process.submission_deadline.day}}
+		)
+
+		// full time left in days
+		var fullTimeLeft = (stopTime.getTime() - Date.now()) / 1000 / 3600 / 24
+		// days
+		days = Math.floor(fullTimeLeft)
+		// hours
+		hours = Math.floor((fullTimeLeft-days)*24)
+		// minutes
+		_mins = (fullTimeLeft-(days+(hours/24)))*24*60
+		var mins = Math.floor(_mins)
+			var secs = Math.floor((_mins-mins)*60)
+		if (fullTimeLeft > 0){
+			$('.submission-deadline').html(`${days} days, ${hours} hours, ${mins} minutes, ${secs} seconds`)
+		}
+		else {
+			$('.submission-deadline').html("Plan time out!")
+		}
+		setTimeout(()=>this.updateTimeLeft(), 1000)
+    }
+    updateTimeLeft()
+</script>

@@ -1,0 +1,25 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+
+<div>
+	<div class="login-content">
+    	<div class="card">
+    		<div class="card-header">
+    			<i class="fa fa-user"></i> New Member
+    		</div>
+
+    		<div class="card-body">
+    			<form method="POST" action="{% url 'core:create_profile' %}">
+    				{% csrf_token %}
+					{{ create_profile_form.as_p }}
+					<div align="center">
+		    			<button class="btn btn-info">Save</button>
+					</div>
+		    	</form>
+    		</div>
+	    	
+    	</div>
+    </div>
+</div>
+{% endblock %}

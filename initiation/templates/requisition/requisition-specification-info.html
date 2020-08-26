@@ -1,0 +1,28 @@
+<div id="requisitionSpecificationInfo">
+
+    {% include 'requisition/specification/specification-section.html' %}
+
+    {% include 'requisition/file_attachment/file-attachment-row.html' %}
+    
+    {% if user == requisition.incharge and not requisition.initiated_on %}
+    <div id="specificationModal" class="modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {% include 'specification/create-specification-form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="attachFileModal" class="modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {% include 'requisition/update-file-attachment.html' %}                                
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

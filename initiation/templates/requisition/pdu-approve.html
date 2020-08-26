@@ -1,0 +1,15 @@
+<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+	<form align="left" method="POST" action="{% url 'initiation:pdu_approve' requisition_id=requisition.id %}">
+		<strong><p>Approve Requisition</p></strong>
+		<hr>
+		Sequence Number: <label>{{requisition.alt_id}}</label>
+		<hr>
+		{% csrf_token %}
+		{{ approve_requisition_as_pdu_form.is_in_plan }}
+		<label for="id_is_in_plan">{{approve_requisition_as_pdu_form.is_in_plan.label}}</label>
+		<hr>
+		{{ approve_requisition_as_pdu_form.password }}
+		<button class="btn btn-info btn-sm">Proceed</button>
+		<a href=''>Cancel</a>
+	</form>
+</div>

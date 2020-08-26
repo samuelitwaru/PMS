@@ -1,0 +1,27 @@
+{% extends 'user-base.html' %}
+{% load procurement_tags %}
+
+{% block content %}
+<div class="container-fluid  p-0">
+	<div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Check Corrections</h4>
+        </div>
+    </div>
+
+	<div class="login-content">
+		<p>Please approve the following correction before you continue.</p>
+		{% include 'requisition/requisition-corrections-mini.html' %}
+		<form method="POST" action="{% url 'initiation:delete_requisition_corrections' requisition_id=requisition.id %}">
+			{% csrf_token %}
+
+			<hr>
+			{{ delete_requisition_corrections_form.approve }} <label for="id_approve" >Approve</label>
+			<hr>
+			<div class="form-group">
+				<button type="submit" class="btn btn-block btn-info" name="submit">Continue</button>
+			</div>
+		</form>
+	</div>
+</div> 
+{% endblock %}

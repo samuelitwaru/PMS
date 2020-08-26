@@ -1,0 +1,60 @@
+{% extends 'user-base.html' %}
+{% load procurement_tags %}
+
+{% block content %}
+
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Consolidations</h4>
+        </div>
+        <a href="{% url 'planning:download_consolidated_plans' %}" class="nav-link btn rounded-circle"><span class="fa fa-download"></span> Output</a>
+
+        <button class="nav-link btn rounded-circle" data-toggle="modal" data-target="#createConsolidationGroupFormModal"><span class="fa fa-plus"></span> New Group</button>
+    </div>
+
+    <div class="p-1">
+        
+
+        <div class="tab-content">
+            {% include 'consolidation_group/nav-supplies-tab.html' %}
+            {% include 'consolidation_group/nav-works-tab.html' %}
+            {% include 'consolidation_group/nav-non-consultancy-services-tab.html' %}
+            {% include 'consolidation_group/nav-consultancy-services-tab.html' %}
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        {% block consolidation_group_bottom_nav %}
+        <nav class="d-flex bg-light fixed-bottom p-1 border-top">
+            <div class="nav nav-pills flex-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-supplies-tab" data-toggle="tab" href="#nav-supplies-tab" role="tab" aria-selected="true">SUPPLIES</a>
+                <a class="nav-item nav-link" id="nav-works-tab" data-toggle="tab" href="#nav-works-tab" role="tab" aria-selected="false">WORKS</a>
+                <a class="nav-item nav-link" id="nav-non-consultancy-services-tab" data-toggle="tab" href="#nav-non-consultancy-services-tab" role="tab" aria-selected="false">NON-CONSULTANCY SERVICES</a>
+                <a class="nav-item nav-link" id="nav-non-consultancy-services-tab-tab" data-toggle="tab" href="#nav-consultancy-services-tab" role="tab" aria-selected="false">CONSULTANCY SERVICES</a>
+                <a href="{% url 'planning:get_unallocated_consolidation_groups' %}" class="nav-item nav-link">Unallocated</a>
+            </div>
+
+            {% if not requisitions_available %}
+            <div>
+                <a href="{% url 'planning:publish_plans' %}" class="btn btn-info">Publish</a>
+            </div>
+            {% endif %}
+        </nav>
+        {% endblock %}
+
+    </div>
+
+    {% include 'consolidation_group/create-consolidation-group.html' %}
+
+</div>
+{% endblock %}

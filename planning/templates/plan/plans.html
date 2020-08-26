@@ -1,0 +1,38 @@
+    {% extends 'user-base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Departmental Plans</h4>
+        </div>
+
+        <div align="right">
+            <a class="btn btn-outline-light" href="{% url 'planning:create_plan' %}"><span class="fa fa-plus"></span> Add Plan</a>
+        </div>
+    </div>
+
+    <table class="table table-responsive-sm border">
+        <tbody>
+            {% for plan in plans %} 
+                <tr>
+                    <td>{{ plan.id }}</td>
+                    
+                    <td class="border m-auto">
+                        <p>{{ plan.subject_of_procurement }}</p>
+                        <small>Created by: {{plan.incharge}}</small>
+                    </td>
+                    <td> Waiting for <strong>{{ plan.stage }}</strong> </td>
+                    <td><a href="{% url 'planning:get_plan' plan_id=plan.id %}" class='btn btn-info'>Details</a></td>
+                </tr>
+            {% empty %}
+                <div class="container" align="center">
+                    <label class="display-4 text-muted">No plans!</label>
+                    <hr>
+                    <a class="btn btn-primary" href="{% url 'planning:create_plan' %}"><span class="fa fa-plus"></span> Add Plan</a>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

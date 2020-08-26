@@ -1,0 +1,118 @@
+{% load procurement_tags %}
+<div id="plan">
+    <div id="title-div"></div>
+    <table class="table table-responsive-sm table-bordered">
+        <tr>
+            <th  class="text-center" colspan="4">Procurement Plan</th>
+        </tr>
+        <tr class="text-center">
+            <th >Procuring and Disposing Entity</th>
+            <th >Financial year</th>
+        </tr>
+        <tr class="text-center">
+            <td  class="text-info">Muni University</td>
+            <td  class="text-info">2019/2020</td>
+        </tr>
+    </table>
+
+    <table class="table table-hover table-bordered table-sm table-responsive-sm">
+
+        <tr>
+            <td  class="text-center" colspan="2">User Department</td>
+            <td  class="text-center" colspan="2">{{ plan.user_department }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Chart of Account</td>
+            <td  class="text-center" colspan="2">{{ plan.expense }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Subject of Procurement</td>
+            <td  class="text-center" colspan="2">{{ plan.subject_of_procurement }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Type of Procurement</td>
+            <td  class="text-center" colspan="2">{{ plan.type_of_procurement }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Quantity</td>
+            <td  class="text-center" colspan="2">{{ plan.quantity }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Unit of Measure</td>
+            <td  class="text-center" colspan="2">{{ plan.unit_of_measure }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Estimated Cost</td>
+            <td  class="text-center" colspan="2">{{ plan.estimated_cost|comma_separator }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Source of Funding</td>
+            <td  class="text-center" colspan="2">{{ plan.source_of_funding }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">PREPARED</td>
+            <td  class="text-center" colspan="2">{% if plan.prepared_on %}YES ({{plan.prepared_on}}){% else %}NO{% endif %}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">APPROVED (HOD)</td>
+            <td  class="text-center" colspan="2">{% if plan.hod_approved_on %}YES ({{plan.hod_approved_on}}){% else %}NO{% endif %}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">APPROVED (PDU)</td>
+            <td  class="text-center" colspan="2">{% if plan.pdu_approved_on %}YES ({{plan.pdu_approved_on}}){% else %}NO{% endif %}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">CONSOLIDATED</td>
+            <td  class="text-center" colspan="2">{% if plan.consolidated_on %}YES ({{plan.consolidated_on}}){% else %}NO{% endif %}</td>
+        </tr>
+    </table>
+
+    {% with consolidation_group=plan.consolidation_group %}
+    {% if consolidation_group %}
+    <table class="table table-hover table-bordered table-sm table-responsive-sm">       
+        <tr>
+            <td  class="text-center" colspan="2">Bid Invitation</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_invitation_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Bid Opening and Closing</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_opening_and_closing_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Approval of Evaluation</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_evaluation_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Award Notification</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.award_notification_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Contract Signing</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.contract_signing_date}}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Contract Completion</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.contract_signing_date}}</td>
+        </tr>
+    </table>
+    {% endif %}
+    {% endwith %}
+</div>
+<!-- <br> -->
+<hr>

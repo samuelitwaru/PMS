@@ -1,0 +1,40 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Members</h4>
+        </div>
+        <div class="" align="right">
+            <a class="btn btn-outline-light" href="{% url 'core:create_profile' %}"><span class="fa fa-plus"></span> Add Member</a>
+        </div>
+    </div>
+
+    <div>
+        <table class="table table-responsive-sm border">
+            <tbody>
+                {% for member in members %} 
+                    <tr>
+                        <td><span class="fa fa-user fa-2x"></span></td>
+                        
+                        <td class="border m-auto">
+                            <p>{{ member.display_name }}</p>
+                            <small>{{ member.title }}</small>
+                        </td>
+                        
+                        <td><a href="{% url 'core:update_profile_permissions' profile_id=member.id %}" class='btn btn-info'>Permissions</a></td>
+                    </tr>
+                {% empty %}
+                    <div class="container" align="center">
+                        <label class="display-4 text-muted">No Members!</label>
+                        <hr>
+                        <a class="btn btn-primary" href="{% url 'core:create_profile' %}"><span class="fa fa-plus"></span> Add Member</a>
+                    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

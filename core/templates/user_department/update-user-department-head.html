@@ -1,0 +1,18 @@
+{% extends 'user_department/user-department.html' %}
+
+{% block user_department_head %}
+<div>
+		<form method="POST" action="{% url 'core:update_user_department_head' user_department_id=department.id%}">
+			<h4 class="p-2">SET Head</h4>
+			<div class="card-body">
+				{% csrf_token %}
+				{{ update_user_department_head_form.as_p }}
+				
+			</div>
+			<div class="modal-footer">
+				<a href="{% url 'core:create_user_department_head' user_department_id=user_department.id%}" class="btn btn-secondary">Cancel</a>
+				<button class="btn btn-info">Okay</button>
+			</div>
+		</form>
+</div>
+{% endblock %}

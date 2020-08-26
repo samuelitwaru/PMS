@@ -1,0 +1,154 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Procurement Process & Timing</h4>
+        </div>
+    </div>
+
+    <div>
+        <small class="text-danger">{{update_timing_form.errors}}</small>
+        <form method="POST" action="{% url 'core:update_timing' %}">
+        	{% csrf_token %}
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <span class="rounded-circle px-4 py-3 bg-primary text-light shadow">1</span> 
+                        <label class="btn btn-primary">
+                            PLANNING
+                        </label>
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <small>{{ update_timing_form.planning_start.label }}</small>
+                            {{ update_timing_form.planning_start }}
+                        </div>
+
+                        <div class="form-group">
+                            <small>{{ update_timing_form.planning_submission_deadline.label }}</small>
+                            {{ update_timing_form.planning_submission_deadline }}
+                        </div>
+
+                        <div class="form-group">
+                            <small>{{ update_timing_form.planning_stop.label }}</small>
+                            {{ update_timing_form.planning_stop }}
+                        </div>
+
+                        <div class="form-group">
+                            <!-- {{ update_timing_form.planning_auto_submit }} -->
+                            <!-- <label for="id_planning_auto_submit">{{update_timing_form.planning_auto_submit.label}}</label> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <span class="rounded-circle px-4 py-3 bg-success text-light shadow">2</span> 
+                        <label class="btn btn-success">
+                            INITIATION
+                        </label>
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <small>{{ update_timing_form.initiation_start.label }}</small>
+                            {{ update_timing_form.initiation_start }}
+                        </div>
+
+                        <div class="form-group">
+                            <small>{{ update_timing_form.initiation_submission_deadline.label }}</small>
+                            {{ update_timing_form.initiation_submission_deadline }}
+                        </div>
+
+                        <div class="form-group">
+                            <small>{{ update_timing_form.initiation_stop.label }}</small>
+                            {{ update_timing_form.initiation_stop }}
+                        </div>
+
+                        <div class="form-group">
+                            <!-- {{ update_timing_form.initiation_auto_submit }} -->
+                            <!-- <label for="id_initiation_auto_submit">{{update_timing_form.initiation_auto_submit.label}}</label> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <span class="rounded-circle px-4 py-3 bg-danger text-light shadow">3</span> 
+                        <label class="btn btn-danger">
+                            BIDDING
+                        </label>
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <small>{{ update_timing_form.bidding_start.label }}</small>
+                            {{ update_timing_form.bidding_start }}
+                        </div>
+
+                        <div class="form-group">
+                            <small>{{ update_timing_form.bidding_stop.label }}</small>
+                            {{ update_timing_form.bidding_stop }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <span class="rounded-circle px-4 py-3 bg-secondary text-light shadow">4</span> 
+                        <label class="btn btn-secondary">
+                            CONTRACT
+                        </label>
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <small>{{ update_timing_form.contract_start.label }}</small>
+                            {{ update_timing_form.contract_start }}
+                        </div>
+
+                        <div class="form-group">
+                            <small>{{ update_timing_form.contract_stop.label }}</small>
+                            {{ update_timing_form.contract_stop }}
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+
+            <div class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+                <button class="btn btn-info btn-sm">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

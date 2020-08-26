@@ -1,0 +1,40 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+
+<div >
+    <div class="login-content">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-user-secret"></i> H.O.D - {{ department }}
+            </div>
+
+            
+            <div class="card-body">
+                {% if not head %}
+                <p class="text-info">This department has no head</p>
+                {% else %}
+                    {% with head_profile=head.profile %}
+                    <div>
+                        <h5 class="card-title">{{head_profile.display_name}}</h5>
+                        <p class="card-text">{{head_profile.title}}</p>
+                    </div>
+                    {% endwith %}
+                {% endif %}
+            </div>
+
+            {% block user_department_head %}
+            <div class="card-body">
+                {% if not head %}
+                <a href="{% url 'core:update_user_department_head' user_department_id=department.id %}" class="btn btn-info"><span class="fa fa-check"></span> SET</a>
+                {% else %}                <a href="{% url 'core:delete_user_department_head' user_department_id=department.id %}" class="btn btn-danger"><span class="fa fa-trash"></span> Remove</a>
+                {% endif %}
+            </div>
+            {% endblock %}
+
+            
+            </div>        
+    </div>
+</div>
+
+{% endblock %}

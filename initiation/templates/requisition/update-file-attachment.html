@@ -1,0 +1,21 @@
+<div id="updateFileAttachmentContainer">
+    <h4>Attach File</h4>
+    <div>
+        <div>
+            <form class="ajaxMultipartForm" method="POST" action="{% url 'initiation:update_requisition_file_attachment' requisition_id=requisition.id %}" enctype="multipart/form-data" data-progress-container="#updateFileAttachmentProgressContainer" data-patch-containers='["#updateFileAttachmentContainer", "#fileAttachmentRow"]'>
+               {% csrf_token %}
+                <div class="input-group mb-2 mr-sm-2">
+                    {{update_requisition_file_attachment_form.file_attachment}}
+                    <hr>
+                    <div class="my-1" align="right">
+                        <button class="btn btn-info">Upload</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".ajaxMultipartForm").submit(ajaxMultipartSubmitForm);
+</script>

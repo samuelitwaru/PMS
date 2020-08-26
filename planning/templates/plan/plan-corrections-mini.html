@@ -1,0 +1,18 @@
+<div>
+    <div>
+	   <h5>Corrections</h5>
+    </div>
+    <!-- <hr> -->
+    <table class="table table-sm border table-hover table-danger" style="cursor: pointer;">
+        <tbody style="font-size: 12px;">
+            {% for correction in plan.plancorrection_set.all %}
+                <tr class="text-{{action.initiation.tag}}">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ correction.description }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="text-decoration-none" href="{% url 'planning:get_plan_corrections' plan_id=plan.id %}">Go to Corrections</a>
+</div>

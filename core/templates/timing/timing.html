@@ -1,0 +1,133 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Procurement Process & Timing</h4>
+        </div>
+    </div>
+
+    <div>
+        <form method="POST" action="{% url 'core:update_timing' %}">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <span class="rounded-circle px-4 py-3 bg-primary text-light shadow">1</span> 
+                        <label class="btn btn-primary">
+                            PLANNING
+                        </label>
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td>Start </td><td>{{planning_timing.start|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                                <tr class="text-danger">
+                                    <td>Submission Dealine </td><td>{{planning_timing.submission_deadline|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Stop </td><td>{{planning_timing.stop|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <span class="rounded-circle px-4 py-3 bg-success text-light shadow">2</span> 
+                        <label class="btn btn-success">
+                            INITIATION
+                        </label>
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td>Start </td><td>{{initiation_timing.start|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                                <tr class="text-danger">
+                                    <td>Submission Dealine </td><td>{{initiation_timing.submission_deadline|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Stop </td><td>{{initiation_timing.stop|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <span class="rounded-circle px-4 py-3 bg-danger text-light shadow">3</span> 
+                        <label class="btn btn-danger">
+                            BIDDING
+                        </label>
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td>Start </td><td>{{bidding_timing.start|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Stop </td><td>{{bidding_timing.stop|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <span class="rounded-circle px-4 py-3 bg-secondary text-light shadow">4</span> 
+                        <label class="btn btn-secondary">
+                            CONTRACT
+                        </label>
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td>Start </td><td>{{contract_timing.start|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Stop </td><td>{{contract_timing.stop|date:'yy-m-d H:i'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </div>
+
+            {% if user == pdu_head %}
+            <div class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+                <a href="{% url 'core:update_timing' %}" class="btn btn-info btn-sm"><span class="fa fa-pencil"></span> Edit</a>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

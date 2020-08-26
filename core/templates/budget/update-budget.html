@@ -1,0 +1,32 @@
+{% extends 'user-base.html' %}
+{% load procurement_tags %}
+
+{% block content %}
+<div class="container-fluid  p-0">
+	<div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light"><a class="text-decoration-none text-light" href="{% url 'core:get_budgets' %}"><span class="fa fa-arrow-left"></span></a> Allocate Budget</h4>
+        </div>
+    </div>
+
+	<div class="login-content">
+		<form method="POST" action="{% url 'core:update_user_department_budget' user_department_id=user_department.id %}">
+			<h4>{{user_department}}</h4>
+			<hr>
+			{{ form.errors }}
+
+			{% csrf_token %}
+
+			<div class="form-group">
+				<label>How much?</label>
+				{{update_user_department_budget_form.budget_sealing}}
+				<label>UGX</label>
+			</div>
+
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info" name="submit">Save</button>
+			</div>
+		</form>
+	</div>
+</div> 
+{% endblock %}
