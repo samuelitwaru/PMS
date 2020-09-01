@@ -3,6 +3,7 @@ from django.contrib.auth import get_user
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from guards import only_pdu_head_allowed
 from ..models import Timing
 from ..forms.timing import UpdateTimingForm
 
@@ -17,7 +18,7 @@ def get_timing(request):
 	context = {"planning_timing":planning_timing, "initiation_timing":initiation_timing, "bidding_timing":bidding_timing, "contract_timing":contract_timing}
 	return render(request, 'timing/timing.html', context)
 
-
+@only_pdu_head_allowed
 def update_timing(request):
 	planning_timing = Timing.objects.get(process="Planning")
 	initiation_timing = Timing.objects.get(process="Initiation")
@@ -27,16 +28,16 @@ def update_timing(request):
 		update_timing_form = UpdateTimingForm(request.POST)
 		if update_timing_form.is_valid():
 			cleaned_data = update_timing_form.cleaned_data
-			planning_timing.start = cleaned_data.get("planning_start")
-			planning_timing.stop = cleaned_data.get("planning_stop")
-			planning_timing.submission_deadline = cleaned_data.get("planning_submission_deadline")
-			planning_timing.auto_submit = cleaned_data.get("planning_auto_submit")
+			planning_timing.start = cleaned_data.get("P_start")
+			planning_timing.stop = cleaned_data.get("P_stop")
+			planning_timing.submission_deadline = cleaned_data.get("P_submission_deadline")
+			planning_timing.auto_submit = cleaned_data.get("P_auto_submit")
 			planning_timing.save()
 
-			initiation_timing.start = cleaned_data.get("initiation_start")
-			initiation_timing.stop = cleaned_data.get("initiation_stop")
-			initiation_timing.submission_deadline = cleaned_data.get("initiation_submission_deadline")
-			initiation_timing.auto_submit = cleaned_data.get("initiation_auto_submit")
+			initiation_timing.start = cleaned_data.get("I_start")
+			initiation_timing.stop = cleaned_data.get("I_stop")
+			initiation_timing.submission_deadline = cleaned_data.get("I_submission_deadline")
+			initiation_timing.auto_submit = cleaned_data.get("I_auto_submit")
 			initiation_timing.save()
 
 			bidding_timing.start = cleaned_data.get("bidding_start")
@@ -53,15 +54,15 @@ def update_timing(request):
 	
 	else:
 		form_data = {
-			"planning_start": planning_timing.start,
-		    "planning_stop": planning_timing.stop,
-		    "planning_submission_deadline": planning_timing.submission_deadline,
-		    "planning_auto_submit": planning_timing.auto_submit,
+			"P_start": planning_timing.start,
+		    "P_stop": planning_timing.stop,
+		    "P_submission_deadline": planning_timing.submission_deadline,
+		    "P_auto_submit": planning_timing.auto_submit,
 
-		    "initiation_start": initiation_timing.start,
-		    "initiation_stop": initiation_timing.stop,
-		    "initiation_submission_deadline": initiation_timing.submission_deadline,
-		    "initiation_auto_submit": initiation_timing.auto_submit,
+		    "I_start": initiation_timing.start,
+		    "I_stop": initiation_timing.stop,
+		    "I_submission_deadline": initiation_timing.submission_deadline,
+		    "I_auto_submit": initiation_timing.auto_submit,
 		    
 		    "bidding_start": bidding_timing.start,
 		    "bidding_stop": bidding_timing.stop,

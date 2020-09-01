@@ -10,7 +10,7 @@
     </div>
 
 	<div class="login-content">
-		<p>Please approve the following correction before you continue.</p>
+		<p>Please approve that you have acted upon the following corrections before you proceed.</p>
 		{% include 'plan/plan-corrections-mini.html' %}
 		<form method="POST" action="{% url 'planning:delete_plan_corrections' plan_id=plan.id %}">
 			{% csrf_token %}

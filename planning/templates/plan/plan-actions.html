@@ -33,7 +33,7 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ action.date|date:"F j, Y" }}</td>
                         <td>{{ action.action }}</td>
-                        <td>{{ action.user }}</td>
+                        <td>{{ action.user.profile }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

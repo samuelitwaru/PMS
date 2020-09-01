@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import datetime
+import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -141,8 +142,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 ENTITY_NAME = 'Muni University'
 ENTITY_CODE = 'MU270'
 FINANCIAL_YEAR = '2020/2021'
-FY_START_DATE = datetime.datetime(2020, 7, 1) 
-FY_STOP_DATE = datetime.datetime(2021, 6, 30)
+FY_START_DATE = datetime.datetime(2020, 7, 1).astimezone(tz=pytz.timezone(TIME_ZONE))
+FY_STOP_DATE = datetime.datetime(2021, 6, 30).astimezone(tz=pytz.timezone(TIME_ZONE))
+CURRENCY = 'UGX'
 
 # email settings
 EMAIL_HOST = 'smtp.gmail.com'

@@ -18,6 +18,7 @@
                         <p>{{ plan.subject_of_procurement }}</p>
                         <small>From: {{plan.user_department}}</small>
                     </td>
+                    <td> Waiting for <strong>{{ plan.stage }}</strong> </td>
                     
                     <td><a href="{% url 'planning:get_plan' plan_id=plan.id %}" class='btn btn-info'>Details</a></td>
                 </tr>

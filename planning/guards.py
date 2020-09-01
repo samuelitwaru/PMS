@@ -39,7 +39,7 @@ def all_consolidation_groups_with_plans_filled(func):
 			)
 		for group in unfilled_groups:
 			if group.plan_set.count():
-				messages.info(request, "Can't publish plans yet. Some consolidation groups are missing required information!")
+				messages.info(request, "Failed! Some consolidation groups are missing required information!")
 				return redirect('planning:get_consolidation_groups')
 		return func(*args, **kwargs)
 	return wrapper

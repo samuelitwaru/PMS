@@ -10,8 +10,8 @@
             <th >Financial year</th>
         </tr>
         <tr class="text-center">
-            <td  class="text-info">Muni University</td>
-            <td  class="text-info">2019/2020</td>
+            <td  class="text-info">{{entity_name}}</td>
+            <td  class="text-info">{{FY}}</td>
         </tr>
     </table>
 
@@ -23,7 +23,7 @@
         </tr>
 
         <tr>
-            <td  class="text-center" colspan="2">Chart of Account</td>
+            <td  class="text-center" colspan="2">Expense</td>
             <td  class="text-center" colspan="2">{{ plan.expense }}</td>
         </tr>
 
@@ -83,32 +83,32 @@
     <table class="table table-hover table-bordered table-sm table-responsive-sm">       
         <tr>
             <td  class="text-center" colspan="2">Bid Invitation</td>
-            <td  class="text-center" colspan="2">{{consolidation_group.bid_invitation_date}}</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_invitation_date|date:time_format}}</td>
         </tr>
 
         <tr>
             <td  class="text-center" colspan="2">Bid Opening and Closing</td>
-            <td  class="text-center" colspan="2">{{consolidation_group.bid_opening_and_closing_date}}</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_opening_and_closing_date|date:time_format}}</td>
         </tr>
 
         <tr>
             <td  class="text-center" colspan="2">Approval of Evaluation</td>
-            <td  class="text-center" colspan="2">{{consolidation_group.bid_evaluation_date}}</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.bid_evaluation_date|date:time_format}}</td>
         </tr>
 
         <tr>
             <td  class="text-center" colspan="2">Award Notification</td>
-            <td  class="text-center" colspan="2">{{consolidation_group.award_notification_date}}</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.award_notification_date|date:time_format}}</td>
         </tr>
 
         <tr>
             <td  class="text-center" colspan="2">Contract Signing</td>
-            <td  class="text-center" colspan="2">{{consolidation_group.contract_signing_date}}</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.contract_signing_date|date:time_format}}</td>
         </tr>
 
         <tr>
             <td  class="text-center" colspan="2">Contract Completion</td>
-            <td  class="text-center" colspan="2">{{consolidation_group.contract_signing_date}}</td>
+            <td  class="text-center" colspan="2">{{consolidation_group.contract_signing_date|date:time_format}}</td>
         </tr>
     </table>
     {% endif %}

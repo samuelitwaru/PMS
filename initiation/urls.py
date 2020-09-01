@@ -25,7 +25,6 @@ urlpatterns = [
 
     # entity requisition routes
     path('entity-requistion', get_entity_requisitions, name='get_entity_requisitions'),
-    path('entity-requistion/update', update_entity_requisition, name='update_entity_requisition'),
 
     # specification routes
     path('entity-requistion', get_entity_requisitions, name='get_entity_requisitions'),

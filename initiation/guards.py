@@ -18,6 +18,7 @@ def check_requisition_corrections(func):
 		return func(*args, **kwargs)
 	return wrapper
 
+
 def check_requisition_specifications(func):
 	@wraps(func)
 	def wrapper(*args, **kwargs):
@@ -34,8 +35,6 @@ def check_initation_timing(func):
 	"""Checks if the submission deadline for plans has been passed"""
 	@wraps(func)
 	def wrapper(*args, **kwargs):
-		return func(*args, **kwargs)
-
 		request = args[0]
 		now = timezone.now()
 		initiation_process = Timing.objects.get(process="Initiation")

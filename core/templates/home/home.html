@@ -9,54 +9,86 @@
     </div>
 
      <div class="container p-2">
-			
-			<div>
-				<h5 class="card-title text-info font-weight-bold">Planning</h5>
+		<div class="row">
+			<div class="col-md-6">
+				<h5 class="card-title text-info font-weight-bold">{{entity_name}}</h5>
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
-							<td>Start</td>
-							<td>{{planning_process.start|date:time_format}}</td>
-							<td><label id="planningStartTimer" data-stop-time="{{planning_process.start|date:'yy-m-d H:i'}}">Calculating</label></td>
-						</tr>
-						<tr class="text-danger">
-							<td>Submission Dealine</td>
-							<td>{{planning_process.submission_deadline|date:time_format}}</td>
-							<td><label id="planningSubmissionDeadlineTimer" data-stop-time="{{planning_process.submission_deadline|date:'yy-m-d H:i'}}">Calculating</label></td>
+							<td>Code</td>
+							<td>{{entity_code}}</td>
 						</tr>
 						<tr>
-							<td>Stop</td>
-							<td>{{planning_process.stop|date:time_format}}</td>
-							<td><label id="planningStopTimer" data-stop-time="{{planning_process.stop|date:'yy-m-d H:i'}}">Calculating</label></td>
+							<td>Financial Year</td>
+							<td>
+								{{FY}}
+								<br>
+								<small>{{FY_start|date:date_format}} <span class="fa fa-arrow-right"></span> {{FY_stop|date:date_format}}</small>
+							</td>
+						</tr>
+
+						<tr>
+							<td>Accounting Officer</td>
+							<td>{{ao.profile}}</td>
+						</tr>
+
+						<tr>
+							<td>Head of PDU</td>
+							<td>{{pdu_head.profile}}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
+			<div class="col-md-6">
+				<div>
+					<h5 class="card-title text-info font-weight-bold">Planning</h5>
+					<table class="table table-bordered">
+						<tbody>
+							<tr>
+								<td>Start</td>
+								<td>{{planning_process.start|date:time_format}}</td>
+								<td><label id="planningStartTimer" data-stop-time="{{planning_process.start|date:'yy-m-d H:i'}}">Calculating</label></td>
+							</tr>
+							<tr class="text-danger">
+								<td>Submission Dealine</td>
+								<td>{{planning_process.submission_deadline|date:time_format}}</td>
+								<td><label id="planningSubmissionDeadlineTimer" data-stop-time="{{planning_process.submission_deadline|date:'yy-m-d H:i'}}">Calculating</label></td>
+							</tr>
+							<tr>
+								<td>Stop</td>
+								<td>{{planning_process.stop|date:time_format}}</td>
+								<td><label id="planningStopTimer" data-stop-time="{{planning_process.stop|date:'yy-m-d H:i'}}">Calculating</label></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 
-			<div class="text-center text-muted"><span class="fa fa-arrow-down fa-5x"></span></div>
+				<div class="text-center text-muted"><span class="fa fa-arrow-down fa-5x"></span></div>
 
-			<div>
-				<h5 class="card-title text-info font-weight-bold">Initiaiton</h5>
-				<table class="table table-bordered">
-					<tbody>
-						<tr>
-							<td>Start</td>
-							<td>{{initiation_process.start|date:time_format}}</td>
-							<td><label id="initiationStartTimer" data-stop-time="{{initiation_process.start|date:'yy-m-d H:i'}}">Calculating</label></td>
-						</tr>
-						<tr class="text-danger">
-							<td>Submission Dealine</td>
-							<td>{{initiation_process.submission_deadline|date:time_format}}</td>
-							<td><label id="initiationSubmissionDeadlineTimer" data-stop-time="{{initiation_process.submission_deadline|date:'yy-m-d H:i'}}">Calculating</label></td>
-						</tr>
-						<tr>
-							<td>Stop</td>
-							<td>{{initiation_process.stop|date:time_format}}</td>
-							<td><label id="initiationStopTimer" data-stop-time="{{initiation_process.stop|date:'yy-m-d H:i'}}">Calculating</label></td>
-						</tr>
-					</tbody>
-				</table>
+				<div>
+					<h5 class="card-title text-info font-weight-bold">Initiaiton</h5>
+					<table class="table table-bordered">
+						<tbody>
+							<tr>
+								<td>Start</td>
+								<td>{{initiation_process.start|date:time_format}}</td>
+								<td><label id="initiationStartTimer" data-stop-time="{{initiation_process.start|date:'yy-m-d H:i'}}">Calculating</label></td>
+							</tr>
+							<tr class="text-danger">
+								<td>Submission Dealine</td>
+								<td>{{initiation_process.submission_deadline|date:time_format}}</td>
+								<td><label id="initiationSubmissionDeadlineTimer" data-stop-time="{{initiation_process.submission_deadline|date:'yy-m-d H:i'}}">Calculating</label></td>
+							</tr>
+							<tr>
+								<td>Stop</td>
+								<td>{{initiation_process.stop|date:time_format}}</td>
+								<td><label id="initiationStopTimer" data-stop-time="{{initiation_process.stop|date:'yy-m-d H:i'}}">Calculating</label></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
+		</div>
 	</div>
 </div>
 

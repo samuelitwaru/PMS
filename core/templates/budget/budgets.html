@@ -1,4 +1,5 @@
 {% extends 'user-base.html' %}
+{% load procurement_tags %}
 
 {% block content %}
 <div class="container-fluid p-0">
@@ -17,9 +18,11 @@
 	                    
 	                    <td class="border m-auto">
 	                        <p>{{ department.name }}</p>
-	                        <small>Sealing: {{department.budget_sealing}}</small>
+	                        <small>Sealing: {{department.budget_sealing|comma_separator}}</small>
 	                    </td>
+	                    {% if user == ao %}
 	                    <td><a href="{% url 'core:update_user_department_budget' user_department_id=department.id %}" class='btn btn-info'>Allocate</a></td>
+	                    {% endif %}
 	                </tr>
 	            {% empty %}
 	                <div class="container" align="center">

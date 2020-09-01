@@ -18,7 +18,7 @@
 		                    <td>{{ forloop.counter }}</td>
 		                    <td>
 		                    	<p>{{ correction.on }}</p>
-		                    	<small>{{correction.user}}</small>
+		                    	<small>{{correction.user.profile}}</small>
 		                    </td>
 		                    <td>{{ correction.description }}</td>
 		                </tr>
@@ -36,6 +36,12 @@
 	</div>
 
 	<div class="col-md-5 p-0">
-		{% include 'requisition/requisition-detail.html' %}
+		<!-- {% include 'requisition/requisition-detail.html' %} -->
+	</div>
+{% endblock %}
+
+{% block requisition_foot %}
+	<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="center">
+		Waiting for <strong>{{requisition.stage}}</strong>
 	</div>
 {% endblock %}

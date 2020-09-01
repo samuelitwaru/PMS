@@ -60,11 +60,11 @@
 						<input type="hidden" name="redirect_url" value="{% url 'initiation:send_to_hod_for_approval' requisition_id=requisition.id %}">
 						<button class="btn btn-sm btn-info">Send to HOD</button>
 					</form>
-				{% else %}
-					<div align="center">
-						Waiting for <strong>{{requisition.stage}}</strong>
-					</div>
-				{% endif %}
+			{% endif %}
+			{% else %}
+				<div align="center">
+					Waiting for <strong>{{requisition.stage}}</strong>
+				</div>
 			{% endif %}
 		</div>
 		{% endblock %}

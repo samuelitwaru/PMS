@@ -55,7 +55,7 @@
 		{% block plan_foot %}
 		<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="right">
 			{% if user == plan.incharge %}
-				{% if plan.plancorrection_set.all|length != 0 and plan.initiator != user_department.hod %}
+				{% if plan.plancorrection_set.all|length != 0 and plan.initiator != user %}
 					<form class='ajaxForm m-0' method="GET" data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" action="{% url 'core:authentication' %}">
 						<input type="hidden" name="redirect_url" value="{% url 'planning:send_back_to_initiator' plan_id=plan.id %}">
 						<button class="btn btn-sm btn-info">Send back to initiator</button>

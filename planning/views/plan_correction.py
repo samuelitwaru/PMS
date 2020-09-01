@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from models import PlanCorrection, Plan
 from ..forms.plan_correction import CreatePlanCorrectionForm, DeletePlanCorrectionsForm
+from .plan_action import create_plan_action
 
 
 def get_plan_corrections(request, plan_id):
@@ -42,7 +43,9 @@ def delete_plan_corrections(request, plan_id):
 			# delete all corrections
 			for correction in corrections:
 				correction.delete()
-			messages.success(request, "Corrections approved")
+			current_user = get_user(request)
+			create_plan_action("Corrected", "", current_user, plan)
+			messages.success(request, "Corrections approved and removed.")
 			return redirect("planning:get_plan", plan_id=plan.id)
 
 	delete_plan_corrections_form = DeletePlanCorrectionsForm()

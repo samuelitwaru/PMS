@@ -8,11 +8,13 @@ def timing(request):
 	initiation_process = Timing.objects.get(process="Initiation")
 	current_process = get_current_process()
 	time_format = "M, d yy H:i"
+	date_format = "F d, Y"
 	return {
 		"planning_process": planning_process,
 		"initiation_process": initiation_process,
 		"current_process": current_process,
-		"time_format": time_format
+		"time_format": time_format,
+		"date_format": date_format
 	}
 
 

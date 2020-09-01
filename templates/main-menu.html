@@ -25,6 +25,9 @@
 
 					<div class="list-group list-group-flush p-1">
 						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_timing' %}"><span class="fa fa-clock-o"></span> Procurement Process & Timing</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_budgets' %}"><span class="fa fa-dollar"></span> Budget</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_programmes' %}"><span class="fa fa-object-ungroup"></span> Programs and Sub Programs</a>
+						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_expenses' %}"><span class="fa fa-money"></span> Expenses</a>
 					</div>
 
 					<br>
@@ -33,7 +36,6 @@
 					{% if profile.is_ao %}
 					<br>
 					<div class="list-group list-group-flush p-1">
-						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_pdu' %}"><span class="fa fa-user-secret"></span> PDU Head</a>
 						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_user_departments' %}"><span class="fa fa-th"> </span> User Departments</a>
 					</div>
 					{% endif %}
@@ -49,9 +51,7 @@
 					{% endif %}
 					<br>
 					<div class="list-group list-group-flush p-1">
-						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_budgets' %}"><span class="fa fa-dollar"></span> Budget</a>
-						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_programmes' %}"><span class="fa fa-object-ungroup"></span> Programs and Sub Programs</a>
-						<a class="p-1 list-group-item list-group-item-action" href="{% url 'core:get_expenses' %}"><span class="fa fa-money"></span> Expenses</a>
+						
 					</div>
 					{% endif %}
 			</div>

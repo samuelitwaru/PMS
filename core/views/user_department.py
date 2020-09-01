@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from guards import only_ao_allowed
 from models import UserDepartment, Profile, User
 from ..forms.user_department import CreateUserDepartmentForm, CreateUserDpeartmentHeadForm, UpdateUserDepartmentHeadForm, DeleteUserDepartmentHeadForm
 
-
+@only_ao_allowed
 def get_user_departments(request):
 	"""Show User Departments in the entity"""
 	departments = UserDepartment.objects.all()
@@ -12,6 +13,7 @@ def get_user_departments(request):
 	return render(request, 'user_department/user-departments.html', context)
 
 
+@only_ao_allowed
 def create_user_department(request):
 	if request.method == "POST":
 		create_user_department_form = CreateUserDepartmentForm(request.POST)
@@ -30,6 +32,7 @@ def create_user_department(request):
 	return render(request, 'user_department/create-user-department.html', context)
     
 
+@only_ao_allowed
 def get_user_department_head(request, user_department_id):
 	department = UserDepartment.objects.get(id=user_department_id)
 	head = department.hod
@@ -37,6 +40,7 @@ def get_user_department_head(request, user_department_id):
 	return render(request, "user_department/user-department.html", context)
 
 
+@only_ao_allowed
 def create_user_department_head(request, user_department_id):
 	department = UserDepartment.objects.get(id=user_department_id)
 	if request.method == "POST":
@@ -73,7 +77,7 @@ def create_user_department_head(request, user_department_id):
 	return render(request, 'user_department/create-user-department-hod.html', context)
 
 
-
+@only_ao_allowed
 def update_user_department_head(request, user_department_id):
 	department = UserDepartment.objects.get(id=user_department_id)
 	if not department.profile_set.count():
@@ -101,7 +105,7 @@ def update_user_department_head(request, user_department_id):
 	return render(request, 'user_department/update-user-department-head.html', context)
 
 
-
+@only_ao_allowed
 def delete_user_department_head(request, user_department_id):
 	department = UserDepartment.objects.get(id=user_department_id)
 	head = department.hod

@@ -92,3 +92,9 @@
 		</form>
 	</div>
 {% endblock %}
+
+{% block plan_foot %}
+	<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="center">
+		Waiting for <strong>{{plan.stage}}</strong>
+	</div>
+{% endblock %}

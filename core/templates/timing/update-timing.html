@@ -9,7 +9,6 @@
     </div>
 
     <div>
-        <small class="text-danger">{{update_timing_form.errors}}</small>
         <form method="POST" action="{% url 'core:update_timing' %}">
         	{% csrf_token %}
             <div class="card">
@@ -25,23 +24,21 @@
                 <div class="card-body">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <small>{{ update_timing_form.planning_start.label }}</small>
-                            {{ update_timing_form.planning_start }}
+                            <small>{{ update_timing_form.P_start.label }}</small>
+                            {{ update_timing_form.P_start }}
+                            <small class="text-danger">{{update_timing_form.errors.P_start}}</small>
                         </div>
 
                         <div class="form-group">
-                            <small>{{ update_timing_form.planning_submission_deadline.label }}</small>
-                            {{ update_timing_form.planning_submission_deadline }}
+                            <small>{{ update_timing_form.P_submission_deadline.label }}</small>
+                            {{ update_timing_form.P_submission_deadline }}
+                            <small class="text-danger">{{update_timing_form.errors.P_submission_deadline}}</small>
                         </div>
 
                         <div class="form-group">
-                            <small>{{ update_timing_form.planning_stop.label }}</small>
-                            {{ update_timing_form.planning_stop }}
-                        </div>
-
-                        <div class="form-group">
-                            <!-- {{ update_timing_form.planning_auto_submit }} -->
-                            <!-- <label for="id_planning_auto_submit">{{update_timing_form.planning_auto_submit.label}}</label> -->
+                            <small>{{ update_timing_form.P_stop.label }}</small>
+                            {{ update_timing_form.P_stop }}
+                            <small class="text-danger">{{update_timing_form.errors.P_stop}}</small>
                         </div>
                     </div>
                 </div>
@@ -60,23 +57,21 @@
                 <div class="card-body">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <small>{{ update_timing_form.initiation_start.label }}</small>
-                            {{ update_timing_form.initiation_start }}
+                            <small>{{ update_timing_form.I_start.label }}</small>
+                            {{ update_timing_form.I_start }}
+                            <small class="text-danger">{{update_timing_form.errors.I_start}}</small>    
                         </div>
 
                         <div class="form-group">
-                            <small>{{ update_timing_form.initiation_submission_deadline.label }}</small>
-                            {{ update_timing_form.initiation_submission_deadline }}
+                            <small>{{ update_timing_form.I_submission_deadline.label }}</small>
+                            {{ update_timing_form.I_submission_deadline }}
+                            <small class="text-danger">{{update_timing_form.errors.I_submission_deadline}}</small>
                         </div>
 
                         <div class="form-group">
-                            <small>{{ update_timing_form.initiation_stop.label }}</small>
-                            {{ update_timing_form.initiation_stop }}
-                        </div>
-
-                        <div class="form-group">
-                            <!-- {{ update_timing_form.initiation_auto_submit }} -->
-                            <!-- <label for="id_initiation_auto_submit">{{update_timing_form.initiation_auto_submit.label}}</label> -->
+                            <small>{{ update_timing_form.I_stop.label }}</small>
+                            {{ update_timing_form.I_stop }}
+                            <small class="text-danger">{{update_timing_form.errors.I_stop}}</small>
                         </div>
                     </div>
                 </div>
@@ -97,11 +92,13 @@
                         <div class="form-group">
                             <small>{{ update_timing_form.bidding_start.label }}</small>
                             {{ update_timing_form.bidding_start }}
+                            <small class="text-danger">{{update_timing_form.errors.bidding_start}}</small>
                         </div>
 
                         <div class="form-group">
                             <small>{{ update_timing_form.bidding_stop.label }}</small>
                             {{ update_timing_form.bidding_stop }}
+                            <small class="text-danger">{{update_timing_form.errors.bidding_stop}}</small>
                         </div>
                     </div>
                 </div>
@@ -122,11 +119,13 @@
                         <div class="form-group">
                             <small>{{ update_timing_form.contract_start.label }}</small>
                             {{ update_timing_form.contract_start }}
+                            <small class="text-danger">{{update_timing_form.errors.contract_start}}</small>
                         </div>
 
                         <div class="form-group">
                             <small>{{ update_timing_form.contract_stop.label }}</small>
                             {{ update_timing_form.contract_stop }}
+                            <small class="text-danger">{{update_timing_form.errors.contracr_stop}}</small>
                         </div>
                     </div>
                 </div>
@@ -146,6 +145,7 @@
             </div>
 
             <div class="bg-light p-2 fixed-bottom shadow border-top" align="right">
+                <a href="{% url 'core:get_timing' %}" class="nav-link">Cancel</button>
                 <button class="btn btn-info btn-sm">Save</button>
             </div>
         </form>

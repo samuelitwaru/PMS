@@ -39,5 +39,5 @@ class ValidTimingRequiredMiddleware(MiddlewareMixin):
 		path = request.path_info.lstrip('/')
 		exemptions = ['timing', 'timing/update', 'login', 'logout']
 		if not path in exemptions and not timing_is_valid():
-			messages.info(request, "The Procurement Process and Timing has not yet been set!")
+			messages.info(request, "The Procurement Process and Timing has not yet been set or it is invalid!")
 			return redirect('core:get_timing')

@@ -1,6 +1,6 @@
 {% load procurement_tags %}
 <div id="updateConsolidationGroupContainer">
-	Methodolgy
+	<h4>Methodolgy</h4>
 	<hr>
 	<form class="ajaxForm" data-patch-containers='["#updateConsolidationGroupContainer"]' data-progress-container="#updateConsolidationGroupMethodologyFormProgressContainer" method="POST" action="{% url 'planning:update_consolidation_group_methodology' consolidation_group_id=group.id %}">
 		{% csrf_token %}

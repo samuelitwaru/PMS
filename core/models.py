@@ -83,6 +83,9 @@ class Profile(models.Model):
     user_department = models.ForeignKey(UserDepartment, null=True, on_delete=models.CASCADE)
     user = models.OneToOneField(User, unique=False, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.display_name
+        
 
 class Token(models.Model):
     token = models.CharField(max_length=128, unique=True)
