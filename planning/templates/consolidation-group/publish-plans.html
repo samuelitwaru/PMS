@@ -1,0 +1,31 @@
+{% extends 'user-base.html' %}
+{% load app_tags %}
+
+{% block content %}
+<div class="container-fluid p-0">
+	<div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Publish Plans</h4>
+        </div>
+    </div>
+
+	<div class="login-content">
+
+		<form class="p-1" method="POST" action="{% url 'planning:publish_plans' %}">
+			{% csrf_token %}
+			{{ publish_plans_form.errors }}
+			<div class="alert alert-danger">Please agree (by checking <span class="fa fa-check-square"></span>) that the following processes have taken place before publishing.</div>
+			<hr>
+			{{ publish_plans_form.cc_approved }}
+			<label for="id_cc_approved">{{ publish_plans_form.cc_approved.label }}</label>
+			<hr>
+			{{ publish_plans_form.board_approved }}
+			<label for="id_board_approved">{{ publish_plans_form.board_approved.label }}</label>
+			<hr>
+			{{ publish_plans_form.password }}
+			<button class="btn btn-info">Publish</button>
+			<hr>
+		</form>
+	</div>
+</div>
+{% endblock %}

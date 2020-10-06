@@ -1,0 +1,27 @@
+{% load app_tags %}
+<div id="updateConsolidationGroupContainer">
+	<h4>Methodolgy</h4>
+	<hr>
+	<form class="ajaxForm" data-patch-containers='["#updateConsolidationGroupContainer"]' data-progress-container="#updateConsolidationGroupMethodologyFormProgressContainer" method="POST" action="{% url 'planning:update_consolidation_group_methodology' consolidation_group_id=group.id %}">
+		{% csrf_token %}
+
+		{% render_field update_consolidation_group_methodology_form.method_of_procurement %}
+		{% render_field update_consolidation_group_methodology_form.contract_type %}
+		{% render_field update_consolidation_group_methodology_form.prequalification class="custom-control-input" %}
+
+
+		<div class="form-group py-2">
+			<small>{{ update_consolidation_group_methodology_form.bid_invitation_date.label }}</small>
+			{{ update_consolidation_group_methodology_form.bid_invitation_date }}
+		</div>
+
+		<div id="updateConsolidationGroupMethodologyFormProgressContainer" align="right">
+			<button class="btn btn-info">Next</button>
+		</div>
+
+	</form>
+</div>
+
+<script type="text/javascript">
+	$(".ajaxForm").submit(ajaxSubmit)
+</script>

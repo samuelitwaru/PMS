@@ -1,0 +1,60 @@
+{% extends 'user-base.html' %}
+{% load app_tags %}
+
+{% block content %}
+
+<div class="container-fluid p-0">
+    <div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Consolidation Groups</h4>
+        </div>
+        <a href="{% url 'planning:download_consolidated_plans' %}" class="nav-link btn rounded-circle"><span class="fa fa-download"></span> Output</a>
+        <button class="nav-link btn rounded-circle" data-toggle="modal" data-target="#createConsolidationGroupFormModal"><span class="fa fa-plus"></span> New Group</button>
+    </div>
+
+    <div class="p-1">
+        
+
+        <div class="tab-content">
+            {% include 'consolidation-group/consolidation-groups-all-tab.html' with groups=groups %}
+            {% for proc_type in procurement_types %}
+                {% include 'consolidation-group/consolidation-groups-tab.html' with proc_type=proc_type %}
+            {% endfor %}
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        {% block consolidation_group_bottom_nav %}
+        <nav class="d-flex bg-light fixed-bottom p-1 border-top">
+
+            <div class="nav nav-pills flex-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link small active" id="nav-all-tab" data-toggle="tab" href="#nav-all-tab" role="tab" aria-selected="true">ALL</a>
+                
+                {% for proc_type in procurement_types %}
+                    <a class="nav-item nav-link small" id="nav-{{proc_type.id}}-tab" data-toggle="tab" href="#nav-{{proc_type.id}}-tab" role="tab" aria-selected="true"><span>{{proc_type.name}}</span></a>
+                {% endfor %}
+            </div>
+
+            {% if not requisitions_available %}
+            <div>
+                <a href="{% url 'planning:publish_plans' %}" class="btn btn-info">Publish</a>
+            </div>
+            {% endif %}
+        </nav>
+        {% endblock %}
+
+    </div>
+
+    {% include 'consolidation-group/create-consolidation-group.html' %}
+
+</div>
+{% endblock %}

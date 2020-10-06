@@ -5,13 +5,14 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from models import *
 
-
+procurement_type_objects = []
 department_objects = []
 funder_objects = []
 expense_objects = []
 
 def run():
     delete_and_migrate_db()
+    create_procurement_types()
     create_permissions()
     set_timings()
     set_funders()
@@ -40,6 +41,14 @@ def create_permissions():
 def delete_and_migrate_db():
     os.system('rm db.sqlite3; python3 manage.py migrate;')
 
+def create_procurement_types():
+    procurement_types = [("SUPPLIES", "SUP"), ("WORKS", "WRK"), ("NON-CONSULTANCY SERVICES", "NCS"), ("CONSULTANCY SERVICES", "CS")]
+    for name, abbr in procurement_types:
+        proc_type = ProcurementType(name=name, abbreviation=abbr)
+        proc_type.save()
+        procurement_type_objects.append(proc_type)
+        
+
 
 def set_timings():
     plan_timing = Timing(process="Planning")
@@ -62,20 +71,34 @@ def set_funders():
 
 def set_expenses():
     items = [
-        {"code": 211101, "name":"General Staff Salaries", "type_of_procurement": "SUPPLIES"},
-        {"code": 211102, "name": "Contract Staff Salaries and wages", "type_of_procurement": "WORKS"},
-        {"code": 211103, "name": "Allowances", "type_of_procurement": "NON-CONSULTANCY SERVICES"}
+        {"code": 221008, "name": "Computer supplies and IT Services", "procurement_type": procurement_type_objects[0]},
+        {"code": 221011, "name": "Printing, Stationery, Photocopying and Binding", "procurement_type": procurement_type_objects[0]},
+        {"code": 227004, "name": "Fuel, Lubricants and Oils", "procurement_type": procurement_type_objects[0]},
+
+        {"code": 221003, "name": "Staff Training", "procurement_type": procurement_type_objects[2]},
+        {"code": 223004, "name": "Guard and Security Services", "procurement_type": procurement_type_objects[2]},
+        {"code": 221009, "name": "Welfare and Entertainment", "procurement_type": procurement_type_objects[2]},
+        {"code": 223005, "name": "Electricity", "procurement_type": procurement_type_objects[2]},
+        {"code": 223006, "name": "Water", "procurement_type": procurement_type_objects[2]},
+        {"code": 224001, "name": "Medical and Veterinary Supplies", "procurement_type": procurement_type_objects[2]},
+        {"code": 224006, "name": "Agricultural Supplies", "procurement_type": procurement_type_objects[2]},
+
+        {"code": 225002, "name": "Consultancy Services – Short-term", "procurement_type": procurement_type_objects[3]},
+        {"code": 225003, "name": "Consultancy Services – Long-term", "procurement_type": procurement_type_objects[3]},
+
+        {"code": 228001, "name": "Maintenance - Civil", "procurement_type": procurement_type_objects[1]},
+        {"code": 228002, "name": "Maintenance - Vehicles", "procurement_type": procurement_type_objects[1]},
+        {"code": 228003, "name": "Maintenance - Machinery, Equipment & Funiture", "procurement_type": procurement_type_objects[1]},
     ]
     for item in items:
-        expense = Expense(code=item['code'], name=item['name'], type_of_procurement = item["type_of_procurement"])
+        expense = Expense(code=item['code'], name=item['name'], procurement_type = item["procurement_type"])
         expense.save()
         expense_objects.append(expense)
 
 
 def set_consolidation_groups():
-    # for funder in funder_objects:
     for expense in expense_objects:
-        group = ConsolidationGroup(subject_of_procurement=expense.name, type_of_procurement=expense.type_of_procurement, expense=expense)
+        group = ConsolidationGroup(subject_of_procurement=expense.name, procurement_type=expense.procurement_type, expense=expense)
         group.save()
 
 

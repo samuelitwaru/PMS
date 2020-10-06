@@ -12,7 +12,7 @@ def get_plan_corrections(request, plan_id):
 	plan_corrections = plan.plancorrection_set.all()
 	create_plan_correction_form = CreatePlanCorrectionForm({"plan":plan.id})
 	context = {"plan":plan, "plan_corrections": plan_corrections, "create_plan_correction_form":create_plan_correction_form}
-	return render(request, 'plan_correction/plan-corrections.html', context)
+	return render(request, 'plan-correction/plan-corrections.html', context)
 
 
 def create_plan_correction(request, plan_id):
@@ -27,11 +27,7 @@ def create_plan_correction(request, plan_id):
 			    user = get_user(request)
 			)
 			plan_correction.save()
-		return redirect('planning:get_plan_corrections', plan_id=create_plan_correction_form.cleaned_data.get("plan").id)
-
-
-def update_plan_correction_corrected(request, plan_correction):
-    pass
+		return redirect('planning:get_plan', plan_id=create_plan_correction_form.cleaned_data.get("plan").id)
 
 
 def delete_plan_corrections(request, plan_id):
@@ -54,5 +50,5 @@ def delete_plan_corrections(request, plan_id):
 	 "corrections": corrections,
 	 "delete_plan_corrections_form": delete_plan_corrections_form
 	}
-	return render(request, 'plan_correction/delete-plan-corrections.html', context)
+	return render(request, 'plan-correction/delete-plan-corrections.html', context)
     

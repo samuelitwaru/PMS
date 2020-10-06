@@ -1,15 +1,17 @@
 {% extends 'user-base.html' %}
-{% load procurement_tags %}
+{% load app_tags %}
 
 {% block content %}
+	
+	{% with is_user_incharge=user|equal_to:requisition.incharge  is_user_initiator=user|equal_to:requisition.initiator  is_user_in_pdu=profile.is_in_pdu has_corrections=requisition.requisitioncorrection_set.all|length|not_equal_to:0 hod_approved=requisition.hod_approved_on pdu_approved=requisition.pdu_approved_on ao_approved=requisition.ao_approved_on specified=requisition.specified_on is_user_hod=user|equal_to:user_department.hod is_user_department_pdu=user_department.is_pdu %}
 
 	<div class="container-fluid p-0">
 
 		<nav class="navbar navbar-expand-lg navbar-light bg-light p-2 border-bottom fixed d-flex">
-			
 			<a class="navbar-brand" href="#">{{ requisition.alt_id }}</a>
-			</button>
 		</nav>
+
+		{% include 'requisition/requisition-track.html' %}
 		
 		<div class="container-fluid">
 			<div class="row p-2">
@@ -32,42 +34,55 @@
 
 		{% block requisition_foot %}
 		<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="right">
-			{% if user == requisition.incharge %}
-				{% if plan.plancorrection_set.all|length != 0 and plan.initiator != user_department.hod %}
+			{% if is_user_incharge %}
+				{% if has_corrections and requisition.initiator != user_department.hod and not is_user_initiator %}
 				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
 					<input type="hidden" name="redirect_url" value="{% url 'initiation:send_back_to_initiator' requisition_id=requisition.id %}">
 					<button class="btn btn-sm btn-info">Send back to initiator</button>
 				</form>
-				{% elif requisition.pdu_approved_on and requisition.incharge == ao %}
+				{% elif pdu_approved and requisition.incharge == ao %}
 				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'initiation:ao_approve' requisition_id=requisition.id %}">
 					{% csrf_token %}
 					<button class="btn btn-sm btn-info">Approve as AO</button>
 				</form>
-				{% elif requisition.hod_approved_on and requisition.incharge == pdu_head and not requisition.ao_approved_on %}
+				{% elif hod_approved and requisition.incharge == pdu_head and not ao_approved %}
 				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'initiation:pdu_approve' requisition_id=requisition.id %}">
 					{% csrf_token %}
 					<button class="btn btn-sm btn-info">Approve as PDU</button>
 				</form>
 
-				{% elif requisition.incharge == user_department.hod and not requisition.hod_approved_on and not requisition.pdu_approved_on %}
+				{% elif requisition.incharge == user_department.hod and not hod_approved and not pdu_approved %}
 				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
 					{% csrf_token %}
 					<input type="hidden" name="redirect_url" value="{% url 'initiation:hod_approve_and_send_to_pdu' requisition_id=requisition.id %}">
 					<button class="btn btn-sm btn-info">Approve as HOD</button>
 				</form>				
-				{% elif requisition.incharge != userdepartment.hod and not requisition.initiated_on %}
+				{% elif requisition.incharge != userdepartment.hod and not specified %}
 					<form class='ajaxForm m-0 d-inline' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
 						<input type="hidden" name="redirect_url" value="{% url 'initiation:send_to_hod_for_approval' requisition_id=requisition.id %}">
 						<button class="btn btn-sm btn-info">Send to HOD</button>
 					</form>
+				{% else %}
+				<div align="center">
+					<a href="{% url 'planning:update_process_track' consolidation_group_id=requisition.plan.consolidation_group.id %}">PROCESS TRACK</a>
+				</div>
 			{% endif %}
 			{% else %}
 				<div align="center">
-					Waiting for <strong>{{requisition.stage}}</strong>
+					{% if requisition.stage %}
+						Waiting for <strong>{{requisition.stage}}</strong>
+					{% else %}
+						<button class="btn btn-sm btn-info" data-toggle="modal" data-target="#processTrackModal">PROCESS TRACK</button>
+					{% endif %}
 				</div>
 			{% endif %}
 		</div>
+		{% if not requisition.stage %}
+			{% include 'consolidation-group/process-track-modal.html' %}
+		{% endif %}
 		{% endblock %}
 	</div>
+
+	{% endwith %}
 
 {% endblock %}

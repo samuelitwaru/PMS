@@ -1,0 +1,15 @@
+Hello,
+
+Please note that you are required to perform the following actions on the procurement process of {{entity}}.
+
+{% if plan_actions %}
+	>> You have {{plan_actions}} actions to carry out on planning process.
+{% endif %}
+
+{% if requisition_actions %}
+	>> You have {{requisitions_actions}} actions to carry out on the initiation process.
+{% endif %}
+
+Please login to complete these actions.
+Thank you.
+From Inkoop.

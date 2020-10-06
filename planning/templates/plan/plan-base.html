@@ -1,8 +1,8 @@
 {% extends 'user-base.html' %}
-{% load procurement_tags %}
+{% load app_tags %}
 
 {% block content %}
-	{% with is_user_incharge=user|equal_to:plan.incharge is_user_initiator=user|equal_to:plan.initiator is_user_in_pdu=profile.is_in_pdu has_corrections=plan.plancorrection_set.all|length|not_equal_to:0 hod_approved=plan.hod_approved_on pdu_approved=plan.pdu_approved_on prepared=plan.prepared_on consolidated=plan.consolidated_on is_user_hod=user|equal_to:user_department.hod is_user_department_pdu=user_department.is_pdu%}
+	{% with is_user_incharge=user|equal_to:plan.incharge is_user_initiator=user|equal_to:plan.initiator is_user_in_pdu=profile.is_in_pdu has_corrections=plan.plancorrection_set.all|length|not_equal_to:0 hod_approved=plan.hod_approved_on pdu_approved=plan.pdu_approved_on prepared=plan.prepared_on consolidated=plan.consolidated_on is_user_hod=user|equal_to:user_department.hod is_user_department_pdu=user_department.is_pdu %}
 
 
 	<div class="container-fluid p-0">
@@ -33,6 +33,9 @@
 				</ul>
 			</div>
 		</nav>
+			
+		{% include 'plan/plan-track.html' %}
+
 		<div class="container-fluid">
 			<div class="row p-2">
 	            {% block plan_content %}
@@ -90,7 +93,11 @@
 				{% endif %}
 			{% else %}
 				<div align="center">
-					Waiting for <strong>{{plan.stage}}</strong>
+					{% if plan.stage %}
+						Waiting for <strong>{{plan.stage}}</strong>
+					{% else %}
+						<strong>PUBLISHED</strong>
+					{% endif %}
 				</div>
 			{% endif %}
 		</div>

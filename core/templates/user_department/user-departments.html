@@ -6,9 +6,6 @@
         <div class="flex-fill m-auto">
             <h4 class="text-light">Departments</h4>
         </div>
-        <div class="" align="right">
-            <a class="btn btn-outline-light" href="{% url 'core:create_user_department' %}"><span class="fa fa-plus"></span> Create Department</a>
-        </div>
     </div>
 
 	<div>
@@ -20,7 +17,7 @@
 	                    
 	                    <td class="border m-auto">
 	                        <p>{{ department.name }}</p>
-	                        <small>HOD: {{department.hod}}</small>
+	                        <small>HOD: {{department.hod.first_name}} {{department.hod.last_name}}</small>
 	                    </td>
 	                    
 	                    <td><a href="{% url 'core:get_user_department_head' user_department_id=department.id %}" class='btn btn-info'>H.O.D</a></td>

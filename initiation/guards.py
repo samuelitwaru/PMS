@@ -19,12 +19,12 @@ def check_requisition_corrections(func):
 	return wrapper
 
 
-def check_requisition_specifications(func):
+def check_requisition_requirement_specifications(func):
 	@wraps(func)
 	def wrapper(*args, **kwargs):
 		request = args[0]
 		requisition = Requisition.objects.get(id=kwargs.get("requisition_id"))
-		if (requisition.specification_set.count() or requisition.file_attachment): 
+		if requisition.description or requisition.file_specification or requisition.attributevaluespecification_set.count(): 
 			return func(*args, **kwargs)
 		messages.error(request, "Can't approve because the requisition has no specifications!", extra_tags="danger")
 		return redirect('initiation:get_requisition', requisition_id=requisition.id)
@@ -47,5 +47,3 @@ def check_initation_timing(func):
 		return redirect('core:index')
 
 	return wrapper
-
-	start < now < dead < stop

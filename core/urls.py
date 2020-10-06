@@ -21,7 +21,7 @@ urlpatterns = [
 
     # user department routes
     path('user-department', get_user_departments, name='get_user_departments'),
-    path('user-department/create', create_user_department, name='create_user_department'),
+    # path('user-department/create', create_user_department, name='create_user_department'),
     path('user-department/<int:user_department_id>/head', get_user_department_head, name='get_user_department_head'),
     path('user-department/<int:user_department_id>/head/create', create_user_department_head, name='create_user_department_head'),
     path('user-department/<int:user_department_id>/head/update', update_user_department_head, name='update_user_department_head'),
@@ -46,5 +46,6 @@ urlpatterns = [
 
     # expense routes
     path('expense', get_expenses, name='get_expenses'),
+    path('expense/create', create_expense, name='create_expense'),
 
 ]

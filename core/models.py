@@ -5,6 +5,14 @@ from django.conf import settings
 from django.utils import timezone
 
 
+class ProcurementType(models.Model):
+    name = models.CharField(max_length=128)
+    abbreviation = models.CharField(max_length=16)
+
+    def __str__(self):
+        return self.name
+
+
 class Timing(models.Model):
     # all ['Planning', 'Initiation', 'Bidding', 'Contract Management']
     process = models.CharField(max_length=64)
@@ -36,7 +44,7 @@ class Timing(models.Model):
 class Expense(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=128)
-    type_of_procurement = models.CharField(max_length=128)
+    procurement_type = models.ForeignKey(ProcurementType, on_delete=models.CASCADE)
 
     def __str__(self):
         return " ".join([self.code, "-", self.name])
@@ -93,7 +101,7 @@ class Token(models.Model):
     user = models.OneToOneField(User, unique=False, on_delete=models.CASCADE)
 
     def is_expired(self):
-        if self.expiry < timezone.now():
+        if self.expiry > timezone.now():
             return True
         return False
 

@@ -7,43 +7,51 @@ from django.utils import timezone
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import get_template
-from models import Plan, Expense, ConsolidationGroup
+from models import Plan, Expense, ConsolidationGroup, ProcurementType
 from utils import get_hod, get_user_department, get_pdu_head
-from ..forms.plan import CreatePlanForm, UpdatePlanForm, DeletePlanForm, SendPlanToPDUMemberForm, ConsolidatePlanForm
+from ..forms.plan import CreatePlanForm, SelectPlanProcurementTypeForm, UpdatePlanForm, DeletePlanForm, SendPlanToPDUMemberForm, ConsolidatePlanForm
 from ..forms.plan_correction import CreatePlanCorrectionForm
 from ..guards import check_plan_corrections, check_planning_submission_deadline, check_user_department_budget_sealing, check_user_department_head
 from .plan_action import create_plan_action
 
 
-@check_planning_submission_deadline
 def get_plans(request):
     plans = Plan.objects.filter(user_department=get_user(request).profile.user_department)
-    context = {"plans":plans}
+    select_plan_procurement_type_form = SelectPlanProcurementTypeForm()
+    context = {"plans":plans, "select_plan_procurement_type_form":select_plan_procurement_type_form}
     return render(request, 'plan/plans.html', context)
 
 
-@check_planning_submission_deadline
 def get_plan(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
     create_plan_correction_form = CreatePlanCorrectionForm({"plan":plan.id})
     context = {"plan": plan, "create_plan_correction_form":create_plan_correction_form}
     return render(request, 'plan/plan.html', context)
 
+def select_plan_procurement_type(request):
+    if request.method == "POST":
+        select_plan_procuremen_type_form = SelectPlanProcurementTypeForm(data=request.POST)
+        if select_plan_procuremen_type_form.is_valid():
+            procurement_type_id = select_plan_procuremen_type_form.cleaned_data.get("procurement_type")
+            return redirect('planning:create_plan', procurement_type_id=procurement_type_id)
+
+
 @check_user_department_budget_sealing
 @check_user_department_head
 @check_planning_submission_deadline
 @permission_required('planning.can_prepare_plan', raise_exception=True)
-def create_plan(request):
+def create_plan(request, procurement_type_id):
+    procurement_type = ProcurementType.objects.get(id=procurement_type_id)
+    
     if request.method == "POST":
         current_user = get_user(request)
-        form = CreatePlanForm(data=request.POST, user=current_user)
-        form.fields['chart_of_account'].choices = form.get_expense_choices()
-        if form.is_valid():
-            cleaned_data = form.cleaned_data
+        create_plan_form = CreatePlanForm(data=request.POST, user=current_user, procurement_type=procurement_type)
+        if create_plan_form.is_valid():
+            cleaned_data = create_plan_form.cleaned_data
             # save plan
             plan = Plan(
                 subject_of_procurement=cleaned_data.get('subject_of_procurement'),
-                type_of_procurement=cleaned_data.get('type_of_procurement'),
+                procurement_type=cleaned_data.get('procurement_type'),
                 expense=cleaned_data.get('chart_of_account'),
                 quantity=cleaned_data.get('quantity'),
                 unit_of_measure=cleaned_data.get('unit_of_measure'),
@@ -63,12 +71,11 @@ def create_plan(request):
             create_plan_action("Initiated", "", current_user, plan)
             messages.success(request, "Plan created")
             return redirect("planning:get_plan", plan_id=plan.id)
-        context = {"form":form}
+        context = {"create_plan_form":create_plan_form, "procurement_type":procurement_type}
         return render(request, 'plan/create-plan.html', context)
     else:
-        form = CreatePlanForm()
-        form.fields['chart_of_account'].choices = form.get_expense_choices()
-        context = {"form":form}
+        create_plan_form = CreatePlanForm(procurement_type=procurement_type)
+        context = {"create_plan_form":create_plan_form, "procurement_type":procurement_type}
         return render(request, 'plan/create-plan.html', context)
 
 
@@ -77,19 +84,16 @@ def create_plan(request):
 def update_plan(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
     current_user = get_user(request)
-    create_plan_correction_form = CreatePlanCorrectionForm({"plan":plan.id})
-    print(">>>>>>>>>>>>>>>", plan.form_dict())
-    update_plan_form = UpdatePlanForm(data=plan.form_dict(), user=current_user)
-    update_plan_form.fields['chart_of_account'].choices = update_plan_form.get_expense_choices()
+    update_plan_form = UpdatePlanForm(data=plan.form_dict(), plan=plan, user=current_user)
 
     if request.method == "POST":
-        update_plan_form = UpdatePlanForm(data=request.POST, user=current_user)
-        update_plan_form.fields['chart_of_account'].choices = update_plan_form.get_expense_choices()
+        update_plan_form = UpdatePlanForm(data=request.POST, plan=plan, user=current_user)
+        update_plan_form.fields['expense'].choices = update_plan_form.get_expense_choices()
         if update_plan_form.is_valid():
             cleaned_data = update_plan_form.cleaned_data
             # update plan
             plan.subject_of_procurement = cleaned_data.get('subject_of_procurement')
-            plan.expense = cleaned_data.get('chart_of_account')
+            plan.expense = cleaned_data.get('expense')
             plan.quantity = cleaned_data.get('quantity')
             plan.unit_of_measure = cleaned_data.get('unit_of_measure')
             plan.estimated_cost = cleaned_data.get('estimated_cost')
@@ -103,7 +107,7 @@ def update_plan(request, plan_id):
             messages.success(request, "Plan updated")
             return redirect("planning:get_plan", plan_id=plan.id)
 
-    context = {"plan":plan, "update_plan_form": update_plan_form, "create_plan_correction_form":create_plan_correction_form}
+    context = {"plan":plan, "update_plan_form": update_plan_form}
     return render(request, 'plan/update-plan.html', context)
 
 
@@ -222,7 +226,7 @@ def send_back_to_initiator(request, plan_id):
 def consolidate(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
     if request.method == "POST":
-        consolidate_plan_form = ConsolidatePlanForm(data=request.POST)
+        consolidate_plan_form = ConsolidatePlanForm(data=request.POST, plan=plan)
         if consolidate_plan_form.is_valid():
             cleaned_data = consolidate_plan_form.cleaned_data
             group = cleaned_data.get("consolidation_group")
@@ -237,8 +241,10 @@ def consolidate(request, plan_id):
             messages.error(request, "Plan consolidation failed! Invalid data was entered.", extra_tags="danger")
             return redirect('planning:get_plan', plan_id=plan.id)
     else:
-        current_consolidation_group = ConsolidationGroup.objects.get(expense=plan.expense)
-        consolidate_plan_form = ConsolidatePlanForm(data={"id":plan.id, "consolidation_group":current_consolidation_group.id})
+        current_consolidation_group = ConsolidationGroup.objects.filter(expense=plan.expense).first()
+        consolidate_plan_form = ConsolidatePlanForm(data={"id":plan.id}, plan=plan)
+        if current_consolidation_group:
+            consolidate_plan_form.data["consolidation_group"] = current_consolidation_group.id
         context = {"consolidate_plan_form": consolidate_plan_form, "plan":plan}
         consolidation_form_template = render(request, 'plan/consolidate-plan-form.html', context)
         data = {

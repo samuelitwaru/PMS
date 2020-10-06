@@ -1,4 +1,4 @@
-{% load procurement_tags %}
+{% load app_tags %}
 <div id="requisition">
     <div id="title-div"></div>
     <table class="table table-responsive-sm table-bordered">
@@ -11,7 +11,7 @@
         </tr>
         <tr class="text-center">
             <td  class="text-info">{{entity_name}}</td>
-            <td  class="text-info">{{financial_year}}</td>
+            <td  class="text-info">{{FY}}</td>
         </tr>
     </table>
 
@@ -39,7 +39,7 @@
 
         <tr>
             <td  class="text-center" colspan="2">Type of Procurement</td>
-            <td  class="text-center" colspan="2">{{ requisition.type_of_procurement }}</td>
+            <td  class="text-center" colspan="2">{{ requisition.procurement_type }}</td>
         </tr>
 
         <tr>
@@ -54,7 +54,7 @@
 
         <tr>
             <td  class="text-center" colspan="2">Estimated Cost</td>
-            <td  class="text-center" colspan="2">{{ requisition.estimated_cost|comma_separator }}</td>
+            <td  class="text-center" colspan="2">{{ requisition.estimated_cost|currency }}</td>
         </tr>
 
         <tr>
@@ -89,7 +89,6 @@
         </tr>
     </table>
 
-    {% include 'requisition/requisition-specification-info.html' %}
 
     <table class="table table-bordered">
         <thead>
@@ -97,8 +96,8 @@
         </thead>
         <tbody>
             <tr>
-                <td  class="text-center">INITIATED</td>
-                <td  class="text-center">{% if requisition.initiated_on %}YES ({{requisition.initiated_on}}){% else %}NO{% endif %}</td>
+                <td  class="text-center">SPECIFIED</td>
+                <td  class="text-center">{% if requisition.specified_on %}YES ({{requisition.specified_on}}){% else %}NO{% endif %}</td>
             </tr>
 
             <tr>

@@ -3,81 +3,109 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user, authenticate
 from django.contrib.auth.decorators import permission_required
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from .requisition_action import create_requisition_action
 from ..models import Requisition
-from ..forms.specification import CreateSpecificationForm
-from ..forms.requisition import UpdateRequisitionFileAttachmentForm, UpdateRequisitionLocationOfDeliveryForm, ApproveRequisitionAsPDUForm, ApproveRequisitionAsAOForm
+from ..forms.attribute_value_specification import CreateAttributeValueSpecificationForm
+from ..forms.item_specification import CreateItemSpecificationForm
+from ..forms.requisition import UpdateRequisitionFileSpecificationForm, UpdateRequisitionDescriptionForm, UpdateRequisitionLocationOfDeliveryForm, ApproveRequisitionAsPDUForm, ApproveRequisitionAsAOForm, DeleteRequisitionDescriptionForm,DeleteRequisitionFileSpecificationForm
 from ..utils import handle_uploaded_file, remove_file
 from utils import get_hod, get_user_department, get_pdu_head, get_ao
-from ..guards import check_requisition_corrections, check_requisition_specifications, check_initation_timing
+from ..guards import check_requisition_corrections, check_requisition_requirement_specifications, check_initation_timing
 
 
-@check_initation_timing
 def get_requisitions(request):
 	requisitions = Requisition.objects.filter(user_department=get_user(request).profile.user_department)
 	context = {"requisitions": requisitions}
 	return render(request, 'requisition/requisitions.html', context)
 
 
-@check_initation_timing
 def get_requisition(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
-    create_specification_form = CreateSpecificationForm()
-    update_requisition_file_attachment_form = UpdateRequisitionFileAttachmentForm()
-    context = {"requisition": requisition, "create_specification_form":create_specification_form, "update_requisition_file_attachment_form":update_requisition_file_attachment_form}
+    create_specification_form = CreateItemSpecificationForm()
+    update_requisition_description_form = UpdateRequisitionDescriptionForm(data={"description":requisition.description or ''})
+    update_requisition_file_specification_form = UpdateRequisitionFileSpecificationForm(data={"description":requisition.description or ''})
+    delete_requisition_description_form = DeleteRequisitionDescriptionForm(data={"id":requisition.id})
+    delete_requisition_file_specification_form = DeleteRequisitionFileSpecificationForm(data={"id":requisition.id})
+    create_attribute_value_specification_form = CreateAttributeValueSpecificationForm()
+    create_item_specification_form = CreateItemSpecificationForm()
+    context = {"requisition": requisition, "create_specification_form":create_specification_form, "update_requisition_description_form":update_requisition_description_form, "update_requisition_file_specification_form": update_requisition_file_specification_form, "create_attribute_value_specification_form":create_attribute_value_specification_form, "create_item_specification_form": create_item_specification_form, "delete_requisition_description_form": delete_requisition_description_form, "delete_requisition_file_specification_form": delete_requisition_file_specification_form}
     return render(request, 'requisition/requisition.html', context)
 
 
 @check_initation_timing
 @permission_required('initiation.can_initiate_requisition', raise_exception=True)
-def update_requisition_file_attachment(request, requisition_id):
+def update_requisition_file_specification(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
     if request.method=='POST':
-    	update_requisition_file_attachment_form = UpdateRequisitionFileAttachmentForm(request.POST, request.FILES)
-    	if update_requisition_file_attachment_form.is_valid():
-            cleaned_data = update_requisition_file_attachment_form.cleaned_data
-            file = cleaned_data.get("file_attachment")
-            _, ext = file.name.split('.')
-            name = requisition.alt_id.replace('/','_').lower()
-            name = f'{name}.{ext}'
-            handle_uploaded_file(file, name)
-            requisition.file_attachment = f'attachments/{name}'
+        update_requisition_file_specification_form = UpdateRequisitionFileSpecificationForm(request.POST, request.FILES)
+        if update_requisition_file_specification_form.is_valid():
+            cleaned_data = update_requisition_file_specification_form.cleaned_data
+            file = cleaned_data.get("file_specification")
+            if requisition.file_specification:
+                remove_file(requisition.file_specification)
+            name = handle_uploaded_file(file, requisition)
+            requisition.file_specification = f'attachments/{name}'
             requisition.save()
-
-    context = {"update_requisition_file_attachment_form": update_requisition_file_attachment_form, "requisition":requisition}
-    update_file_attachment_container_template = render(request, 'requisition/update-file-attachment.html', context)
-    file_attachment_row_template = render(request, 'requisition/file_attachment/file-attachment-row.html', context)
-    
-    data = {
-        "form_templates": {
-            "#updateFileAttachmentContainer": update_file_attachment_container_template.content.decode(),
-            "#fileAttachmentRow": file_attachment_row_template.content.decode(),
-        }
-    }
-    return JsonResponse(data)
+            messages.success(request, "Updated file specification")
+        else:
+            messages.error(request, f"Operation failed {update_requisition_file_specification_form.errors}", extra_tags="danger")
+        
+        next = request.META.get('HTTP_REFERER', None) or '/'
+        return HttpResponseRedirect(next)
 
 
 @check_initation_timing
 @permission_required('initiation.can_initiate_requisition', raise_exception=True)
-def delete_requisition_file_attachment(request, requisition_id):
+def delete_requisition_file_specification(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
-    # delete file
-    remove_file(requisition.file_attachment)
-    requisition.file_attachment = None
-    requisition.save()        
+    if request.method == "POST":
+        delete_requisition_file_specification_form = DeleteRequisitionFileSpecificationForm(data=request.POST)
+        if delete_requisition_file_specification_form.is_valid():
+            remove_file(requisition.file_specification)
+            requisition.file_specification = None
+            requisition.save()
+            messages.success(request, "Deleted file specification")
+        else:
+            messages.error(request, "Operation failed", extra_tags="danger")
         
-    update_requisition_file_attachment_form = UpdateRequisitionFileAttachmentForm()
+        next = request.META.get('HTTP_REFERER', None) or '/'
+        return HttpResponseRedirect(next)
 
-    context = {"update_requisition_file_attachment_form": update_requisition_file_attachment_form, "requisition":requisition}
-    file_attachment_row_template = render(request, 'requisition/file_attachment/file-attachment-row.html', context)
-    data = {
-        "form_templates": {
-            "#fileAttachmentRow": file_attachment_row_template.content.decode()
-        }
-    }
-    return JsonResponse(data)
+
+@check_initation_timing
+def update_requisition_description(request, requisition_id):
+    requisition = Requisition.objects.get(id=requisition_id)
+    if request.method == "POST":
+        update_requisition_description_form = UpdateRequisitionDescriptionForm(data=request.POST)
+        if update_requisition_description_form.is_valid():
+            description = update_requisition_description_form.cleaned_data.get("description")
+            requisition.description = description
+            requisition.save()
+            messages.success(request, "Updated descriptive specification")
+        else:
+            messages.error(request, "Operation failed", extra_tags="danger")
+        
+        next = request.META.get('HTTP_REFERER', None) or '/'
+        return HttpResponseRedirect(next)
+
+
+@check_initation_timing
+def delete_requisition_description(request, requisition_id):
+    requisition = Requisition.objects.get(id=requisition_id)
+    if request.method == "POST":
+        delete_requisition_description_form = DeleteRequisitionDescriptionForm(data=request.POST)
+        if delete_requisition_description_form.is_valid():
+            requisition.description = None
+            requisition.save()
+            messages.success(request, "Deleted descriptive specification")
+        else:
+            messages.error(request, "Operation failed", extra_tags="danger")
+        
+        next = request.META.get('HTTP_REFERER', None) or '/'
+        return HttpResponseRedirect(next)
+
 
 
 @check_initation_timing
@@ -93,7 +121,7 @@ def update_requisition_location_of_delivery(request, requisition_id):
             requisition.save()
         return redirect('initiation:get_requisition', requisition_id=requisition.id)
 
-    context = {"update_requisition_file_attachment_form": update_requisition_file_attachment_form, "requisition":requisition}
+    context = {"update_requisition_file_specification_form": update_requisition_file_specification_form, "requisition":requisition}
     form_template = render(request, 'requisition/update-file-attachment.html', context)
     data = {
         "form_template": form_template.content.decode()
@@ -107,20 +135,20 @@ def print_requisition(request, requisition_id):
     template = get_template('requisition/requisition-detail.html')
     html = template.render(context)
     pdf_file = HTML(string=html).write_pdf()
-    response = HttpResponse(pdf_file, content_type='application/pdf')
+    return HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="requisition.pdf"'
     return response
 
 
 @check_initation_timing
-@check_requisition_specifications
+@check_requisition_requirement_specifications
 @check_requisition_corrections
 @permission_required('initiation.can_initiate_requisition', raise_exception=True)
 def send_to_hod_for_approval(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
     requisition.incharge = get_hod(get_user_department(get_user(request)))
     requisition.stage = "HOD APPROVAL"
-    requisition.initiated_on = timezone.now()
+    requisition.specified_on = timezone.now()
     requisition.save()
     create_requisition_action("Sent to HOD", "", get_user(request), requisition)
     messages.success(request, "Requisition sent to HOD")
@@ -128,15 +156,15 @@ def send_to_hod_for_approval(request, requisition_id):
 
 
 @check_initation_timing
-@check_requisition_specifications
+@check_requisition_requirement_specifications
 @check_requisition_corrections
 def hod_approve_and_send_to_pdu(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
     requisition.incharge = get_pdu_head()
     requisition.stage = "PDU APPROVAL"
     requisition.hod_approved_on = timezone.now()
-    if not requisition.initiated_on:
-        requisition.initiated_on = timezone.now()
+    if not requisition.specified_on:
+        requisition.specified_on = timezone.now()
     requisition.save()
     create_requisition_action("Approved by HOD", "", get_user(request), requisition)
     messages.success(request, "Requisition approved by HOD")
@@ -144,6 +172,7 @@ def hod_approve_and_send_to_pdu(request, requisition_id):
     return redirect('initiation:get_requisition', requisition_id=requisition.id)
 
 
+@check_initation_timing
 @check_requisition_corrections
 def pdu_approve(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
@@ -177,6 +206,8 @@ def pdu_approve(request, requisition_id):
         }
         return JsonResponse(data)
 
+
+@check_initation_timing
 @check_requisition_corrections
 def ao_approve(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
@@ -189,7 +220,7 @@ def ao_approve(request, requisition_id):
             if user:
                 requisition.incharge = get_pdu_head()
                 requisition.ao_approved_on = timezone.now()
-                requisition.stage = "BIDDING PROCESS"
+                requisition.stage = None
                 requisition.save()
                 create_requisition_action("Approved by AO", "", get_user(request), requisition)
                 messages.success(request, "Requisition approved by Accounting Officer")
@@ -210,11 +241,13 @@ def ao_approve(request, requisition_id):
         }
         return JsonResponse(data)
 
+
 @check_initation_timing
 def send_back_to_initiator(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
-    requisition.stage = "INITIATION" 
-    requisition.initiated_on = None
+    requisition.stage = "REQUIREMENTS SPECIFICATION" 
+    requisition.specified_on = None
+    requisition.pdu_approved_on = None
     requisition.hod_approved_on = None
     requisition.incharge = requisition.initiator
     requisition.save()
@@ -223,7 +256,7 @@ def send_back_to_initiator(request, requisition_id):
     return redirect('initiation:get_requisition', requisition_id=requisition.id)
 
 
-
+@check_initation_timing
 def authenticate_pdu_approval(request):
     if request.method == "POST":
         approve_requisition_as_pdu_form = ApproveRequisitionAsPDUForm(request.POST)

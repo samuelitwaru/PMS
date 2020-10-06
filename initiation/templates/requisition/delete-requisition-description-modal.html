@@ -1,0 +1,20 @@
+<div class="modal fade" id="deleteRequisitionDescriptionModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Confirm delete</h5>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this description?
+			</div>
+			<div class="modal-footer">
+				<form method="POST" action="{% url 'initiation:delete_requisition_description' requisition_id=requisition.id %}">
+					{% csrf_token %}
+					{{delete_requisition_description_form.id}}
+					<button class="btn btn-danger">Yes</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</div>

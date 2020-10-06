@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.template.loader import get_template
 from django.http import HttpResponseRedirect, JsonResponse
 from models import User, Token
+from tasks.tasks import send_auth_mail
+from utils import set_user_token
 from ..forms import LoginForm, SetPasswordForm, ForgotPasswordForm, AuthenticationForm
 from ..guards import *
 
@@ -48,10 +50,14 @@ def forgot_password(request):
         forgot_password_form = ForgotPasswordForm(request.POST)
         if forgot_password_form.is_valid():
             cleaned_data = forgot_password_form.cleaned_data
-            email = cleaned_data.get("email")
-            user = email
+            user = cleaned_data.get("email")
+            # set auth token
+            set_user_token(user)
             # send email
-            messages.info(request, f"An email with password reset instructions has been sent to '{email}'. Login to your email to forgot your password.")
+            send_auth_mail(user.username)
+            # send_auth_mail.delay(user.email)
+            messages.info(request, f"An email with password reset instructions has been sent to '{user.username}'. Login to your this email to continue.")
+            return render(request, "emails/password-set-email.html", {"token": user.token.token})
             return redirect("core:index")
 
     context = {"forgot_password_form": forgot_password_form}
@@ -61,8 +67,8 @@ def forgot_password(request):
 def set_password(request, token):
     token = Token.objects.filter(token=token).first()
     if not token or token.is_expired():
+        token.delete()
         messages.error(request, "Your token is invalid or has expired", extra_tags="danger")
-        # resend another
         return redirect("core:index")
 
     user = token.user
@@ -79,22 +85,7 @@ def set_password(request, token):
             return redirect("core:index")
     
     context = {"target_user":user, "set_password_form": set_password_form}
-    return render(request, "auth/set-password.html", context)    
-
-
-def reset_password(request, token):
-    reset_password_form = ResetPasswordForm()
-    if request.method == "POST":
-        reset_password_form = SetPasswordForm(request.POST)
-        if reset_password_form.is_valid():
-            cleaned_data = set_password_form.cleaned_data
-            email = cleaned_data.get("email")
-            # send email
-            messages.info(request, f"An email with password reset instructions has been sent to '{email}'. Login to your email to reset your password.")
-            return redirect("core:index")
-
-    context = {"set_password_form": set_password_form}
-    return render(request, "auth/reset-password.html", context)    
+    return render(request, "auth/set-password.html", context)     
 
 
 def authentication(request):

@@ -11,7 +11,7 @@ def get_requisition_corrections(request, requisition_id):
 	requisition_corrections = requisition.requisitioncorrection_set.all()
 	create_requisition_correction_form = CreateRequisitionCorrectionForm({"requisition":requisition.id})
 	context = {"requisition":requisition, "requisition_corrections": requisition_corrections, "create_requisition_correction_form":create_requisition_correction_form}
-	return render(request, 'requisition_correction/requisition-corrections.html', context)
+	return render(request, 'requisition-correction/requisition-corrections.html', context)
 
 
 def create_requisition_correction(request, requisition_id):
@@ -26,7 +26,8 @@ def create_requisition_correction(request, requisition_id):
 			    user = get_user(request)
 			)
 			requisition_correction.save()
-		return redirect('initiation:get_requisition_corrections', requisition_id=create_requisition_correction_form.cleaned_data.get("requisition").id)
+			messages.success(request, "Correction added.")
+		return redirect('initiation:get_requisition', requisition_id=requisition_id)
 
 
 def update_requisition_correction_corrected(request, requisition_correction):
@@ -42,7 +43,7 @@ def delete_requisition_corrections(request, requisition_id):
 			# delete all corrections
 			for correction in corrections:
 				correction.delete()
-			messages.success(request, "Corrections approved")
+			messages.success(request, "Corrections approved and removed.")
 			return redirect("initiation:get_requisition", requisition_id=requisition.id)
 
 	delete_requisition_corrections_form = DeleteRequisitionCorrectionsForm()
@@ -51,5 +52,5 @@ def delete_requisition_corrections(request, requisition_id):
 	 "corrections": corrections,
 	 "delete_requisition_corrections_form": delete_requisition_corrections_form
 	}
-	return render(request, 'requisition_correction/delete-requisition-corrections.html', context)
+	return render(request, 'requisition-correction/delete-requisition-corrections.html', context)
     

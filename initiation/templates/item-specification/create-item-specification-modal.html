@@ -1,0 +1,37 @@
+{% load app_tags %}
+<div class="modal fade" id="createItemSpecificationModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>New Item</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+		        </button>
+			</div>
+			<div class="modal-body">
+				<form method="POST" action="{% url 'initiation:create_item_specification' requisition_id=requisition.id %}">
+					{% csrf_token %}
+					
+					{% render_field create_item_specification_form.name %}
+
+					<div class="row">
+						<div class="col-4"> 
+							{% render_field create_item_specification_form.quantity %}
+						</div>
+
+						<div class="col-8"> 
+							{% render_field create_item_specification_form.unit_of_measure %}
+						</div>
+					</div>
+					
+					{% render_field create_item_specification_form.estimated_unit_cost %}
+					
+
+					<div class="modal-footer">
+						<button class="btn btn-info">Add</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

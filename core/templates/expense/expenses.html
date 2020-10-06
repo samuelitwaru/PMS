@@ -7,6 +7,9 @@
         <div class="flex-fill m-auto">
             <h4 class="text-light">Expenses</h4>
         </div>
+        {% if user == pdu_head %}
+            <button class="nav-link btn rounded-circle" data-toggle="modal" data-target="#createExpenseFormModal"><span class="fa fa-plus"></span> New Expense</button>
+        {% endif %}
     </div>
 
     <table class="table table-responsive-sm border">
@@ -17,16 +20,17 @@
                     
                     <td class="border m-auto">
                         <p>{{ expense.name }}</p>
+                        <small>{{expense.procurement_type}}</small>
                     </td>
                 </tr>
-            {% empty %}
-                <div class="container" align="center">
-                    <label class="display-4 text-muted">No plans!</label>
-                    <hr>
-                    <a class="btn btn-primary" href="{% url 'core:create_plan' %}"><span class="fa fa-plus"></span> Add Plan</a>
-                </div>
             {% endfor %}
         </tbody>
     </table>
+
+    {% if user == pdu_head %}
+        {% include 'expense/create-expense-modal.html' %}
+    {% endif %}
+
+
 </div>
 {% endblock %}

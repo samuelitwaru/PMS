@@ -124,7 +124,7 @@ var ajaxMultipartSubmitForm = function(event){
 
 	var progressContainer = $(this)[0].dataset.progressContainer
     var patchContainers = JSON.parse($(this)[0].dataset.patchContainers)
-			
+
 	$(progressContainer).html(`
 	        <div class="spinner-border text-info" role="status">
 	            <span class="sr-only">Loading...</span>

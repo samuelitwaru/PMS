@@ -1,0 +1,24 @@
+<div>
+	<div class="d-flex py-1">
+		<label class="flex-fill">Descriptive Specification</label>
+		{% if user == requisition.incharge and user == requisition.initiator and not requisition.hod_approved_on %}
+		<button class="btn btn-link btn-sm text-info" data-toggle="modal" data-target="#updateRequisitionDescriptionModal"><span class="fa fa-pencil"></span></button>
+		<button class="btn btn-link btn-sm text-danger" data-toggle="modal" data-target="#deleteRequisitionDescriptionModal"><span class="fa fa-trash"></span></button>
+		{% endif %}
+	</div>
+	<div>
+		<div class="form-control overflow-auto" style="height: 10rem;">
+			
+			{% if requisition.description %}
+			<p>{{requisition.description}}</p>
+			{% else %}
+			<p class="text-muted">No descripton added</p>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% if user == requisition.incharge and user == requisition.initiator and not requisition.hod_approved_on %}
+	{% include 'requisition/update-requisition-description-modal.html' %}
+	{% include 'requisition/delete-requisition-description-modal.html' %}
+{% endif %}

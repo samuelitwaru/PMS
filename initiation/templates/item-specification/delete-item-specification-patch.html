@@ -1,0 +1,10 @@
+<div id="deleteItemSpecificationPatch">
+	<form method="POST" action="{% url 'initiation:delete_item_specification' item_specification_id=item_specification.id %}">
+		{% csrf_token %}
+		{{ delete_item_specification_form }}
+		Are you sure you want to remove the item "{{item_specification.name}}"?
+		<div class="modal-footer">
+			<button class="btn btn-danger">Yes</button>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,47 @@
+{% extends 'plan/plan-base.html' %}
+{% load app_tags %}
+
+
+{% block plan_content %}
+	<div class="col-md-7 p-0">
+		<div class="bg-light p-2 border mb-1">
+		    <div class="d-flex">
+			   	<h5 class="flex-fill m-auto">
+			   		Corrections
+			  	</h5>
+		    </div>
+		    <hr>
+		    <table class="table table-sm border table-hover table-danger" style="cursor: pointer;">
+		        <tbody>
+		            {% for correction in plan.plancorrection_set.all %}
+		                <tr class="text-{{action.initiation.tag}}">
+		                    <td>{{ forloop.counter }}</td>
+		                    <td>
+		                    	<p>{{ correction.on }}</p>
+		                    	<small>{{correction.user.profile}}</small>
+		                    </td>
+		                    <td>{{ correction.description }}</td>
+		                </tr>
+		            {% empty %}
+		                <p class="text-success text-center">No Corrections Added</p>
+		            {% endfor %}
+		        </tbody>
+		    </table>
+		</div>
+
+		{% if is_user_incharge and not is_user_initiator and not pdu_approved %}
+		{% include 'plan-correction/create-plan-correction.html' %}
+		{% endif %}
+	
+	</div>
+
+	<div class="col-md-5 p-0">
+		
+	</div>
+{% endblock %}
+
+{% block plan_foot %}
+	<div id="authenticationFormContainer" class="bg-light p-2 fixed-bottom shadow border-top" align="center">
+		Waiting for <strong>{{plan.stage}}</strong>
+	</div>
+{% endblock %}

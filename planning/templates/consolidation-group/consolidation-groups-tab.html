@@ -1,0 +1,9 @@
+{% load app_tags %}
+<div class="tab-pane fade" id="nav-{{proc_type.id}}-tab">
+	{% with groups=proc_type.consolidationgroup_set.all %}
+    {% include 'consolidation-group/consolidation-groups-table.html' %}
+    {% if groups|length == 0 %}
+        <p class="text-center text-muted">No consolidated groups found</p>
+    {% endif %}
+    {% endwith %}
+</div>

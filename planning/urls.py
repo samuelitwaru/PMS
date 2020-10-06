@@ -8,7 +8,8 @@ urlpatterns = [
     # plan routes
     path('plan', get_plans, name='get_plans'),
     path('plan/<int:plan_id>', get_plan, name='get_plan'),
-    path('plan/create', create_plan, name='create_plan'), # check: planning_submission_deadline 
+    path('plan/create/select/procurement_type', select_plan_procurement_type, name="select_plan_procurement_type"), # check: planning_submission_deadline 
+    path('plan/create/<int:procurement_type_id>', create_plan, name='create_plan'), # check: planning_submission_deadline 
     path('plan/<int:plan_id>/update', update_plan, name='update_plan'), # check: planning_submission_deadline
     path('plan/<int:plan_id>/delete', delete_plan, name='delete_plan'), # check: planning_submission_deadline
     path('plan/<int:plan_id>/print', print_plan, name='print_plan'),
@@ -22,7 +23,7 @@ urlpatterns = [
 
     # consolidation group routes
     path('consolidation-groups', get_consolidation_groups, name='get_consolidation_groups'),
-    path('consolidation-groups/unallocated', get_unallocated_consolidation_groups, name='get_unallocated_consolidation_groups'),
+    # path('consolidation-groups/unallocated', get_unallocated_consolidation_groups, name='get_unallocated_consolidation_groups'),
     path('consolidation-groups/create', create_consolidation_group, name='create_consolidation_group'),
     path('consolidation-groups/<int:consolidation_group_id>/update', update_consolidation_group, name='update_consolidation_group'),
     path('consolidation-groups/<int:consolidation_group_id>/info/update', update_consolidation_group_info, name='update_consolidation_group_info'),
@@ -34,7 +35,6 @@ urlpatterns = [
     # plan correction routes
     path('plan/<int:plan_id>/plan-corrections/', get_plan_corrections, name="get_plan_corrections"), # check: planning_submission_deadline
     path('plan-correction/create/<int:plan_id>', create_plan_correction, name='create_plan_correction'), # check: planning_submission_deadline
-    path('plan/<int:plan_id>/plan-corrections/update-plan-correction-corrected', update_plan_correction_corrected, name="update_plan_correction_corrected"), # check: planning_submission_deadline
     path('plan/<int:plan_id>/plan-corrections/delete', delete_plan_corrections, name="delete_plan_corrections"), # check: planning_submission_deadline
 
     # entity plan routes

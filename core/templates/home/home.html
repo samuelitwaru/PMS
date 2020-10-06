@@ -10,46 +10,73 @@
 
      <div class="container p-2">
 		<div class="row">
-			<div class="col-md-6">
-				<h5 class="card-title text-info font-weight-bold">{{entity_name}}</h5>
-				<table class="table table-bordered">
+			<div class="col-md-6 bg-light border p-2 my-2 mb-2">
+				<h5 class="card-title text-center text-info font-weight-bold">{{entity_name}}</h5>
+				<table class="table">
 					<tbody>
 						<tr>
-							<td>Code</td>
+							<th>Entity</th>
+							<td>{{entity_name}}</td>
+						</tr>
+						<tr>
+							<th>Code</th>
 							<td>{{entity_code}}</td>
 						</tr>
 						<tr>
-							<td>Financial Year</td>
+							<th>Financial Year</th>
 							<td>
 								{{FY}}
 								<br>
-								<small>{{FY_start|date:date_format}} <span class="fa fa-arrow-right"></span> {{FY_stop|date:date_format}}</small>
 							</td>
 						</tr>
 
 						<tr>
-							<td>Accounting Officer</td>
+							<th>Accounting Officer</th>
 							<td>{{ao.profile}}</td>
 						</tr>
 
 						<tr>
-							<td>Head of PDU</td>
+							<th>Head of PDU</th>
 							<td>{{pdu_head.profile}}</td>
+						</tr>
+						
+						<tr>
+							<th>User department</th>
+							<td>{{user_department}}</td>
+						</tr>
+						<tr>
+							<th>HOD</th>
+							<td>{{user_department.hod.first_name}} {{user_department.hod.last_name}}</td>
+						</tr>
+						<tr>
+							<th>Department Members</th>
+							<td>
+								{{user_department.profile_set.count}}	
+							</td>
+						</tr>
+						<tr>
+							<th>Department Plans</th>
+							<td>
+								{{user_department.plan_set.count}}	
+							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
+
 			<div class="col-md-6">
+
 				<div>
-					<h5 class="card-title text-info font-weight-bold">Planning</h5>
-					<table class="table table-bordered">
+
+					<h5 class="card-title text-center text-info font-weight-bold">Planning</h5>
+					<table class="table table-sm table-bordered">
 						<tbody>
 							<tr>
 								<td>Start</td>
 								<td>{{planning_process.start|date:time_format}}</td>
 								<td><label id="planningStartTimer" data-stop-time="{{planning_process.start|date:'yy-m-d H:i'}}">Calculating</label></td>
 							</tr>
-							<tr class="text-danger">
+							<tr>
 								<td>Submission Dealine</td>
 								<td>{{planning_process.submission_deadline|date:time_format}}</td>
 								<td><label id="planningSubmissionDeadlineTimer" data-stop-time="{{planning_process.submission_deadline|date:'yy-m-d H:i'}}">Calculating</label></td>
@@ -66,15 +93,15 @@
 				<div class="text-center text-muted"><span class="fa fa-arrow-down fa-5x"></span></div>
 
 				<div>
-					<h5 class="card-title text-info font-weight-bold">Initiaiton</h5>
-					<table class="table table-bordered">
+					<h5 class="card-title text-center text-info font-weight-bold">Initiaiton</h5>
+					<table class="table table-sm table-bordered">
 						<tbody>
 							<tr>
 								<td>Start</td>
 								<td>{{initiation_process.start|date:time_format}}</td>
 								<td><label id="initiationStartTimer" data-stop-time="{{initiation_process.start|date:'yy-m-d H:i'}}">Calculating</label></td>
 							</tr>
-							<tr class="text-danger">
+							<tr>
 								<td>Submission Dealine</td>
 								<td>{{initiation_process.submission_deadline|date:time_format}}</td>
 								<td><label id="initiationSubmissionDeadlineTimer" data-stop-time="{{initiation_process.submission_deadline|date:'yy-m-d H:i'}}">Calculating</label></td>

@@ -1,0 +1,11 @@
+<div class="form-group">
+	<small>{{field.label}}</small>
+	<div class="form-control" style="height: auto">
+		{% for radio in field %}
+			<div>
+				{{ radio }}
+			</div>
+		{% endfor %}
+		<small class="text-danger">{{field.errors}}</small>
+	</div>
+</div>

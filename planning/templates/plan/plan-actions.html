@@ -12,9 +12,9 @@
     <hr>
     
     <div class="form-group">
-        <small class="text-info">Next Action</small>
+        <small class="text-info">Next Stage</small>
         <p class="" style="height: auto">
-            {% if plan.stage == "PREPARATION" %}HOD APPROVAL{% elif plan.stage == "HOD APPROVAL"%}PDU APRROVAL{% elif plan.stage == "PDU APPROVAL"%}CONSOLIDATION{% elif plan.stage == "CONSOLIDATION"%}INITIATION{% endif %}
+            {% if plan.stage == "PREPARATION" %}HOD APPROVAL{% elif plan.stage == "HOD APPROVAL"%}PDU APRROVAL{% elif plan.stage == "PDU APPROVAL" %}CONSOLIDATION{% elif plan.stage == "CONSOLIDATION"%}PUBLISHING{% endif %}
         </p>
     </div>
     {% endif %}

@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
-from core.models import UserDepartment, Expense
+from core.models import UserDepartment, Expense, ProcurementType
 from planning.models import Plan, Funder
 
 
@@ -9,9 +9,8 @@ class Requisition(models.Model):
 	alt_id = models.CharField(max_length=128, null=True)
 	sequence_number = models.CharField(max_length=128, null=True)
 	expense = models.ForeignKey(Expense, on_delete=models.CASCADE)
-
 	subject_of_procurement = models.CharField(max_length=128)
-	type_of_procurement = models.CharField(max_length=64)
+	procurement_type = models.ForeignKey(ProcurementType, on_delete=models.CASCADE)
 	quantity = models.IntegerField()
 	unit_of_measure = models.CharField(max_length=32)
 	estimated_cost = models.IntegerField()
@@ -21,12 +20,14 @@ class Requisition(models.Model):
 	date_required_q3 = models.BooleanField(default=False)
 	date_required_q4 = models.BooleanField(default=False)
 
-	stage = models.CharField(max_length=64, default="INITIATION")
+	stage = models.CharField(max_length=64, default="REQUIREMENTS SPECIFICATION", null=True)
 
 	location_of_delivery = models.CharField(max_length=128)
-	file_attachment = models.FileField(null=True)
 
-	initiated_on = models.DateField(null=True)
+	file_specification = models.FileField(null=True)
+	description = models.CharField(max_length=1024, null=True)
+
+	specified_on = models.DateField(null=True)
 	hod_approved_on = models.DateField(null=True)
 	pdu_approved_on = models.DateField(null=True)
 	ao_approved_on = models.DateField(null=True)
@@ -41,15 +42,25 @@ class Requisition(models.Model):
 		number = str(self.id)
 		while len(number) < 4:
 		    number = f'0{number}'
-		self.alt_id = f'REQUISITION/{settings.ENTITY_CODE}/{number}'
+		self.alt_id = f'REQUISITION/{self.procurement_type.abbreviation}/{settings.ENTITY_CODE}/{number}'
 		self.save()
 
 
 
-class Specification(models.Model):
+class ItemSpecification(models.Model):
+    name = models.CharField(max_length=64)
+    quantity = models.IntegerField()
+    unit_of_measure = models.CharField(max_length=64)
+    estimated_unit_cost = models.IntegerField()
+    requisition = models.ForeignKey(Requisition, on_delete=models.CASCADE)
+	
+
+
+class AttributeValueSpecification(models.Model):
 	attribute = models.CharField(max_length=64)
 	value = models.CharField(max_length=256)
 	requisition = models.ForeignKey(Requisition, on_delete=models.CASCADE)
+
 
 
 class RequisitionAction(models.Model):

@@ -8,7 +8,7 @@ def initialize_requisitions(plans):
 		requisition = Requisition(
 			expense = plan.expense,
 			subject_of_procurement = plan.subject_of_procurement,
-			type_of_procurement = plan.type_of_procurement,
+			procurement_type = plan.procurement_type,
 			quantity = plan.quantity,
 			unit_of_measure = plan.unit_of_measure,
 			estimated_cost = plan.estimated_cost,
@@ -27,11 +27,14 @@ def initialize_requisitions(plans):
 		requisition.alt_id = requisition.set_requisition_alt_id()
 
 
-def handle_uploaded_file(f, name):
+def handle_uploaded_file(file, requisition):
+	_, ext = file.name.split('.')
+	name = requisition.alt_id.replace('/','_').lower()
+	name = f'{name}.{ext}'
 	with open(f'{settings.MEDIA_ROOT}/attachments/{name}', 'wb+') as destination:
-		for chunk in f.chunks():
-			pass
+		for chunk in file.chunks():
 			destination.write(chunk)
+	return name
 
 def remove_file(name):
 	os.remove(f'{settings.MEDIA_ROOT}/{name}')

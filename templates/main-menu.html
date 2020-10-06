@@ -1,3 +1,4 @@
+{% load app_tags %}
 <div class="modal shadow left slide" id="sideBar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content rounded-0 bg-light">
@@ -6,6 +7,9 @@
 				<div class="flex-fill p-1 m-auto">
 					<h5 class="text-primar">{{ profile.display_name }}</h5>
 					<small class="text-muted">{{ user_department }}</small>
+					<hr>
+					<div>Sealing</div>
+					{{ user_department.budget_sealing|currency }}
 				</div>
 			</div>
 

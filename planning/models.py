@@ -2,13 +2,13 @@ from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
-from core.models import UserDepartment, Expense, SubProgramme, Timing, Profile, Funder
+from core.models import ProcurementType, UserDepartment, Expense, SubProgramme, Timing, Profile, Funder
 
 
 class ConsolidationGroup(models.Model):
     expense = models.ForeignKey(Expense, on_delete=models.CASCADE, null=True)
     subject_of_procurement = models.CharField(max_length=128, null=True)
-    type_of_procurement = models.CharField(max_length=128)
+    procurement_type = models.ForeignKey(ProcurementType, on_delete=models.CASCADE)
     method_of_procurement = models.CharField(max_length=128, null=True)
     contract_type = models.CharField(max_length=64, null=True)
     prequalification = models.BooleanField(null=True)
@@ -41,7 +41,7 @@ class ConsolidationGroup(models.Model):
         return sum([plan.estimated_cost for plan in self.plan_set.all()])
 
     def get_info_form_data(self):
-        data = {"subject_of_procurement": self.subject_of_procurement, "type_of_procurement":self.type_of_procurement}
+        data = {"subject_of_procurement": self.subject_of_procurement, "procurement_type":self.procurement_type}
         return data
 
     def get_methodology_form_data(self):
@@ -52,7 +52,7 @@ class ConsolidationGroup(models.Model):
 
     def get_schedule_form_data(self):
         method = self.method_of_procurement
-        type_ = self.type_of_procurement
+        type_ = self.procurement_type
         bid_opening_and_closing_date = self.bid_invitation_date + timedelta(20)
         if method == "Open Domestic Bidding" or method == "Restricted International Bidding":
             bid_opening_and_closing_date = self.bid_invitation_date + timedelta(20)
@@ -102,7 +102,7 @@ class ConsolidationGroup(models.Model):
 class Plan(models.Model):
     alt_id = models.CharField(max_length=128, null=True)
     subject_of_procurement = models.CharField(max_length=128)
-    type_of_procurement = models.CharField(max_length=64)
+    procurement_type = models.ForeignKey(ProcurementType, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     unit_of_measure = models.CharField(max_length=32)
     estimated_cost = models.IntegerField()
@@ -120,7 +120,7 @@ class Plan(models.Model):
     consolidated_on = models.DateField(null=True)
     published_on = models.DateField(null=True)
 
-    stage = models.CharField(max_length=16, default='PREPARATION')
+    stage = models.CharField(max_length=16, default='PREPARATION', null=True)
     date_initiated = models.DateTimeField(auto_now_add=True)
 
     initiator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiated_plan_set', null=True)
@@ -137,18 +137,18 @@ class Plan(models.Model):
         number = str(self.id)
         while len(number) < 4:
             number = f'0{number}'
-        self.alt_id = f'PLAN/{settings.ENTITY_CODE}/{number}'
+        self.alt_id = f'PLAN/{self.procurement_type.abbreviation}/{settings.ENTITY_CODE}/{number}'
         self.save()
 
     def form_dict(self):
         return { 'id': self.id, 'subject_of_procurement': self.subject_of_procurement, 
-            'type_of_procurement': self.type_of_procurement, 
-            'quantity': 4, 'unit_of_measure': self.unit_of_measure, 
+            'procurement_type': self.procurement_type, 
+            'quantity': self.quantity, 'unit_of_measure': self.unit_of_measure, 
             'estimated_cost': self.estimated_cost, 
             'source_of_funding': self.source_of_funding_id, 
             'date_required_q1': self.date_required_q1, 'date_required_q2': self.date_required_q2, 
             'date_required_q3': self.date_required_q3, 'date_required_q4': self.date_required_q4, 
-            'chart_of_account': self.expense_id, 'project_funder': self.source_of_funding
+            'expense': self.expense_id, 'project_funder': self.source_of_funding
         }
 
 

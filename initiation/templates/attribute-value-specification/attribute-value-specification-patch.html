@@ -1,0 +1,12 @@
+<div id="attributeValueSpecificationPatch">
+	<table class="table table-bordered">
+        <tbody>
+        	{% for specification in requisition.attributevaluespecification_set.all %}
+            <tr>
+                <td>{{specification.attribute}}</td>
+                <td>{{specification.value}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -22,6 +22,14 @@ def get_ao():
 	ao = Profile.objects.get(is_ao=True)
 	return ao.user
 
+
+def get_user_actions(user):
+	actions = {
+		"plan_actions": user.incharge_plan_set.filter(consolidated_on=None), 
+		"requisition_actions": user.incharge_requisition_set.filter(ao_approved_on=None)
+	}
+	return actions
+
 def get_current_process():
 	current_process = Timing.objects.filter(start__lte=timezone.now(), stop__gte=timezone.now()).first()
 	return current_process
@@ -45,9 +53,12 @@ def requisitions_available():
 	return Requisition.objects.count()
 
 
-def set_user_token(user): 
+def set_user_token(user):
+	token = Token.objects.get(user_id=user.id)
+	if token:
+		token.delete()
 	signer = TimestampSigner()
-	token = signer.sign("password reset")
+	token = signer.sign("reset")
 	token = Token(user=user, token=token)
 	token.save()
 

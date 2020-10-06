@@ -1,4 +1,4 @@
-{% load procurement_tags %}
+{% load app_tags %}
 <div id="plan">
     <div id="title-div"></div>
     <table class="table table-responsive-sm table-bordered">
@@ -34,7 +34,7 @@
 
         <tr>
             <td  class="text-center" colspan="2">Type of Procurement</td>
-            <td  class="text-center" colspan="2">{{ plan.type_of_procurement }}</td>
+            <td  class="text-center" colspan="2">{{ plan.procurement_type }}</td>
         </tr>
 
         <tr>
@@ -49,12 +49,33 @@
 
         <tr>
             <td  class="text-center" colspan="2">Estimated Cost</td>
-            <td  class="text-center" colspan="2">{{ plan.estimated_cost|comma_separator }}</td>
+            <td  class="text-center" colspan="2">{{ plan.estimated_cost|currency }}</td>
         </tr>
 
         <tr>
             <td  class="text-center" colspan="2">Source of Funding</td>
             <td  class="text-center" colspan="2">{{ plan.source_of_funding }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Dates required</td>
+            <td  class="text-center" colspan="2">
+                <table class="table">
+                    <tr>
+                        <td>Q1</td>
+                        <td>{% if plan.date_required_q1 %}<span class="fa fa-check"></span>{% endif %}</td>
+                        <td>Q2</td>
+                        <td>{% if plan.date_required_q2 %}<span class="fa fa-check"></span>{% endif %}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Q3</td>
+                        <td>{% if plan.date_required_q3 %}<span class="fa fa-check"></span>{% endif %}</td>
+                        <td>Q4</td>
+                        <td>{% if plan.date_required_q4 %}<span class="fa fa-check"></span>{% endif %}</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
 
         <tr>
@@ -114,5 +135,4 @@
     {% endif %}
     {% endwith %}
 </div>
-<!-- <br> -->
 <hr>

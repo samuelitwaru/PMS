@@ -13,23 +13,23 @@ def get_user_departments(request):
 	return render(request, 'user_department/user-departments.html', context)
 
 
-@only_ao_allowed
-def create_user_department(request):
-	if request.method == "POST":
-		create_user_department_form = CreateUserDepartmentForm(request.POST)
-		if create_user_department_form.is_valid():
-			name = create_user_department_form.cleaned_data.get("name")
-			sub_programme = create_user_department_form.cleaned_data.get("sub_programme")
+# @only_ao_allowed
+# def create_user_department(request):
+# 	if request.method == "POST":
+# 		create_user_department_form = CreateUserDepartmentForm(request.POST)
+# 		if create_user_department_form.is_valid():
+# 			name = create_user_department_form.cleaned_data.get("name")
+# 			sub_programme = create_user_department_form.cleaned_data.get("sub_programme")
 			
-			user_department = UserDepartment(name=name, sub_programme=sub_programme)
-			user_department.save()
-			user_department.save()
-			return redirect('core:get_user_departments')
+# 			user_department = UserDepartment(name=name, sub_programme=sub_programme)
+# 			user_department.save()
+# 			user_department.save()
+# 			return redirect('core:get_user_departments')
 				 
-	elif request.method == "GET":
-		create_user_department_form = CreateUserDepartmentForm()
-	context = {"create_user_department_form": create_user_department_form}
-	return render(request, 'user_department/create-user-department.html', context)
+# 	elif request.method == "GET":
+# 		create_user_department_form = CreateUserDepartmentForm()
+# 	context = {"create_user_department_form": create_user_department_form}
+# 	return render(request, 'user_department/create-user-department.html', context)
     
 
 @only_ao_allowed

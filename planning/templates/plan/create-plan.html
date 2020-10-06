@@ -1,5 +1,5 @@
 {% extends 'user-base.html' %}
-{% load procurement_tags %}
+{% load app_tags %}
 
 {% block content %}
 <div class="container-fluid  p-0">
@@ -10,46 +10,27 @@
     </div>
 
 	<div class="login-content">
-		<form method="POST" action="{% url 'planning:create_plan' %}">
-			{{ form.errors }}
 
-			{% csrf_token %}
+		<form method="POST" action="{% url 'planning:create_plan' procurement_type_id=procurement_type.id %}" novalidate>
 
-			<div class="form-group">
-				<small>Expense Category (COA)</small>
-				{{ form.chart_of_account|add_css:"form-control" }}
-			</div>
+			{% csrf_token  %}
 
-			<div class="form-group">
-				<small>Subject of Procurement</small>
-				{{ form.subject_of_procurement|add_css:"form-control" }}
-			</div>
-
-			<div class="form-group">
-				<small>Quantity</small>
-				{{ form.quantity|add_css:"form-control" }}
-			</div>
-
-			<div class="form-group">
-				<small>Unit of measure</small>
-				{{ form.unit_of_measure|add_css:"form-control" }}
-			</div>
-
-			<div class="form-group">
-				<small>Estimated Cost</small>
-				{{ form.estimated_cost|add_css:"form-control" }}
-			</div>
+			{% render_field create_plan_form.subject_of_procurement class='form-control' %}
+			{% render_field create_plan_form.expense class='form-control' %}
+			{% render_field create_plan_form.quantity class='form-control' min=0 %}
+			{% render_field create_plan_form.unit_of_measure class='form-control' %}
+			{% render_field create_plan_form.estimated_cost class='form-control' %}
 
 			<div class="form-group">
 				<small>Source of Funding</small>
 				<div class="form-control" style="height: auto">
-					{% for radio in form.source_of_funding %}
+					{% for radio in create_plan_form.source_of_funding %}
 						<div>
 							{{ radio }}
 						</div>
 					{% endfor %}
 					<small class="text-info">Specify Funder</small>
-					{{ form.other_funder|add_attrs:'{"id":"id_other_funder", "class":"form-control"}' }}
+					{{ create_plan_form.other_funder|add_attrs:'{"id":"id_other_funder", "class":"form-control"}' }}
 					<script type="text/javascript">
 						$('.source_of_funding_radio').on('change', (e)=>{
 							if (e.target.value == "0") {
@@ -60,26 +41,22 @@
 						})
 					</script>
 				</div>
+				<small class="text-danger">{{create_plan_form.errors.source_of_funding}}</small>
 			</div>
-
 			<div class="form-group">
-				<small>Date Rquired</small>
+				<small>Date Required</small>
 				<div class="row border m-0 rounded p-3">
-					<div class="custom-control custom-checkbox col-md-6">
-						{{ form.date_required_q1|add_attrs:'{"class":"custom-control-input", "id":"q1"}' }}
-						<label class="custom-control-label" for="q1">Quarter 1 <small>(Jul, Aug, Sep)</small></label>
+					<div class="col-md-6">
+						{% render_field create_plan_form.date_required_q1 class="custom-control-input" %}
 					</div>
-					<div class="custom-control custom-checkbox col-md-6">
-						{{ form.date_required_q2|add_attrs:'{"class":"custom-control-input", "id":"q2"}' }}
-						<label class="custom-control-label" for="q2">Quarter 2 <small>(Oct, Nov, Dec)</small></label>
+					<div class="col-md-6">
+						{% render_field create_plan_form.date_required_q2 class="custom-control-input" %}
 					</div>
-					<div class="custom-control custom-checkbox col-md-6">
-						{{ form.date_required_q3|add_attrs:'{"class":"custom-control-input", "id":"q3"}' }}
-						<label class="custom-control-label" for="q3">Quarter 3 <small>(Jan, Feb, March)</small></label>
+					<div class="col-md-6">
+						{% render_field create_plan_form.date_required_q3 class="custom-control-input" %}
 					</div>
-					<div class="custom-control custom-checkbox col-md-6">
-						{{ form.date_required_q4|add_attrs:'{"class":"custom-control-input", "id":"q4"}' }}
-						<label class="custom-control-label" for="q4">Quarter 4 <small>(Apr, May, Jun)</small></label>
+					<div class="col-md-6">
+						{% render_field create_plan_form.date_required_q4 class="custom-control-input" %}
 					</div>
 				</div>
 			</div>

@@ -1,0 +1,24 @@
+<div>
+	<div class="d-flex py-1">
+		<label class="flex-fill">File Specification</label>
+		{% if user == requisition.incharge and user == requisition.initiator and not requisition.hod_approved_on %}
+		<button class="btn btn-link btn-sm text-info" data-toggle="modal" data-target="#updateRequisitionFileSpecificationModal"><span class="fa fa-pencil"></span></button>
+		<button class="btn btn-link btn-sm text-danger" data-toggle="modal" data-target="#deleteRequistionFileSpecificationModal"><span class="fa fa-trash"></span></button>
+		{% endif %}
+	</div>
+
+	<div>
+		<div class="form-control">
+			{% if requisition.file_specification %}
+			<a target="_blank" href="{{MEDIA_URL}}{{requisition.file_specification}}" class="nav-link d-inline"><span class="fa fa-download"></span> Specification File</a>
+			{% else %}
+			<p class="text-muted">No file specification added</p>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% if user == requisition.incharge and user == requisition.initiator and not requisition.hod_approved_on %}
+	{% include 'requisition/update-requisition-file-specification-modal.html' %}
+	{% include 'requisition/delete-requisition-file-specification-modal.html' %}
+{% endif %}

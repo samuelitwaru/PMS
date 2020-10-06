@@ -9,7 +9,10 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+from __future__ import absolute_import
+# This will make sure the app is always imported when
+# Django starts so that shared_task will use this app.
+from .celery import app as celery_app
 import os
 import datetime
 import pytz
@@ -29,7 +32,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'core',
     'planning',
     'initiation',
@@ -76,6 +79,9 @@ TEMPLATES = [
                 'core.context_processors.user_profile',
                 'core.context_processors.actions'
             ],
+            'libraries': {
+                "app_tags" : "templatetags.app_tags"
+            }
         },
     },
 ]
@@ -87,9 +93,18 @@ WSGI_APPLICATION = 'PMS.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # },
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'PMS',
+        'USER': 'root',
+        'PASSWORD': 'bratz123',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -118,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Kampala'
 
 USE_I18N = True
 
@@ -128,6 +143,13 @@ USE_TZ = True
 
 LOGIN_URL = '/login'
 
+# CELERY STUFF
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Kampala'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -146,10 +168,12 @@ FY_START_DATE = datetime.datetime(2020, 7, 1).astimezone(tz=pytz.timezone(TIME_Z
 FY_STOP_DATE = datetime.datetime(2021, 6, 30).astimezone(tz=pytz.timezone(TIME_ZONE))
 CURRENCY = 'UGX'
 
-# email settings
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'info@inkoop.co.ug'
-EMAIL_HOST_PASSWORD = 'Inkoop@123'
+# host address
+HOST = 'http://127.0.0.1:8000'
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

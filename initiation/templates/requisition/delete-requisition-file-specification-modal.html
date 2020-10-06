@@ -1,0 +1,20 @@
+<div class="modal fade" id="deleteRequistionFileSpecificationModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Confirm delete</h5>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this file specification?
+			</div>
+			<div class="modal-footer">
+				<form method="POST" action="{% url 'initiation:delete_requisition_file_specification' requisition_id=requisition.id %}">
+					{% csrf_token %}
+					{{delete_requisition_file_specification_form.id}}
+					<button class="btn btn-danger">Yes</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</div>

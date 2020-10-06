@@ -27,4 +27,4 @@ def update_process_track(request, consolidation_group_id):
 		update_process_track_form = UpdateProcessTrackForm(group.process_track_form_data())
 	
 	context = {"group":group, "update_process_track_form":update_process_track_form}
-	return render(request, 'consolidation_group/consolidation-group.html', context)
+	return render(request, 'consolidation-group/consolidation-group.html', context)

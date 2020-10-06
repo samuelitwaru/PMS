@@ -13,8 +13,6 @@ def get_timing(request):
 	initiation_timing = Timing.objects.get(process="Initiation")
 	bidding_timing = Timing.objects.get(process="Bidding")
 	contract_timing = Timing.objects.get(process="Contract")
-	
-
 	context = {"planning_timing":planning_timing, "initiation_timing":initiation_timing, "bidding_timing":bidding_timing, "contract_timing":contract_timing}
 	return render(request, 'timing/timing.html', context)
 

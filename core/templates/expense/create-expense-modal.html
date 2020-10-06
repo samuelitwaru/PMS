@@ -1,0 +1,31 @@
+<div class="modal fade" id="createExpenseFormModal"> 
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>New Expense</h5>
+			</div>
+			<div class="modal-body">
+				<form method="POST" action="{% url 'core:create_expense' %}">
+					{% csrf_token %}
+					<table>
+						<div class="form-group">
+							<small>{{create_expense_form.procurement_type.label}}</small>
+							{{ create_expense_form.procurement_type }}
+						</div>
+						<div class="form-group">
+							<small>{{create_expense_form.code.label}}</small>
+							{{ create_expense_form.code }}
+						</div>
+						<div class="form-group">
+							<small>{{create_expense_form.name.label}}</small>
+							{{ create_expense_form.name }}
+						</div>
+					</table>
+					<div class="modal-footer">
+						<button class="btn btn-info">Save</button>
+					</div>		
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -2,7 +2,7 @@ from django import forms
 from ..models import Requisition
 
 on_choices = [
-	("Specification", "Specification"), ("File Attachment", "File Attachment")
+	("Descriptive Specification", "Descriptive Specification"), ("File Specification", "File Specification"), ("Attribute Value Specification", "Attribute Value Specification")
 ]
 
 

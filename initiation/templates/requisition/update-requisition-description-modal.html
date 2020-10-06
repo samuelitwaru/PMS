@@ -1,0 +1,20 @@
+{% load app_tags %}
+<div class="modal fade" id="updateRequisitionDescriptionModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Descriptive Specification</h5>
+			</div>
+			<div class="modal-body">
+				<p>Please provide a description for the item to be procured</p>
+				<form method="POST" action="{% url 'initiation:update_requisition_description' requisition_id=requisition.id %}">
+					{% csrf_token %}
+					{% render_field update_requisition_description_form.description %}
+					<div class="modal-footer">
+						<button class="btn btn-info">Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

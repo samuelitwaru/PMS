@@ -1,0 +1,20 @@
+{% load app_tags %}
+<div class="modal fade" id="updateRequisitionFileSpecificationModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>File Specification</h5>
+			</div>
+			<div class="modal-body">
+				<p>Please provide a .docx, .xlsx or pdf file containing specification instructions for the item being procured</p>
+				<form method="POST" action="{% url 'initiation:update_requisition_file_specification' requisition_id=requisition.id %}" enctype="multipart/form-data">
+					{% csrf_token %}
+					{% render_field update_requisition_file_specification_form.file_specification %}
+					<div class="modal-footer">
+						<button class="btn btn-info">Upload</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

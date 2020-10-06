@@ -1,0 +1,50 @@
+{% load app_tags %}
+<div class="modal fade" id="itemSpecificationsDetailedModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Item Checklist</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+		        </button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered" style="cursor: pointer;">
+			        <thead>
+			        	<th><small>No</small></th>
+			        	<th><small>Item</small></th>
+			        	<th><small>Quantity</small></th>
+			        	<th><small>Estimated Unit Cost</small></th>
+			        	<th><small></th>
+			        	<th><small></th>
+			        </thead>
+			        <tbody>
+			            {% for item in requisition.item_set.all %}
+			                <tr class="text-{{action.initiation.tag}}">
+			                    <td>{{ forloop.counter }}</td>
+			                    <td>{{ item.name }}</td>
+			                    <td>{{ item.quantity }} ({{item.unit_of_measure}})</td>
+			                    <td>{{ item.estimated_unit_cost|currency }}</td>
+			                    <td align="center">
+			                    	<form class="d-inline ajaxForm flex-fill" method="GET" action="{% url 'initiation:update_item_specification' item_specification_id=item_specification.id %}" data-progress-container="#updateItemSpecificationPatch" data-patch-containers='["#updateItemSpecificationPatch"]'>
+				                    	<button data-toggle="modal" data-target="#updateItemModal" class="btn btn-sm btn-info"><span class="fa fa-pencil"></span></button>
+				                    </form>
+			                    </td>
+			                    <td align="center">
+			                    	<form class="d-inline ajaxForm flex-fill" method="GET" action="{% url 'initiation:delete_item' item_id=item.id %}" data-progress-container="#deleteItemSpecificationPatch" data-patch-containers='["#deleteItemSpecificationPatch"]'>
+				                    	<button data-toggle="modal" data-target="#deleteItemSpecificationModal" class="btn btn-sm btn-danger">Remove</button>
+				                    </form>
+			                    </td>
+			                </tr>
+			            {% empty %}
+			                <p class="text-muted text-center">No Item Specifications Added</p>
+			            {% endfor %}
+			        </tbody>
+			    </table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

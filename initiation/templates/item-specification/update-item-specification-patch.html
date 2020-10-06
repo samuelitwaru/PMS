@@ -1,0 +1,26 @@
+{% load app_tags %}
+<div id="updateItemSpecificationPatch">
+	<form method="POST" action="{% url 'initiation:update_item_specification' item_specification_id=item_specification.id %}">
+		{% csrf_token %}
+		
+		{{ update_item_specification_form.id }}
+
+		{% render_field update_item_specification_form.name %}
+
+		<div class="row">
+			<div class="col-4"> 
+				{% render_field update_item_specification_form.quantity %}
+			</div>
+
+			<div class="col-8"> 
+				{% render_field update_item_specification_form.unit_of_measure %}
+			</div>
+		</div>
+		
+		{% render_field update_item_specification_form.estimated_unit_cost %}
+
+		<div class="modal-footer">
+			<button class="btn btn-info">Save</button>
+		</div>
+	</form>
+</div>

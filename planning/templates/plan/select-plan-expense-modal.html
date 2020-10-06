@@ -1,0 +1,21 @@
+{% load app_tags %}
+<div class="modal fade" id="selectPlanExpenseModal"> 
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Select Type of Procurement</h5>
+			</div>
+			<div class="modal-body">
+				<form method="POST" action="{% url 'planning:select_plan_procurement_type' %}">
+					{% csrf_token %}
+					<table>
+						{% render_field select_plan_procurement_type_form.procurement_type %}
+					</table>
+					<div class="modal-footer">
+						<button class="btn btn-info">Next</button>
+					</div>		
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

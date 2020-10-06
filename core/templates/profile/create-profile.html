@@ -12,7 +12,9 @@
     		<div class="card-body">
     			<form method="POST" action="{% url 'core:create_profile' %}">
     				{% csrf_token %}
-					{{ create_profile_form.as_p }}
+                    <table class="table table-responsive">
+                        {{ create_profile_form.as_table }}                    
+                    </table>
 					<div align="center">
 		    			<button class="btn btn-info">Save</button>
 					</div>

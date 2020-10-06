@@ -1,0 +1,18 @@
+<p>Please note that you are required to perform the following actions on the procurement process of {{entity}}</p>
+
+<p class="m-0 text-center"><strong>Plans</strong></p>
+{% for action in plan_actions %}
+	<a href="{% url 'planning:get_plan' plan_id=action.id %}" class="dropdown-item">{{action.alt_id}} <small>({{action.stage}})</small></a>
+{% empty %}
+	<p class="p-1 text-center m-auto">Nothing</p>
+{% endfor %}
+
+<div class="dropdown-divider"></div>
+
+<p class="m-0 text-center"><strong>Requisitions</strong></p>
+<div class="dropdown-divider"></div>
+{% for action in requisition_actions %}
+	<a href="{% url 'initiation:get_requisition' requisition_id=action.id %}" class="dropdown-item">{{action.alt_id}} <small>({{action.stage}})</small></a>
+{% empty %}
+<p class="p-1 text-center m-auto">Nothing</p>
+{% endfor %}
