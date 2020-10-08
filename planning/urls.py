@@ -23,15 +23,15 @@ urlpatterns = [
 
     # consolidation group routes
     path('consolidation-groups', get_consolidation_groups, name='get_consolidation_groups'),
-    # path('consolidation-groups/unallocated', get_unallocated_consolidation_groups, name='get_unallocated_consolidation_groups'),
     path('consolidation-groups/create', create_consolidation_group, name='create_consolidation_group'),
     path('consolidation-groups/<int:consolidation_group_id>/update', update_consolidation_group, name='update_consolidation_group'),
     path('consolidation-groups/<int:consolidation_group_id>/info/update', update_consolidation_group_info, name='update_consolidation_group_info'),
     path('consolidation-groups/<int:consolidation_group_id>/methodology/update', update_consolidation_group_methodology, name='update_consolidation_group_methodology'),
     path('consolidation-groups/<int:consolidation_group_id>/schedule/update', update_consolidation_group_schedule, name='update_consolidation_group_schedule'),
+    path('consolidation-groups/<int:consolidation_group_id>/process-track', get_consolidation_group_process_track, name='get_consolidation_group_process_track'),
     path('consolidation-groups/plans/publish', publish_plans, name='publish_plans'),
     path('consolidation-groups/complied_plans/download', download_consolidated_plans, name='download_consolidated_plans'),
-
+    
     # plan correction routes
     path('plan/<int:plan_id>/plan-corrections/', get_plan_corrections, name="get_plan_corrections"), # check: planning_submission_deadline
     path('plan-correction/create/<int:plan_id>', create_plan_correction, name='create_plan_correction'), # check: planning_submission_deadline

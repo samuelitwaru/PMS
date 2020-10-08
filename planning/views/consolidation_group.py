@@ -22,6 +22,15 @@ def get_consolidation_groups(request):
 	context = {"procurement_types":procurement_types, "groups":groups, "create_consolidation_group_form": create_consolidation_group_form, "requisitions_available":requisitions_available} 
 	return render(request, 'consolidation-group/consolidation-groups.html', context)
 
+def get_consolidation_group_process_track(request, consolidation_group_id):
+	group = ConsolidationGroup.objects.get(id=consolidation_group_id)
+	context = {"group": group}
+	process_track_patch_template = render(request, 'consolidation-group/process-track-patch.html', context)
+	data = {
+		"form_templates": {
+			"#processTrackPatch": process_track_patch_template.content.decode()
+		}
+    };return JsonResponse(data)
 
 def create_consolidation_group(request):
 	if request.method == "POST":

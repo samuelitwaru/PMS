@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from models import ConsolidationGroup
+from django.contrib import messages
 from ..forms.process_track import UpdateProcessTrackForm
 
 
@@ -11,9 +12,9 @@ def update_process_track(request, consolidation_group_id):
 			cleaned_data = update_process_track_form.cleaned_data
 			group.preparation_of_bid_document = cleaned_data.get("preparation_of_bid_document")
 			group.approval_of_bid_document = cleaned_data.get("approval_of_bid_document")
-			group.invitation_bid = cleaned_data.get("invitation_bid")
+			group.invitation_of_bids = cleaned_data.get("invitation_of_bids")
 			group.issue_and_sale_of_bid_document = cleaned_data.get("issue_and_sale_of_bid_document")
-			group.receiof_bids = cleaned_data.get("receiof_bids")
+			group.receipt_of_bids = cleaned_data.get("receipt_of_bids")
 			group.opening_of_bids = cleaned_data.get("opening_of_bids")
 			group.nomination_of_evaluation_committee_members = cleaned_data.get("nomination_of_evaluation_committee_members")
 			group.approval_or_rejection_of_evaluation_committee_members = cleaned_data.get("approval_or_rejection_of_evaluation_committee_members")
@@ -22,6 +23,9 @@ def update_process_track(request, consolidation_group_id):
 			group.display_of_best_evaluated_bidders = cleaned_data.get("display_of_best_evaluated_bidders")
 			group.contract_signing = cleaned_data.get("contract_signing")
 			group.save()
+			messages.success(request, "Process track updated.")
+		else:
+			messages.error(request, "Failed! Invalid entries.", extra_tags="danger")
 
 	else:
 		update_process_track_form = UpdateProcessTrackForm(group.process_track_form_data())

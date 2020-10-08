@@ -116,6 +116,20 @@ var ajaxSubmit = function(event){
 
 $(".ajaxForm").submit(ajaxSubmit)
 
+var loadUrl = function(url, progressContainer, patchContainers){
+    $(progressContainer).html(`
+        <div class="spinner-border text-info" role="status" align="center">
+            <span class="sr-only">Loading...</span>
+        </div>
+    `)
+    $.get(url, function(response) {
+        for (var i = 0; i < patchContainers.length; i++) {
+            patchContainer = patchContainers[i]
+            $(patchContainer).replaceWith(response.form_templates[patchContainer]);
+        }
+    })
+}
+
 var ajaxMultipartSubmitForm = function(event){
 	event.preventDefault(); //prevent default action
 	var post_url = $(this).attr("action"); //get form action url

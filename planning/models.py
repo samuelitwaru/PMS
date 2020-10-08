@@ -21,9 +21,9 @@ class ConsolidationGroup(models.Model):
 
     preparation_of_bid_document = models.DateTimeField(null=True)
     approval_of_bid_document = models.DateTimeField(null=True)
-    invitation_bid = models.DateTimeField(null=True)
+    invitation_of_bids = models.DateTimeField(null=True)
     issue_and_sale_of_bid_document = models.DateTimeField(null=True)
-    receiof_bids = models.DateTimeField(null=True)
+    receipt_of_bids = models.DateTimeField(null=True)
     opening_of_bids = models.DateTimeField(null=True)
     nomination_of_evaluation_committee_members = models.DateTimeField(null=True)
     approval_or_rejection_of_evaluation_committee_members = models.DateTimeField(null=True)
@@ -86,9 +86,9 @@ class ConsolidationGroup(models.Model):
         return {
             "preparation_of_bid_document": self.preparation_of_bid_document ,
             "approval_of_bid_document": self.approval_of_bid_document ,
-            "invitation_bid": self.invitation_bid ,
+            "invitation_of_bids": self.invitation_of_bids ,
             "issue_and_sale_of_bid_document": self.issue_and_sale_of_bid_document ,
-            "receiof_bids": self.receiof_bids ,
+            "receipt_of_bids": self.receipt_of_bids ,
             "opening_of_bids": self.opening_of_bids ,
             "nomination_of_evaluation_committee_members": self.nomination_of_evaluation_committee_members ,
             "approval_or_rejection_of_evaluation_committee_members": self.approval_or_rejection_of_evaluation_committee_members ,
@@ -174,20 +174,3 @@ class PlanCorrection(models.Model):
 
     def __str___(self):
         return self.description
-
-
-# class ProcessTrack(models.Model):
-#     preparation_of_bid_document = models.DateTimeField(null=True)
-#     approval_of_bid_document = models.DateTimeField(null=True)
-#     invitation_bid = models.DateTimeField(null=True)
-#     issue_and_sale_of_bid_document = models.DateTimeField(null=True)
-#     receiof_bids = models.DateTimeField(null=True)
-#     opening_of_bids = models.DateTimeField(null=True)
-#     nomination_of_evaluation_committee_members = models.DateTimeField(null=True)
-#     approval_or_rejection_of_evaluation_committee_members = models.DateTimeField(null=True)
-#     evaluation_of_bids = models.DateTimeField(null=True)
-#     approval_or_rejection_of_evaluation_report = models.DateTimeField(null=True)
-#     display_of_best_evaluated_bidders = models.DateTimeField(null=True)
-#     contract_signing = models.DateTimeField(null=True)
-
-#     consolidation_group = models.OneToOneField(ConsolidationGroup, on_delete=models.CASCADE)

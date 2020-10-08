@@ -1,26 +1,21 @@
+{% if requisition.stage %}
 <div class="my-1">
-    
     <div class="form-group">
         <small class="text-info">Current Stage</small>
         <P style="height: auto">
             {{requisition.stage}}
         </P>
     </div>
-
-    {% if requisition.stage != 'DONE' %}
-
     <hr>
-    
     <div class="form-group">
         <small class="text-info">Next Action</small>
         <p class="" style="height: auto">
-            {% if requisition.stage == "INITIATION" %}HOD APPROVAL{% elif requisition.stage == "HOD APPROVAL"%}PDU APRROVAL{% elif requisition.stage == "PDU APPROVAL"%}AO APPROVAL{% elif requisition.stage == "AO APPROVAL"%}BIDDING PROCESS{% endif %}
+            {% if requisition.stage == "ITEM SPECIFICATION" %}HOD APPROVAL{% elif requisition.stage == "HOD APPROVAL"%}PDU APRROVAL{% elif requisition.stage == "PDU APPROVAL"%}AO APPROVAL{% elif requisition.stage == "AO APPROVAL"%}BIDDING PROCESS{% endif %}
         </p>
     </div>
-    {% endif %}
 </div>
-
 <hr>
+{% endif %}
 
 <div>
     <div>

@@ -1,13 +1,12 @@
 from django import forms
 from models import Profile, User
 
-
 class CreateProfileForm(forms.Form):
     first_name = forms.CharField()
     last_name = forms.CharField()
     email = forms.EmailField()
     title = forms.CharField()
-    telephone = forms.CharField(required=False)
+    telephone = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder":"eg +256781567890"}))
 
     def clean(self):
     	cleaned_data = super().clean()

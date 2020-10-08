@@ -1,0 +1,76 @@
+<div id="processTrackPatch">
+	<table class="table table-striped">
+		<thead>
+			<th>No</th>
+			<th>Action</th>
+			<th>Status</th>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>1</td>
+				<td>Preparation of Bid Document</td>
+				<td>{% if group.preparation_of_bid_document %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>Approval of Bid Document</td>
+				<td>{% if group.approval_of_bid_document %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>Invitation of Bids</td>
+				<td>{% if group.invitation_of_bids %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>Issue and Sale of Bid Document</td>
+				<td>{% if group.issue_and_sale_of_bid_document %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>Reciept of Bids</td>
+				<td>{% if group.receipt_of_bids %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+
+			<tr>
+				<td>6</td>
+				<td>Opening and Closing of Bids</td>
+				<td>{% if group.opening_of_bids %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+
+			<tr>
+				<td>7</td>
+				<td>Nomination of Evaluation Committee Members</td>
+				<td>{% if group.nomination_of_evaluation_committee_members %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+
+			<tr>
+				<td>8</td>
+				<td>Approval or Rejection of Evaluation Committee Members</td>
+				<td>{% if group.approval_or_rejection_of_evaluation_committee_members %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+			<tr>
+				<td>9</td>
+				<td>Evaluation of Bids</td>
+				<td>{% if group.evaluation_of_bids %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td>Approval or Rejection of Evaluation Report</td>
+				<td>{% if group.approval_or_rejection_of_evaluation_report %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td>Display of Best Evaluated Bidders</td>
+				<td>{% if group.display_of_best_evaluated_bidders %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+
+			<tr>
+				<td>12</td>
+				<td>Contract Signing</td>
+				<td>{% if group.contract_signing %}<span class="fa fa-check"></span>{% else %}<span class="alert-warning">PENDING</span>{% endif %}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
