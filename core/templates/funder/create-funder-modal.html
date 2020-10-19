@@ -1,0 +1,23 @@
+<div class="modal fade" id="createFunderFormModal"> 
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>New Funder</h5>
+			</div>
+			<div class="modal-body">
+				<form method="POST" action="{% url 'core:create_funder' %}">
+					{% csrf_token %}
+					<table>
+						<div class="form-group">
+							<small>{{create_funder_form.name.label}}</small>
+							{{ create_funder_form.name }}
+						</div>
+					</table>
+					<div class="modal-footer">
+						<button class="btn btn-info">Save</button>
+					</div>		
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,35 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+
+<div>
+	<div class="bg-info p-2 shadow fixed d-flex">
+        <div class="flex-fill m-auto">
+            <h4 class="text-light">Funders</h4>
+        </div>
+        {% if user == pdu_head %}
+            <button class="nav-link btn rounded-circle" data-toggle="modal" data-target="#createFunderFormModal"><span class="fa fa-plus"></span> New Funder</button>
+        {% endif %}
+    </div>
+
+    <table class="table table-responsive-sm border">
+        <tbody>
+            {% for funder in funders %} 
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    
+                    <td class="border m-auto">
+                        <p>{{ funder.name }}</p>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if user == pdu_head %}
+        {% include 'funder/create-funder-modal.html' %}
+    {% endif %}
+
+
+</div>
+{% endblock %}

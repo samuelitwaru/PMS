@@ -48,8 +48,13 @@
         </tr>
 
         <tr>
-            <td  class="text-center" colspan="2">Estimated Cost</td>
-            <td  class="text-center" colspan="2">{{ plan.estimated_cost|currency }}</td>
+            <td  class="text-center" colspan="2">Estimated Unit Cost</td>
+            <td  class="text-center" colspan="2">{{ plan.estimated_unit_cost|currency }}</td>
+        </tr>
+
+        <tr>
+            <td  class="text-center" colspan="2">Estimated Total Cost</td>
+            <td  class="text-center" colspan="2">{{ plan.estimated_unit_cost|multiply:plan.quantity|currency }}</td>
         </tr>
 
         <tr>

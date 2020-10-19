@@ -4,12 +4,19 @@
 {% block content %}
 
 <div class="container-fluid p-0">
-    <div class="bg-info p-2 shadow fixed d-flex">
-        <div class="flex-fill m-auto">
-            <h4 class="text-light">Consolidation Groups</h4>
+    <div class="bg-info shadow fixed">
+        <div class="d-flex">
+            <div class="flex-fill m-auto">
+                <h4 class="text-light">Consolidation Groups</h4>
+            </div>
+            <a href="{% url 'planning:download_consolidated_plans' %}" class="nav-link btn rounded-circle"><span class="fa fa-download"></span> Output</a>
+            <button class="nav-link btn rounded-circle" data-toggle="modal" data-target="#createConsolidationGroupFormModal"><span class="fa fa-plus"></span> New Group</button>
         </div>
-        <a href="{% url 'planning:download_consolidated_plans' %}" class="nav-link btn rounded-circle"><span class="fa fa-download"></span> Output</a>
-        <button class="nav-link btn rounded-circle" data-toggle="modal" data-target="#createConsolidationGroupFormModal"><span class="fa fa-plus"></span> New Group</button>
+
+        <div class="bg-white" align="center">
+
+            <small class="text-danger">{% if unpublished_plans %}{{unpublished_plans}} unpublished plans{% endif %}</small>
+        </div>
     </div>
 
     <div class="p-1">
@@ -43,10 +50,9 @@
                     <a class="nav-item nav-link small" id="nav-{{proc_type.id}}-tab" data-toggle="tab" href="#nav-{{proc_type.id}}-tab" role="tab" aria-selected="true"><span>{{proc_type.name}}</span></a>
                 {% endfor %}
             </div>
-
-            {% if not requisitions_available %}
+            {% if unpublished_plans %}
             <div>
-                <a href="{% url 'planning:publish_plans' %}" class="btn btn-info">Publish</a>
+                <a href="{% url 'planning:publish_plans' %}" class="btn btn-info">Publish {{unpublished_plans}} Plans</a>
             </div>
             {% endif %}
         </nav>

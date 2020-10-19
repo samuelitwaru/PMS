@@ -6,4 +6,5 @@ from .pdu import *
 from .budget import *
 from .programme import *
 from .expense import *
+from .funder import *
 

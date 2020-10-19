@@ -28,7 +28,7 @@
 					</li>
 					{% endif %}
 					<li class="nav-item active" align="right">
-						<a title="print" href="{% url 'planning:print_plan' plan_id=plan.id %}" class="btn btn-o fa fa-print nav-link"></a>
+						<a title="print" target="blank_" href="{% url 'planning:print_plan' plan_id=plan.id %}" class="btn btn-o fa fa-print nav-link"></a>
 					</li>
 				</ul>
 			</div>
@@ -64,7 +64,11 @@
 						<button class="btn btn-sm btn-info">Send back to initiator</button>
 					</form>
 				{% elif plan.consolidated_on %}
-					Waiting for <strong>{{plan.stage}}</strong>
+					{% if plan|has_attr:'requisition' %}
+                        <strong>PUBLISHED</strong>
+                    {% else %}
+                        Waiting for <strong>{{ plan.stage }}</strong>
+                    {% endif %}
 				{% elif plan.pdu_approved_on %}
 					{% if user == pdu_head %}
 					<form class='ajaxForm m-0 d-inline' method="GET" data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" action="{% url 'planning:pdu_send_to_other_member' plan_id=plan.id %}">
@@ -82,22 +86,22 @@
 					</form>
 				{% elif plan.prepared_on or plan.initiator == user_department.hod %}
 					<form class='ajaxForm m-0' method="GET" data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" action="{% url 'core:authentication' %}">
-						<input type="hidden" name="redirect_url" value="{% url 'planning:hod_approve_and_send_to_pdu' plan_id=plan.id %}">
-						<button class="btn btn-sm btn-info">Approve as HOD</button>
+						<input type="hidden" name="redirect_url" value="{% url 'planning:hod_verify_and_send_to_pdu' plan_id=plan.id %}">
+						<button class="btn btn-sm btn-info">Verify as HOD</button>
 					</form>
 				{% elif not plan.prepared_on and plan.initiator != user_department.hod %}
 					<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
-						<input type="hidden" name="redirect_url" value="{% url 'planning:send_to_hod_for_approval' plan_id=plan.id %}">
+						<input type="hidden" name="redirect_url" value="{% url 'planning:send_to_hod_for_verification' plan_id=plan.id %}">
 						<button class="btn btn-sm btn-info">Send to HOD</button>
 					</form>
 				{% endif %}
 			{% else %}
 				<div align="center">
-					{% if plan.stage %}
-						Waiting for <strong>{{plan.stage}}</strong>
-					{% else %}
-						<strong>PUBLISHED</strong>
-					{% endif %}
+					{% if plan|has_attr:'requisition' %}
+                        <strong>PUBLISHED</strong>
+                    {% else %}
+                        Waiting for <strong>{{ plan.stage }}</strong>
+                    {% endif %}
 				</div>
 			{% endif %}
 		</div>

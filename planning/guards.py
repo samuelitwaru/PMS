@@ -1,12 +1,13 @@
 from functools import wraps
 from django.db.models import Q
 from django.utils import timezone
+from django.http import HttpResponseRedirect 
 from django.contrib.auth import get_user
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
 from models import Plan, SubProgramme, Timing, ConsolidationGroup, Plan, Requisition
-from utils import get_ao, get_pdu_head, get_current_process, get_user_department
+from utils import get_ao, get_pdu_head, get_current_process, get_user_department, unpublished_plans
 
 
 def all_pdu_approved_plans_consolidated(func):
@@ -64,7 +65,8 @@ def check_planning_submission_deadline(func):
 		planning_process = Timing.objects.get(process="Planning")
 		if planning_process.submission_deadline < now:
 			messages.info(request, "Planning submission time is out!", extra_tags="danger")
-			return redirect('core:index')
+			next = request.META.get('HTTP_REFERER', None) or '/'
+			return HttpResponseRedirect(next)
 		return func(*args, **kwargs)
 	return wrapper
 
@@ -78,7 +80,8 @@ def check_planning_stop(func):
 		planning_process = Timing.objects.get(process="Planning")
 		if planning_process.stop < now:
 			messages.info(request, "Plan stop time out!", extra_tags="danger")
-			return redirect('core:index')
+			next = request.META.get('HTTP_REFERER', None) or '/'
+			return HttpResponseRedirect(next)
 		return func(*args, **kwargs)
 	return wrapper
 
@@ -94,7 +97,8 @@ def check_user_department_budget_sealing(func):
 			return func(*args, **kwargs)
 		else:
 			messages.error(request, f"'{department.name}' department has no budget sealing allocated!", extra_tags="danger")
-			return redirect('core:index')
+			next = request.META.get('HTTP_REFERER', None) or '/'
+			return HttpResponseRedirect(next)
 	return wrapper
 
 
@@ -109,18 +113,19 @@ def check_user_department_head(func):
 			return func(*args, **kwargs)
 		else:
 			messages.error(request, f"{department.name} has no H.O.D!", extra_tags="danger")
-			return redirect('core:index')
+			next = request.META.get('HTTP_REFERER', None) or '/'
+			return HttpResponseRedirect(next)
 	return wrapper
 
 
-def check_requisitions_available(func):
-	"""Checks if requistions are in the system 
-	(in other words if plans have been published by PDU)"""
+def check_unpublsihed_plans_available(func):
+	"""Checks if there are any plans that do not have requisitions attached to them"""
 	def wrapper(*args, **kwargs):
-		if Requisition.objects.count():
+		if not unpublished_plans():
 			request = args[0]
-			messages.error(request, "Plans have already been published!", extra_tags="info")
-			return redirect('core:index')
+			messages.error(request, "There aren't any plans to publish", extra_tags="info")
+			next = request.META.get('HTTP_REFERER', None) or '/'
+			return HttpResponseRedirect(next)
 		else:
 			return func(*args, **kwargs)
 	return wrapper

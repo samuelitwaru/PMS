@@ -18,7 +18,7 @@
                         <p>{{ requisition.subject_of_procurement }}</p>
                         <small>Plan reference: {{requisition.plan}}</small>
                     </td>
-                    <td>{% if requisition.stage %}Waiting for <strong>{{ requisition.stage }}</strong>{% endif %}</td>
+                    <td>{% if requisition.stage %}Waiting for <strong>{{ requisition.stage }}</strong>{% else %}<strong>APPROVED</strong>{% endif %}</td>
                     
                     <td><a href="{% url 'initiation:get_requisition' requisition_id=requisition.id %}" class='btn btn-info'>Details</a></td>
                 </tr>

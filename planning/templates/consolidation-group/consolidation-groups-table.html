@@ -100,8 +100,16 @@
                                 {% for plan in plans %} 
                                     <tr>
                                         <td class="border">
-                                            <p class="m-0">{{ plan.subject_of_procurement }}</p>
+                                            {{ plan.subject_of_procurement }}
+                                            <br>
                                             <small>User Department: {{plan.user_department}}</small>
+                                        </td>
+                                        <td class="border">
+                                            {% if plan|has_attr:'requisition' %}
+                                                <strong>PUBLISHED</strong>
+                                            {% else %}
+                                                Waiting for <strong>{{ plan.stage }}</strong>
+                                            {% endif %} 
                                         </td>
                                         <td class="border">
                                             <small>Dates required:</small>

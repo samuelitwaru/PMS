@@ -10,7 +10,7 @@
     <div class="form-group">
         <small class="text-info">Next Action</small>
         <p class="" style="height: auto">
-            {% if requisition.stage == "ITEM SPECIFICATION" %}HOD APPROVAL{% elif requisition.stage == "HOD APPROVAL"%}PDU APRROVAL{% elif requisition.stage == "PDU APPROVAL"%}AO APPROVAL{% elif requisition.stage == "AO APPROVAL"%}BIDDING PROCESS{% endif %}
+            {% if requisition.stage == "REQUIREMENTS SPECIFICATION" %}HOD VERIFICATION{% elif requisition.stage == "HOD VERIFICATION"%}PDU APRROVAL{% elif requisition.stage == "PDU VERIFICATION"%}AO APPROVAL{% elif requisition.stage == "AO APPROVAL"%}BIDDING PHASE{% endif %}
         </p>
     </div>
 </div>

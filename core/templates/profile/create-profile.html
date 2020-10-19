@@ -1,4 +1,5 @@
 {% extends 'user-base.html' %}
+{% load app_tags %}
 
 {% block content %}
 
@@ -11,11 +12,13 @@
 
     		<div class="card-body">
     			<form method="POST" action="{% url 'core:create_profile' %}">
-    				{% csrf_token %}
-                    <table class="table table-responsive">
-                        {{ create_profile_form.as_table }}                    
-                    </table>
-					<div align="center">
+    				{% csrf_token  %}
+                    {% render_field create_profile_form.first_name class="form-control" %}
+                    {% render_field create_profile_form.last_name class="form-control" %}
+                    {% render_field create_profile_form.email class="form-control" %}
+                    {% render_field create_profile_form.title class="form-control" %}
+                    {% render_field create_profile_form.telephone tel_code=create_profile_form.tel_code class="form-control" %}
+                    <div align="center">
 		    			<button class="btn btn-info">Save</button>
 					</div>
 		    	</form>

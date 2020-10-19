@@ -144,10 +144,10 @@ def print_requisition(request, requisition_id):
 @check_requisition_requirement_specifications
 @check_requisition_corrections
 @permission_required('initiation.can_initiate_requisition', raise_exception=True)
-def send_to_hod_for_approval(request, requisition_id):
+def send_to_hod_for_verification(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
     requisition.incharge = get_hod(get_user_department(get_user(request)))
-    requisition.stage = "HOD APPROVAL"
+    requisition.stage = "HOD VERIFICATION"
     requisition.specified_on = timezone.now()
     requisition.save()
     create_requisition_action("Sent to HOD", "", get_user(request), requisition)
@@ -158,16 +158,16 @@ def send_to_hod_for_approval(request, requisition_id):
 @check_initation_timing
 @check_requisition_requirement_specifications
 @check_requisition_corrections
-def hod_approve_and_send_to_pdu(request, requisition_id):
+def hod_verify_and_send_to_pdu(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
     requisition.incharge = get_pdu_head()
-    requisition.stage = "PDU APPROVAL"
+    requisition.stage = "PDU VERIFICATION"
     requisition.hod_approved_on = timezone.now()
     if not requisition.specified_on:
         requisition.specified_on = timezone.now()
     requisition.save()
     create_requisition_action("Approved by HOD", "", get_user(request), requisition)
-    messages.success(request, "Requisition approved by HOD")
+    messages.success(request, "Requisition verified by HOD")
 
     return redirect('initiation:get_requisition', requisition_id=requisition.id)
 

@@ -246,7 +246,7 @@ def set_planning_timing(start_date=timezone.now()):
     p_dead = p_start + timedelta(2)
     p_stop = p_start + timedelta(4)
 
-    i_start = p_stop
+    i_start = p_stop + timedelta(1)
     i_dead = i_start + timedelta(2)
     i_stop = i_start + timedelta(4)
 
@@ -258,19 +258,15 @@ def set_planning_timing(start_date=timezone.now()):
 
     planning_timing = Timing.objects.filter(process="Planning")
     planning_timing.update(start=p_start, submission_deadline=p_dead, stop=p_stop)
-    # planning_timing.save()
 
     initiation_timing = Timing.objects.filter(process="Initiation")
     initiation_timing.update(start=i_start, submission_deadline=i_dead, stop=i_stop)
-    # initiation_timing.save()
 
     bidding_timing = Timing.objects.filter(process="Bidding")
     bidding_timing.update(start=b_start, stop=b_stop)
-    # bidding_timing.save()
 
     contract_timing = Timing.objects.filter(process="Contract")
     contract_timing.update(start=c_start, stop=c_stop)
-    # contract_timing.save()
 
 
 
@@ -279,10 +275,9 @@ def set_initiation_timing(start_date=timezone.now()):
     i_dead = i_start + timedelta(2)
     i_stop = i_start + timedelta(4)
 
-
     p_start = i_start - timedelta(4)
     p_dead = p_start + timedelta(1)
-    p_stop = p_start + timedelta(1)
+    p_stop = p_start + timedelta(3)
 
     
     b_start = i_stop
@@ -293,16 +288,12 @@ def set_initiation_timing(start_date=timezone.now()):
 
     planning_timing = Timing.objects.filter(process="Planning")
     planning_timing.update(start=p_start, submission_deadline=p_dead, stop=p_stop)
-    # planning_timing.save()
 
     initiation_timing = Timing.objects.filter(process="Initiation")
     initiation_timing.update(start=i_start, submission_deadline=i_dead, stop=i_stop)
-    # initiation_timing.save()
 
     bidding_timing = Timing.objects.filter(process="Bidding")
     bidding_timing.update(start=b_start, stop=b_stop)
-    # bidding_timing.save()
 
     contract_timing = Timing.objects.filter(process="Contract")
     contract_timing.update(start=c_start, stop=c_stop)
-    # contract_timing.save()

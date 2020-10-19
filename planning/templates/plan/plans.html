@@ -1,4 +1,5 @@
-    {% extends 'user-base.html' %}
+{% extends 'user-base.html' %}
+{% load app_tags %}
 
 {% block content %}
 <div class="container-fluid p-0">
@@ -12,7 +13,26 @@
         </div>
     </div>
 
-    {% include 'plan/select-plan-expense-modal.html' %}
+    <div class="modal fade" id="selectPlanExpenseModal"> 
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Select Type of Procurement</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'planning:select_plan_procurement_type' %}">
+                        {% csrf_token %}
+                        <table>
+                            {% render_field select_plan_procurement_type_form.procurement_type %}
+                        </table>
+                        <div class="modal-footer">
+                            <button class="btn btn-info">Next</button>
+                        </div>      
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <table class="table table-responsive-sm border">
         <tbody>
@@ -24,7 +44,13 @@
                         <p>{{ plan.subject_of_procurement }}</p>
                         <small>Created by: {{plan.initiator.first_name}} {{plan.initiator.last_name}}</small>
                     </td>
-                    <td>{% if plan.stage %}Waiting for <strong>{{ plan.stage }}{% else %}<strong>PUBLISHED</strong>{% endif %}</strong> </td>
+                    <td>
+                        {% if plan|has_attr:'requisition' %}
+                            <strong>PUBLISHED</strong>
+                        {% else %}
+                            Waiting for <strong>{{ plan.stage }}</strong>
+                        {% endif %} 
+                    </td>
                     <td><a href="{% url 'planning:get_plan' plan_id=plan.id %}" class='btn btn-info'>Details</a></td>
                 </tr>
             {% empty %}
@@ -37,4 +63,5 @@
         </tbody>
     </table>
 </div>
+
 {% endblock %}

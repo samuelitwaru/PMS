@@ -23,6 +23,16 @@ def total_cost(item):
 	return item.quantity * item.unit_cost
 
 
+@register.filter(name="multiply")
+def multiply(value, multiplier):
+	return value * multiplier
+
+
+@register.filter(name="has_attr")
+def has_attr(object, attribute):
+	return hasattr(object, attribute)
+
+
 @register.filter(name="format_date")
 def format_date(date):
 	date = date.strftime("%d/%b/%Y %H:%M:%S")
@@ -48,7 +58,7 @@ def add_attrs(field, attrs):
 
 @register.filter(name="consolidated_plan_cost")
 def consolidated_plan_cost(plans):
-	return sum([plan.estimated_cost for plan in plans])
+	return sum([plan.estimated_unit_cost for plan in plans])
 
 
 @register.filter(name="consolidated_source_of_funding")
@@ -83,13 +93,21 @@ def not_equal_to(value, value2):
 def render_field(field, **kwargs):
 	template_file = 'string-field.html'
 	widget = field.field.widget
+	context = {}
 	if hasattr(widget, 'input_type'):
 		if widget.input_type == 'checkbox':
 			template_file = 'checkbox-field.html'
 		elif field.field.widget.input_type == 'radio':
 			template_file = 'radio-field.html'
+		elif field.field.widget.input_type == 'tel':
+			tel_code = kwargs.pop("tel_code", None)
+			if tel_code:
+				context["tel_code_widget"] = tel_code.as_widget()
+			template_file = 'tel-field.html'
+
 
 	string_field_template = template.loader.get_template(f'widgets/{template_file}')
 	as_widget = field.as_widget(attrs=kwargs)
-	context = {"field": field, "as_widget":as_widget}
+	context["field"] = field
+	context["as_widget"] = as_widget
 	return string_field_template.render(context)

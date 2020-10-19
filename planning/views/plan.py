@@ -45,7 +45,7 @@ def create_plan(request, procurement_type_id):
     
     if request.method == "POST":
         current_user = get_user(request)
-        create_plan_form = CreatePlanForm(data=request.POST, user=current_user, procurement_type=procurement_type)
+        create_plan_form = CreatePlanForm(data=request.POST, request=request, user=current_user, procurement_type=procurement_type)
         if create_plan_form.is_valid():
             cleaned_data = create_plan_form.cleaned_data
             # save plan
@@ -55,7 +55,7 @@ def create_plan(request, procurement_type_id):
                 expense=cleaned_data.get('chart_of_account'),
                 quantity=cleaned_data.get('quantity'),
                 unit_of_measure=cleaned_data.get('unit_of_measure'),
-                estimated_cost=cleaned_data.get('estimated_cost'),
+                estimated_unit_cost=cleaned_data.get('estimated_unit_cost'),
                 source_of_funding=cleaned_data.get('source_of_funding'),
                 date_required_q1=cleaned_data.get('date_required_q1'),
                 date_required_q2=cleaned_data.get('date_required_q2'),
@@ -96,7 +96,7 @@ def update_plan(request, plan_id):
             plan.expense = cleaned_data.get('expense')
             plan.quantity = cleaned_data.get('quantity')
             plan.unit_of_measure = cleaned_data.get('unit_of_measure')
-            plan.estimated_cost = cleaned_data.get('estimated_cost')
+            plan.estimated_unit_cost = cleaned_data.get('estimated_unit_cost')
             plan.source_of_funding = cleaned_data.get('source_of_funding')
             plan.date_required_q1 = cleaned_data.get('date_required_q1')
             plan.date_required_q2 = cleaned_data.get('date_required_q2')
@@ -131,9 +131,9 @@ def print_plan(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
     context = {"plan":plan}
     template = get_template('prints/plan.html')
-    return render(request, 'prints/plan.html', context)
-    html = template.render(context)
-    pdf_file = HTML(string=html).write_pdf()
+    html = render(request, 'prints/plan.html', context)
+    # html = template.render(context)
+    pdf_file = HTML(string=html.content.decode()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="plan.pdf"'
     return response
@@ -142,10 +142,10 @@ def print_plan(request, plan_id):
 @check_planning_submission_deadline
 @check_plan_corrections
 @permission_required('planning.can_prepare_plan', raise_exception=True)
-def send_to_hod_for_approval(request, plan_id):
+def send_to_hod_for_verification(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
     plan.incharge = get_hod(get_user_department(get_user(request)))
-    plan.stage = "HOD APPROVAL"
+    plan.stage = "HOD VERIFICATION"
     plan.prepared_on = timezone.now()
     plan.save()
     create_plan_action("Sent to HOD", "", get_user(request), plan)
@@ -156,7 +156,7 @@ def send_to_hod_for_approval(request, plan_id):
 
 @check_planning_submission_deadline
 @check_plan_corrections
-def hod_approve_and_send_to_pdu(request, plan_id):
+def hod_verify_and_send_to_pdu(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
     plan.incharge = get_pdu_head()
     plan.stage = "PDU APPROVAL"
@@ -165,7 +165,7 @@ def hod_approve_and_send_to_pdu(request, plan_id):
     plan.hod_approved_on = timezone.now()
     plan.save()
     create_plan_action("Approved by HOD", "", get_user(request), plan)
-    messages.success(request, "Plan approved by HOD")
+    messages.success(request, "Plan verified by HOD")
 
     return redirect('planning:get_plan', plan_id=plan.id)
 

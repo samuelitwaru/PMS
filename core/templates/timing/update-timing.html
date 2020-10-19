@@ -29,11 +29,15 @@
                             <small class="text-danger">{{update_timing_form.errors.P_start}}</small>
                         </div>
 
+                        {% include 'timing/date-controller.html' with previous="#id_P_start" next="#id_P_submission_deadline" %}
+                        
                         <div class="form-group">
                             <small>{{ update_timing_form.P_submission_deadline.label }}</small>
                             {{ update_timing_form.P_submission_deadline }}
                             <small class="text-danger">{{update_timing_form.errors.P_submission_deadline}}</small>
                         </div>
+                        
+                        {% include 'timing/date-controller.html' with previous="#id_P_submission_deadline" next="#id_P_stop" %}
 
                         <div class="form-group">
                             <small>{{ update_timing_form.P_stop.label }}</small>
@@ -62,11 +66,15 @@
                             <small class="text-danger">{{update_timing_form.errors.I_start}}</small>    
                         </div>
 
+                        {% include 'timing/date-controller.html' with previous="#id_I_start" next="#id_I_submission_deadline" %}
+
                         <div class="form-group">
                             <small>{{ update_timing_form.I_submission_deadline.label }}</small>
                             {{ update_timing_form.I_submission_deadline }}
                             <small class="text-danger">{{update_timing_form.errors.I_submission_deadline}}</small>
                         </div>
+
+                        {% include 'timing/date-controller.html' with previous="#id_I_submission_deadline" next="#id_I_stop" %}
 
                         <div class="form-group">
                             <small>{{ update_timing_form.I_stop.label }}</small>
@@ -151,4 +159,33 @@
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(".dateController").on("keyup", (event)=>{
+        next = event.target.dataset.next
+        previousDate = moment($(event.target.dataset.previous)[0].value)
+        daysToAdd = event.target.value
+        nextDate = previousDate.add(daysToAdd, "days").format("YYYY-MM-DD")
+        $(next).val(nextDate)
+    })
+
+    $(".dateController").on("load", (event)=>{
+        alert(event)
+    })
+
+    setDateControllerValues = function(){
+        dateControllers = $(".dateController")
+        dateControllers.each((index, item)=>{
+            previousDate = moment($(item.dataset.previous)[0].value)
+            nextDate = moment($(item.dataset.next)[0].value)
+            // (nextDate-previousDate)/1000/60/60/24
+            console.dir(item)
+            item.value = (nextDate-previousDate)/1000/60/60/24
+        })
+    }
+
+
+    
+</script>
+
 {% endblock %}

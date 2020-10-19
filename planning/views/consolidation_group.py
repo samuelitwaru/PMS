@@ -8,10 +8,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from initiation.utils import initialize_requisitions
 from models import ConsolidationGroup, Plan, Timing, ProcurementType
-from utils import get_pdu_head, dict_key_name, requisitions_available
+from utils import get_pdu_head, dict_key_name, requisitions_available, unpublished_plans
 from ..utils import generate_xlsx_file_for_consolidation_groups
 from ..forms.consolidation_group import UpdateConsolidationGroupForm, CreateConsolidationGroupForm, UpdateConsolidationGroupMethodologyForm, UpdateConsolidationGroupScheduleForm, PublishPlansForm
-from ..guards import all_consolidation_groups_with_plans_filled, all_pdu_approved_plans_consolidated, check_requisitions_available
+from ..guards import all_consolidation_groups_with_plans_filled, all_pdu_approved_plans_consolidated, check_unpublsihed_plans_available
 from initiation.guards import check_initation_timing
 
 
@@ -19,7 +19,7 @@ def get_consolidation_groups(request):
 	groups = ConsolidationGroup.objects.all()
 	procurement_types = ProcurementType.objects.all()
 	create_consolidation_group_form = CreateConsolidationGroupForm()
-	context = {"procurement_types":procurement_types, "groups":groups, "create_consolidation_group_form": create_consolidation_group_form, "requisitions_available":requisitions_available} 
+	context = {"procurement_types":procurement_types, "groups":groups, "create_consolidation_group_form": create_consolidation_group_form, "requisitions_available":requisitions_available, "unpublished_plans":unpublished_plans} 
 	return render(request, 'consolidation-group/consolidation-groups.html', context)
 
 def get_consolidation_group_process_track(request, consolidation_group_id):
@@ -133,7 +133,7 @@ def download_consolidated_plans(request):
 
 
 @check_initation_timing
-@check_requisitions_available
+@check_unpublsihed_plans_available
 @all_pdu_approved_plans_consolidated
 @all_consolidation_groups_with_plans_filled
 def publish_plans(request):

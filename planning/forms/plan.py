@@ -1,7 +1,9 @@
 from django import forms
+from django.contrib import messages
 from models import Expense, Profile, ConsolidationGroup, Funder, ProcurementType
 from utils import get_pdu_head, get_user_department
 from ..utils import create_new_funder
+from templatetags.app_tags import currency
 
 sources_of_funding = [("GOU", "GOU"), ("Project Funding", "Project Funding")]
 
@@ -10,17 +12,18 @@ class CreatePlanForm(forms.Form):
     expense = forms.ChoiceField()
     quantity = forms.IntegerField(initial=1)
     unit_of_measure = forms.CharField(initial='Months')
-    estimated_cost = forms.IntegerField(label="Estimated Total Cost", initial=1000000)
+    estimated_unit_cost = forms.IntegerField(label="Estimated Unit Cost", initial=1000000)
     source_of_funding = forms.CharField(widget=forms.RadioSelect(attrs={"class":"source_of_funding_radio"}))
-    other_funder = forms.CharField(max_length=64, required=False, widget=forms.TextInput())
+    other_funder = forms.CharField(label="Specify other Funder", max_length=64, required=False, widget=forms.TextInput())
     date_required_q1 = forms.BooleanField(label="Quarter 1", required=False)
     date_required_q2 = forms.BooleanField(label="Quarter 2", required=False)
     date_required_q3 = forms.BooleanField(label="Quarter 3", required=False)
     date_required_q4 = forms.BooleanField(label="Quarter 4", required=False)
 
-    def __init__(self, procurement_type=None, user=None, *args, **kwargs):
+    def __init__(self, request=None, procurement_type=None, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = user
+        self.request = request
         self.procurement_type = procurement_type
         self.fields["source_of_funding"].widget.choices = self.get_source_of_funding_choices()
         self.fields["expense"].choices = self.get_expense_choices()
@@ -38,13 +41,18 @@ class CreatePlanForm(forms.Form):
         q3 = cleaned_data.get("date_required_q3")
         q4 = cleaned_data.get("date_required_q4")
         
-        estimated_cost = cleaned_data.get("estimated_cost")
+        estimated_unit_cost = cleaned_data.get("estimated_unit_cost")
+        quantity = cleaned_data.get("quantity")
+        total_estimated_cost = estimated_unit_cost * quantity
+        
         user_department = get_user_department(self.user)
         budget_sealing = user_department.budget_sealing
-        total_estimated_departmental_plan_cost = estimated_cost + user_department.total_estimated_plan_cost()
+        total_estimated_departmental_plan_cost = total_estimated_cost + user_department.total_estimated_plan_cost()
 
         if total_estimated_departmental_plan_cost > budget_sealing:
-            raise forms.ValidationError(f"You are exceeding the budget limit ({budget_sealing})")
+            messages.error(self.request, f"You are exceeding the budget limit ({currency(budget_sealing)})", extra_tags="danger")
+            self.add_error('estimated_unit_cost', f"You are exceeding the budget limit ({currency(budget_sealing)})")
+
 
         if not (q1 or q2 or q3 or q4):
             self.add_error('date_required_q4', "Select at least 1 Quarter")
@@ -83,9 +91,9 @@ class UpdatePlanForm(forms.Form):
     subject_of_procurement = forms.CharField()
     quantity = forms.IntegerField()
     unit_of_measure = forms.CharField()
-    estimated_cost = forms.IntegerField()
-    source_of_funding = forms.CharField(widget=forms.RadioSelect(choices=sources_of_funding, attrs={"class":"source_of_funding_radio"}))
-    other_funder = forms.CharField(max_length=64, required=False, widget=forms.TextInput())
+    estimated_unit_cost = forms.IntegerField()
+    source_of_funding = forms.CharField(widget=forms.RadioSelect(attrs={"class":"source_of_funding_radio"}))
+    other_funder = forms.CharField(label="Specify other Funder", max_length=64, required=False, widget=forms.TextInput())
     date_required_q1 = forms.BooleanField(required=False)
     date_required_q2 = forms.BooleanField(required=False)
     date_required_q3 = forms.BooleanField(required=False)
@@ -115,11 +123,15 @@ class UpdatePlanForm(forms.Form):
             self.add_error('date_required', "Select at least 1 Quarter")
 
         plan_id = cleaned_data.get("id")
-        estimated_cost = cleaned_data.get("estimated_cost")
+        estimated_unit_cost = cleaned_data.get("estimated_unit_cost")
+        quantity = cleaned_data.get("quantity")
+        total_estimated_cost = estimated_unit_cost * quantity
+
         user_department = get_user_department(self.user)
         budget_sealing = user_department.budget_sealing
-        total_estimated_departmental_plan_cost = estimated_cost + user_department.total_estimated_plan_cost(exclude_id=plan_id)
+        total_estimated_departmental_plan_cost = total_estimated_cost + user_department.total_estimated_plan_cost(exclude_id=plan_id)
         if total_estimated_departmental_plan_cost > budget_sealing:
+            self.add_error('estimated_unit_cost', f"You are exceeding the budget limit ({currency(budget_sealing)})")
             raise forms.ValidationError(f"You have exceeding the budget limit ({budget_sealing})")
 
         source_of_funding = cleaned_data.get("source_of_funding")
@@ -134,6 +146,7 @@ class UpdatePlanForm(forms.Form):
         expense = Expense.objects.get(id=(cleaned_data.get("expense")))
         cleaned_data["expense"] = expense
         cleaned_data["procurement_type"] = expense.procurement_type
+
 
 class DeletePlanForm(forms.Form):
     id = forms.IntegerField()

@@ -14,13 +14,39 @@
 		<form method="POST" action="{% url 'planning:create_plan' procurement_type_id=procurement_type.id %}" novalidate>
 
 			{% csrf_token  %}
+			
+			{% render_field create_plan_form.expense class='form-control' %}
 
 			{% render_field create_plan_form.subject_of_procurement class='form-control' %}
-			{% render_field create_plan_form.expense class='form-control' %}
-			{% render_field create_plan_form.quantity class='form-control' min=0 %}
+			
 			{% render_field create_plan_form.unit_of_measure class='form-control' %}
-			{% render_field create_plan_form.estimated_cost class='form-control' %}
+			
+			<div class="row">
+				<div class="col-3">
+					{% render_field create_plan_form.quantity class='form-control' min=0 %}					
+				</div>
+				<div class="col-4">
+					{% render_field create_plan_form.estimated_unit_cost class='form-control' min=10000 step="1000" %}
+				</div>
+				<div class="col-5">
+					<small>Total Cost</small>
+					<div id="totalCostField" class="form-control bg-light"></div>
+				</div>
 
+				<script>
+					$("#id_quantity").on("keyup", (event)=>{
+						res = event.target.value * $("#id_estimated_unit_cost")[0].value
+						$("#totalCostField").html(res)
+					})
+
+					$("#id_estimated_unit_cost").on("keyup", (event)=>{
+						res = event.target.value * $("#id_quantity")[0].value
+						$("#totalCostField").html(res)
+					})
+				</script>
+			
+			</div>
+			
 			<div class="form-group">
 				<small>Source of Funding</small>
 				<div class="form-control" style="height: auto">

@@ -1,22 +1,23 @@
+{% load app_tags %}
 <div class="my-1">
     
-    <div class="form-group">
-        <small class="text-info">Current Stage</small>
-        <P style="height: auto">
-            {{plan.stage}}
-        </P>
-    </div>
+    {% if plan|has_attr:'requisition' %}
+        <strong>PUBLISHED</strong>
+    {% else %}
+        <div class="form-group">
+            <small class="text-info">Current Stage</small>
+            <P style="height: auto">
+                {{plan.stage}}
+            </P>
+        </div>
 
-    {% if plan.stage != 'DONE' %}
-
-    <hr>
-    
-    <div class="form-group">
-        <small class="text-info">Next Stage</small>
-        <p class="" style="height: auto">
-            {% if plan.stage == "PREPARATION" %}HOD APPROVAL{% elif plan.stage == "HOD APPROVAL"%}PDU APRROVAL{% elif plan.stage == "PDU APPROVAL" %}CONSOLIDATION{% elif plan.stage == "CONSOLIDATION"%}PUBLISHING{% endif %}
-        </p>
-    </div>
+        
+        <div class="form-group">
+            <small class="text-info">Next Stage</small>
+            <p class="" style="height: auto">
+                {% if plan.stage == "PREPARATION" %}HOD VERIFICATION{% elif plan.stage == "HOD VERIFICATION"%}PDU APRROVAL{% elif plan.stage == "PDU APPROVAL" %}CONSOLIDATION{% elif plan.stage == "CONSOLIDATION"%}PUBLISHING{% elif plan.stage == "PUBLISHING" %}INITIATION PHASE{% endif %}
+            </p>
+        </div>
     {% endif %}
 </div>
 

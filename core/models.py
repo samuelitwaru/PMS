@@ -80,7 +80,7 @@ class UserDepartment(models.Model):
 
     def total_estimated_plan_cost(self, exclude_id=0):
         plans = self.plan_set.exclude(id=exclude_id)
-        return sum([plan.estimated_cost for plan in plans])
+        return sum([(plan.estimated_unit_cost*plan.quantity) for plan in plans])
 
 class Profile(models.Model):
     display_name = models.CharField(max_length=128)

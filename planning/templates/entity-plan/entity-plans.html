@@ -1,4 +1,5 @@
 {% extends 'user-base.html' %}
+{% load app_tags %}
 
 {% block content %}
 <div class="container-fluid p-0">
@@ -18,7 +19,13 @@
                         <p>{{ plan.subject_of_procurement }}</p>
                         <small>From: {{plan.user_department}}</small>
                     </td>
-                    <td> Waiting for <strong>{{ plan.stage }}</strong> </td>
+                    <td>
+                        {% if plan|has_attr:'requisition' %}
+                            <strong>PUBLISHED</strong>
+                        {% else %}
+                            Waiting for <strong>{{ plan.stage }}</strong>
+                        {% endif %} 
+                    </td>
                     
                     <td><a href="{% url 'planning:get_plan' plan_id=plan.id %}" class='btn btn-info'>Details</a></td>
                 </tr>

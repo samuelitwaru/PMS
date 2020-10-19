@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.core.signing import Signer
 from django.core.signing import TimestampSigner
-from models import UserDepartment, Profile, Timing, Token, Requisition
+from models import UserDepartment, Profile, Timing, Token, Plan, Requisition
 
 
 def get_user_department(user):
@@ -65,3 +65,11 @@ def set_user_token(user):
 
 def dict_key_name(name):
 	return name.replace(" ", "_").replace("-", "_")
+
+
+def unpublished_plans():
+	count = 0
+	for plan in Plan.objects.all():
+		if not hasattr(plan, 'requisition'):
+			count += 1			
+	return count

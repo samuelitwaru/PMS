@@ -54,12 +54,12 @@
 				{% elif requisition.incharge == user_department.hod and not hod_approved and not pdu_approved %}
 				<form class='ajaxForm m-0' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
 					{% csrf_token %}
-					<input type="hidden" name="redirect_url" value="{% url 'initiation:hod_approve_and_send_to_pdu' requisition_id=requisition.id %}">
-					<button class="btn btn-sm btn-info">Approve as HOD</button>
+					<input type="hidden" name="redirect_url" value="{% url 'initiation:hod_verify_and_send_to_pdu' requisition_id=requisition.id %}">
+					<button class="btn btn-sm btn-info">Verify as HOD</button>
 				</form>				
 				{% elif requisition.incharge != userdepartment.hod and not specified %}
 					<form class='ajaxForm m-0 d-inline' data-patch-containers='["#authenticationFormContainer"]' data-progress-container="#authenticationFormContainer" method="GET" action="{% url 'core:authentication' %}">
-						<input type="hidden" name="redirect_url" value="{% url 'initiation:send_to_hod_for_approval' requisition_id=requisition.id %}">
+						<input type="hidden" name="redirect_url" value="{% url 'initiation:send_to_hod_for_verification' requisition_id=requisition.id %}">
 						<button class="btn btn-sm btn-info">Send to HOD</button>
 					</form>
 				{% else %}

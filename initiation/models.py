@@ -36,7 +36,7 @@ class Requisition(models.Model):
 	initiator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiated_requisition_set')
 	user_department = models.ForeignKey(UserDepartment, on_delete=models.CASCADE)
 	
-	plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+	plan = models.OneToOneField(Plan, on_delete=models.CASCADE)
 
 	def set_requisition_alt_id(self):
 		number = str(self.id)

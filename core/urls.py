@@ -48,4 +48,8 @@ urlpatterns = [
     path('expense', get_expenses, name='get_expenses'),
     path('expense/create', create_expense, name='create_expense'),
 
+    # expense routes
+    path('funder', get_funders, name='get_funders'),
+    path('funder/create', create_funder, name='create_funder'),
+
 ]

@@ -38,7 +38,7 @@ class ConsolidationGroup(models.Model):
         return False
 
     def estimated_cost(self):
-        return sum([plan.estimated_cost for plan in self.plan_set.all()])
+        return sum([(plan.estimated_unit_cost*plan.quantity) for plan in self.plan_set.all()])
 
     def get_info_form_data(self):
         data = {"subject_of_procurement": self.subject_of_procurement, "procurement_type":self.procurement_type}
@@ -105,7 +105,7 @@ class Plan(models.Model):
     procurement_type = models.ForeignKey(ProcurementType, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     unit_of_measure = models.CharField(max_length=32)
-    estimated_cost = models.IntegerField()
+    estimated_unit_cost = models.IntegerField()
     
     source_of_funding = models.ForeignKey(Funder, on_delete=models.CASCADE)
 
@@ -144,7 +144,7 @@ class Plan(models.Model):
         return { 'id': self.id, 'subject_of_procurement': self.subject_of_procurement, 
             'procurement_type': self.procurement_type, 
             'quantity': self.quantity, 'unit_of_measure': self.unit_of_measure, 
-            'estimated_cost': self.estimated_cost, 
+            'estimated_unit_cost': self.estimated_unit_cost, 
             'source_of_funding': self.source_of_funding_id, 
             'date_required_q1': self.date_required_q1, 'date_required_q2': self.date_required_q2, 
             'date_required_q3': self.date_required_q3, 'date_required_q4': self.date_required_q4, 

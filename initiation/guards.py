@@ -1,6 +1,7 @@
 from functools import wraps
 from django.db.models import Q
 from django.utils import timezone
+from django.http import HttpResponseRedirect 
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -44,6 +45,7 @@ def check_initation_timing(func):
 			messages.info(request, "Initiation has not yet started!", extra_tags="danger")
 		elif now > initiation_process.submission_deadline:
 			messages.info(request, "Initiation time is out!", extra_tags="danger")
-		return redirect('core:index')
+		next = request.META.get('HTTP_REFERER', None) or '/'
+		return HttpResponseRedirect(next)
 
 	return wrapper
