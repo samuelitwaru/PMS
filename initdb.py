@@ -11,6 +11,7 @@ funder_objects = []
 expense_objects = []
 
 def run():
+    delete_media()
     delete_and_migrate_db()
     create_procurement_types()
     create_permissions()
@@ -40,6 +41,11 @@ def create_permissions():
 
 def delete_and_migrate_db():
     os.system('rm db.sqlite3; python3 manage.py migrate;')
+
+
+def delete_media():
+    os.system('rm -rf media; mkdir media;')
+    
 
 def create_procurement_types():
     procurement_types = [("SUPPLIES", "SUP"), ("WORKS", "WRK"), ("NON-CONSULTANCY SERVICES", "NCS"), ("CONSULTANCY SERVICES", "CS")]
