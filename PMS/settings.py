@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'core',
     'planning',
     'initiation',
-    # 'tasks',
+    'tasks',
 ]
 
 MIDDLEWARE = [
