@@ -44,7 +44,9 @@ def delete_and_migrate_db():
 
 
 def delete_media():
-    os.system('rm -rf media; mkdir media;')
+    os.system('rm -rf media; mkdir media; mkdir media/attachments; mkdir media/generated;')
+
+
     
 
 def create_procurement_types():

@@ -30,7 +30,7 @@ SECRET_KEY = 'uthl%wk2o!&1=rc5*1j2yh+5v$gx%mvyn72)3n^f=*!cxq2l*@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -155,7 +155,8 @@ CELERY_TIMEZONE = 'Africa/Kampala'
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
+STATIC_DIRS = [os.path.join(BASE_DIR, 'static/')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -170,6 +171,7 @@ CURRENCY = 'UGX'
 
 # host address
 HOST = 'http://127.0.0.1:8000'
+HOST = 'http://www.inkoop.co.ug'
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
