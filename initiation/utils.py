@@ -1,5 +1,4 @@
 import os
-import filetype
 from .models import Requisition
 from django.conf import settings
 
