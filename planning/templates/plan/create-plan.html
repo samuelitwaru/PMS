@@ -23,7 +23,7 @@
 			
 			<div class="row">
 				<div class="col-3">
-					{% render_field create_plan_form.quantity class='form-control' min=0 %}					
+					{% render_field create_plan_form.quantity class='form-control' min=1 %}					
 				</div>
 				<div class="col-4">
 					{% render_field create_plan_form.estimated_unit_cost class='form-control' min=10000 step="1000" %}
@@ -34,15 +34,19 @@
 				</div>
 
 				<script>
-					$("#id_quantity").on("keyup", (event)=>{
-						res = event.target.value * $("#id_estimated_unit_cost")[0].value
-						$("#totalCostField").html(res)
+					$(document).ready(function() {
+						calculateTotalCost()
 					})
-
-					$("#id_estimated_unit_cost").on("keyup", (event)=>{
-						res = event.target.value * $("#id_quantity")[0].value
-						$("#totalCostField").html(res)
+					$("#id_quantity").on("change", (event)=>{
+						calculateTotalCost()
 					})
+					$("#id_estimated_unit_cost").on("change", (event)=>{
+						calculateTotalCost()
+					})
+					calculateTotalCost = function(){
+						res = $("#id_estimated_unit_cost")[0].value * $("#id_quantity")[0].value
+						$("#totalCostField").html(res)	
+					}
 				</script>
 			
 			</div>
@@ -55,17 +59,7 @@
 							{{ radio }}
 						</div>
 					{% endfor %}
-					<small class="text-info">Specify Funder</small>
-					{{ create_plan_form.other_funder|add_attrs:'{"id":"id_other_funder", "class":"form-control"}' }}
-					<script type="text/javascript">
-						$('.source_of_funding_radio').on('change', (e)=>{
-							if (e.target.value == "0") {
-								$('#id_other_funder').val('').attr('disabled', false)
-							}else{
-								$('#id_other_funder').val('').attr('disabled', true)
-							}
-						})
-					</script>
+					
 				</div>
 				<small class="text-danger">{{create_plan_form.errors.source_of_funding}}</small>
 			</div>

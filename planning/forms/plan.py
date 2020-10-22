@@ -5,7 +5,6 @@ from utils import get_pdu_head, get_user_department
 from ..utils import create_new_funder
 from templatetags.app_tags import currency
 
-sources_of_funding = [("GOU", "GOU"), ("Project Funding", "Project Funding")]
 
 class CreatePlanForm(forms.Form):
     subject_of_procurement = forms.CharField(initial="Supply of Computers")
@@ -14,7 +13,7 @@ class CreatePlanForm(forms.Form):
     unit_of_measure = forms.CharField(initial='Months')
     estimated_unit_cost = forms.IntegerField(label="Estimated Unit Cost", initial=1000000)
     source_of_funding = forms.CharField(widget=forms.RadioSelect(attrs={"class":"source_of_funding_radio"}))
-    other_funder = forms.CharField(label="Specify other Funder", max_length=64, required=False, widget=forms.TextInput())
+    # other_funder = forms.CharField(label="Specify other Funder", max_length=64, required=False, widget=forms.TextInput())
     date_required_q1 = forms.BooleanField(label="Quarter 1", required=False)
     date_required_q2 = forms.BooleanField(label="Quarter 2", required=False)
     date_required_q3 = forms.BooleanField(label="Quarter 3", required=False)
@@ -32,7 +31,7 @@ class CreatePlanForm(forms.Form):
         return [(expense.id, f"{expense.name}") for expense in self.procurement_type.expense_set.all()]
 
     def get_source_of_funding_choices(self):
-        return [(funder.id, funder.name) for funder in Funder.objects.all()] + [("0", "Other")]
+        return [(funder.id, funder.name) for funder in Funder.objects.all()]
 
     def clean(self):
         cleaned_data = super().clean()
@@ -59,12 +58,12 @@ class CreatePlanForm(forms.Form):
 
         source_of_funding = cleaned_data.get("source_of_funding")
         funder = Funder.objects.filter(id=source_of_funding).first()
-        if not funder:
-            other_funder = cleaned_data.get("other_funder")
-            if other_funder:
-                funder = create_new_funder(other_funder)
-            else:
-                self.add_error('other_funder', "Funder must be specified.")
+        # if not funder:
+        #     other_funder = cleaned_data.get("other_funder")
+        #     if other_funder:
+        #         funder = create_new_funder(other_funder)
+        #     else:
+        #         self.add_error('other_funder', "Funder must be specified.")
 
         cleaned_data["source_of_funding"] = funder
         expense = Expense.objects.get(id=(cleaned_data.get("expense")))
@@ -93,7 +92,7 @@ class UpdatePlanForm(forms.Form):
     unit_of_measure = forms.CharField()
     estimated_unit_cost = forms.IntegerField()
     source_of_funding = forms.CharField(widget=forms.RadioSelect(attrs={"class":"source_of_funding_radio"}))
-    other_funder = forms.CharField(label="Specify other Funder", max_length=64, required=False, widget=forms.TextInput())
+    # other_funder = forms.CharField(label="Specify other Funder", max_length=64, required=False, widget=forms.TextInput())
     date_required_q1 = forms.BooleanField(required=False)
     date_required_q2 = forms.BooleanField(required=False)
     date_required_q3 = forms.BooleanField(required=False)
@@ -136,12 +135,12 @@ class UpdatePlanForm(forms.Form):
 
         source_of_funding = cleaned_data.get("source_of_funding")
         funder = Funder.objects.filter(id=source_of_funding).first()
-        if not funder:
-            other_funder = cleaned_data.get("other_funder")
-            if other_funder:
-                funder = create_new_funder(other_funder)
-            else:
-                self.add_error('other_funder', "Funder must be specified.")
+        # if not funder:
+        #     other_funder = cleaned_data.get("other_funder")
+        #     if other_funder:
+        #         funder = create_new_funder(other_funder)
+        #     else:
+        #         self.add_error('other_funder', "Funder must be specified.")
         cleaned_data["source_of_funding"] = funder
         expense = Expense.objects.get(id=(cleaned_data.get("expense")))
         cleaned_data["expense"] = expense

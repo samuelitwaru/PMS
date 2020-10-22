@@ -8,6 +8,7 @@ urlpatterns = [
     # requisition routes
     path('requisition', get_requisitions, name='get_requisitions'),
     path('requisition/<int:requisition_id>', get_requisition, name='get_requisition'),
+    path('requisition/<int:requisition_id>/print', print_requisition, name='print_requisition'),
     path('requisition/<int:requisition_id>/file-specification/update', update_requisition_file_specification, name='update_requisition_file_specification'),
     path('requisition/<int:requisition_id>/file-specification/delete', delete_requisition_file_specification, name='delete_requisition_file_specification'),
     path('requisition/<int:requisition_id>/description/update', update_requisition_description, name='update_requisition_description'),

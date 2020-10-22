@@ -1,0 +1,12 @@
+<!-- Other Funder Specification -->
+<small class="text-info">Specify Funder</small>
+{{ create_plan_form.other_funder|add_attrs:'{"id":"id_other_funder", "class":"form-control"}' }}
+<script type="text/javascript">
+	$('.source_of_funding_radio').on('change', (e)=>{
+		if (e.target.value == "0") {
+			$('#id_other_funder').val('').attr('disabled', false)
+		}else{
+			$('#id_other_funder').val('').attr('disabled', true)
+		}
+	})
+</script>

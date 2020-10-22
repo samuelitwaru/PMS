@@ -8,4 +8,5 @@ def entity(request):
 		"FY": settings.FINANCIAL_YEAR,
 		"FY_start": settings.FY_START_DATE,
 		"FY_stop": settings.FY_STOP_DATE,
+		"HOST": settings.HOST,
 	}

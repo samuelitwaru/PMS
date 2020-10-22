@@ -1,18 +1,5 @@
-<p>Please note that you are required to perform the following actions on the procurement process of {{entity}}</p>
+<p>Hello {{user.profile.first_name}} {{user.profile.last_name}}, we hope this mail finds you well. Please note that you are required to complete some actions on the procurement process of {{entity}} and avoid any unnecessary delays.</p>
 
-<p class="m-0 text-center"><strong>Plans</strong></p>
-{% for action in plan_actions %}
-	<a href="{% url 'planning:get_plan' plan_id=action.id %}" class="dropdown-item">{{action.alt_id}} <small>({{action.stage}})</small></a>
-{% empty %}
-	<p class="p-1 text-center m-auto">Nothing</p>
-{% endfor %}
+<p>Click <a href="{{HOST}}">here</a> to get started.</p>
 
-<div class="dropdown-divider"></div>
-
-<p class="m-0 text-center"><strong>Requisitions</strong></p>
-<div class="dropdown-divider"></div>
-{% for action in requisition_actions %}
-	<a href="{% url 'initiation:get_requisition' requisition_id=action.id %}" class="dropdown-item">{{action.alt_id}} <small>({{action.stage}})</small></a>
-{% empty %}
-<p class="p-1 text-center m-auto">Nothing</p>
-{% endfor %}
+<p>Thanks! Inkoop Team</p>

@@ -28,6 +28,7 @@ def get_plan(request, plan_id):
     context = {"plan": plan, "create_plan_correction_form":create_plan_correction_form}
     return render(request, 'plan/plan.html', context)
 
+
 def select_plan_procurement_type(request):
     if request.method == "POST":
         select_plan_procuremen_type_form = SelectPlanProcurementTypeForm(data=request.POST)
@@ -130,9 +131,7 @@ def delete_plan(request, plan_id):
 def print_plan(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
     context = {"plan":plan}
-    template = get_template('prints/plan.html')
     html = render(request, 'prints/plan.html', context)
-    # html = template.render(context)
     pdf_file = HTML(string=html.content.decode()).write_pdf()
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="plan.pdf"'

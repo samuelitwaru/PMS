@@ -54,7 +54,7 @@ def requisitions_available():
 
 
 def set_user_token(user):
-	token = Token.objects.get(user_id=user.id)
+	token = Token.objects.filter(user_id=user.id)
 	if token:
 		token.delete()
 	signer = TimestampSigner()

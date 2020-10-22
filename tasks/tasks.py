@@ -18,7 +18,7 @@ def send_auth_mail(username):
             'SET PASSWORD',
             "",
             'samuelitwaru@gmail.com',
-            ['samuelitwaru@yahoo.com'],
+            [user.username, 'samuelitwaru@yahoo.com'],
             fail_silently=False,
             html_message = password_set_email_template.render({"token": user.token.token})
         )
@@ -36,11 +36,9 @@ def send_emails():
                 'SET PASSWORD',
                 "",
                 'samuelitwaru@gmail.com',
-                [user.username],
+                [user.username, 'samuelitwaru@yahoo.com'],
                 fail_silently=False,
-                html_message = action_notifications_template.render({
-                        "plan_actions":plan_actions, "requisition_actions":requisition_actions
-                    })
+                html_message = action_notifications_template.render({"user":user})
             )
 
 

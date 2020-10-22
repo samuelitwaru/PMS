@@ -1,3 +1,4 @@
+from weasyprint import HTML, CSS
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user, authenticate
@@ -5,6 +6,7 @@ from django.contrib.auth.decorators import permission_required
 from django.utils import timezone
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib import messages
+from django.template.loader import get_template
 from .requisition_action import create_requisition_action
 from ..models import Requisition
 from ..forms.attribute_value_specification import CreateAttributeValueSpecificationForm
@@ -33,6 +35,14 @@ def get_requisition(request, requisition_id):
     context = {"requisition": requisition, "create_specification_form":create_specification_form, "update_requisition_description_form":update_requisition_description_form, "update_requisition_file_specification_form": update_requisition_file_specification_form, "create_attribute_value_specification_form":create_attribute_value_specification_form, "create_item_specification_form": create_item_specification_form, "delete_requisition_description_form": delete_requisition_description_form, "delete_requisition_file_specification_form": delete_requisition_file_specification_form}
     return render(request, 'requisition/requisition.html', context)
 
+def print_requisition(request, requisition_id):
+    requisition = Requisition.objects.get(id=requisition_id)
+    context = {"requisition":requisition}
+    html = render(request, 'prints/requisition.html', context)
+    pdf_file = HTML(string=html.content.decode()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="requisition.pdf"'
+    return response
 
 @check_initation_timing
 @permission_required('initiation.can_initiate_requisition', raise_exception=True)
@@ -46,9 +56,13 @@ def update_requisition_file_specification(request, requisition_id):
             if requisition.file_specification:
                 remove_file(requisition.file_specification)
             name = handle_uploaded_file(file, requisition)
-            requisition.file_specification = f'attachments/{name}'
-            requisition.save()
-            messages.success(request, "Updated file specification")
+            if name:
+                requisition.file_specification = f'attachments/{name}'
+                requisition.save()
+                messages.success(request, "Updated file specification")
+            else:
+                messages.error(request, "Invalid file type", extra_tags="danger")
+
         else:
             messages.error(request, f"Operation failed {update_requisition_file_specification_form.errors}", extra_tags="danger")
         
@@ -132,10 +146,9 @@ def update_requisition_location_of_delivery(request, requisition_id):
 def print_requisition(request, requisition_id):
     requisition = Requisition.objects.get(id=requisition_id)
     context = {"requisition":requisition}
-    template = get_template('requisition/requisition-detail.html')
-    html = template.render(context)
-    pdf_file = HTML(string=html).write_pdf()
-    return HttpResponse(pdf_file, content_type='application/pdf')
+    html = render(request, 'prints/requisition.html', context)
+    pdf_file = HTML(string=html.content.decode()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="requisition.pdf"'
     return response
 

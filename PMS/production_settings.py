@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'uthl%wk2o!&1=rc5*1j2yh+5v$gx%mvyn72)3n^f=*!cxq2l*@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -55,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
     'middleware.LoginRequiredMiddleware',
     'middleware.ValidTimingRequiredMiddleware',
 ]
@@ -158,10 +157,6 @@ STATIC_URL = '/static/'
 STATIC_DIRS = [os.path.join(BASE_DIR, 'static/')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -174,7 +169,6 @@ FY_STOP_DATE = datetime.datetime(2021, 6, 30).astimezone(tz=pytz.timezone(TIME_Z
 CURRENCY = 'UGX'
 
 # host address
-HOST = 'http://127.0.0.1:8000'
 HOST = 'http://www.inkoop.co.ug'
 
 EMAIL_HOST = 'smtp.sendgrid.net'
@@ -182,4 +176,4 @@ EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
 EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

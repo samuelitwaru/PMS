@@ -1,4 +1,5 @@
 import os
+import filetype
 from .models import Requisition
 from django.conf import settings
 
@@ -29,7 +30,11 @@ def initialize_requisitions(plans):
 
 
 def handle_uploaded_file(file, requisition):
-	_, ext = file.name.split('.')
+	name_contents = file.name.split('.')
+	if len(name_contents) > 1:
+		ext = name_contents[-1]
+	else:
+		return None
 	name = requisition.alt_id.replace('/','_').lower()
 	name = f'{name}.{ext}'
 	with open(f'{settings.MEDIA_ROOT}/attachments/{name}', 'wb+') as destination:
@@ -38,4 +43,8 @@ def handle_uploaded_file(file, requisition):
 	return name
 
 def remove_file(name):
-	os.remove(f'{settings.MEDIA_ROOT}/{name}')
+	try:
+		os.remove(f'{settings.MEDIA_ROOT}/{name}')
+	except FileNotFoundError:
+		pass
+

@@ -57,7 +57,6 @@ def forgot_password(request):
             send_auth_mail(user.username)
             # send_auth_mail.delay(user.email)
             messages.info(request, f"An email with password reset instructions has been sent to '{user.username}'. Login to your this email to continue.")
-            return render(request, "emails/password-set-email.html", {"token": user.token.token})
             return redirect("core:index")
 
     context = {"forgot_password_form": forgot_password_form}
